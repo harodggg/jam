@@ -10,7 +10,7 @@
 and Ethereum. In a single coherent model, Jam provides a global singleton permissionless object environment—much
 like the smart-contract environment pioneered by Ethereum—paired with secure sideband computation parallelized
 over a scalable node network, a proposition pioneered by Polkadot.</p>
-<h6>摘要。我们提出了jam全面，并且正式的定义，即一种结合了ethereum和polkadot两种的元素的协议。Jam 既提供了类似于以太坊首创的智能合约环境的全局单例无许可对象环境，又结合了 Polkadot 开创的、可安全地在可扩展节点网络上并行处理的侧带计算功能。</h6>
+<h6>摘要。我们提出了全面，并且正式的JAM定义，即一种同时结合了ethereum和polkadot两种的元素的协议。JAM既提供了类似于以太坊首创的全局单例无许可对象智能合约环境，又结合了 Polkadot 开创的、可安全地在可扩展节点网络上并行处理的侧带计算功能。</h6>
 <h6>( sideband:边带。 一般而言，术语“边带”用于指代用于传输附加信息的次要或辅助信道。这可以是在无线电通信、计算或其他领域的背景下。在这里指的可能是polkadot中继-平行链模型，中继通过hrmp或者xcmp 处理平行链的信息 )</h6>
 <p>Jam introduces a decentralized hybrid system offering smart-contract functionality structured around a secure and
 scalable in-core/on-chain dualism. While the smart-contract functionality implies some similarities with Ethereum’s
