@@ -15,8 +15,10 @@ over a scalable node network, a proposition pioneered by Polkadot.</p>
 <p>Jam introduces a decentralized hybrid system offering smart-contract functionality structured around a secure and
 scalable in-core/on-chain dualism. While the smart-contract functionality implies some similarities with Ethereum’s
 paradigm, the overall model of the service offered is driven largely by underlying architecture of Polkadot.</p>
-<h6> </h6>
+<h6>JAM 提出了一种去中心化混合系统，拥有围绕在安全和可扩展性 "核心内"/"在链上" 的二元性的智能合约功能。虽然智能合约功能与以太坊的范例有一些相似之处，但所提供服务的整体模型主要由 Polkadot 的底层架构驱动。</h6>
+<h6> ( in-core/on-chain dualism，二元性，有点像一个硬币的两面，或者量子的概念。即可能是在核心里，也可能是在链上，关键取决于你怎么看待这件事情。可以即是在核心里，也可以在链上。 )</h6>
 <p>Jam is permissionless in nature, allowing anyone to deploy code as a service on it for a fee commensurate with the
 resources this code utilizes and to induce execution of this code through the procurement and allocation of core-time,
 a metric of resilient and ubiquitous computation, somewhat similar to the purchasing of gas in Ethereum. We already
 envision a Polkadot-compatible CoreChains service.</p>
+<h6> JAM 在本质上是无需许可的，允许任何人去部署代码提供服务，费用和代码所使用的资源相当，并且去引发代码执行通过获取和分配核心时间，有点类似以太坊中购买gas。我们已经设想了一种兼容polkadot的核心链服务</h6>
