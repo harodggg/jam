@@ -7,8 +7,11 @@
 <h6 align="center">( semi-coherent: semi一半，coherent一致，相关，相干。也许是不一定需要强一致性，类似于一个区块，只有唯一的历史结果，只有一个世界树，这个也许可以包含多个历史结果，类似平行宇宙。 )</h6>
 
 <p>Abstract. We present a comprehensive and formal definition of Jam, a protocol combining elements of both Polkadot
-and Ethereum. In a single coherent model,  a proposition pioneered by Polkadot.</p>
+and Ethereum. In a single coherent model, Jam provides a global singleton permissionless object environment—much
+like the smart-contract environment pioneered by Ethereum—paired with secure sideband computation parallelized
+over a scalable node network, a proposition pioneered by Polkadot.</p>
 <h6>摘要。我们提出了jam全面，并且正式的定义，即一种结合了ethereum和polkadot两种协议的协议。在一个单一的一致模型中，</h6>
+
 <p>Jam introduces a decentralized hybrid system offering smart-contract functionality structured around a secure and
 scalable in-core/on-chain dualism. While the smart-contract functionality implies some similarities with Ethereum’s
 paradigm, the overall model of the service offered is driven largely by underlying architecture of Polkadot.</p>
