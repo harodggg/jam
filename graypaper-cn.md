@@ -22,3 +22,6 @@ resources this code utilizes and to induce execution of this code through the pr
 a metric of resilient and ubiquitous computation, somewhat similar to the purchasing of gas in Ethereum. We already
 envision a Polkadot-compatible CoreChains service.</p>
 <h6> JAM 在本质上是无需许可的，允许任何人去部署代码提供服务，费用和代码所使用的资源相当，并且去引发代码执行通过获取和分配核心时间，有点类似以太坊中购买gas。我们已经设想了一种兼容polkadot的核心链服务</h6>
+
+
+<h3 align="center"> 1. Introduction </h3>
