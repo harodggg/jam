@@ -1,1 +1,1 @@
-# <center>JAM</center>
+<h1 align="center">JAM</h1>
