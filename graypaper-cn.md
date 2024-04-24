@@ -40,6 +40,6 @@
 3. Performance: able to perform computation quickly and at low cost.
 4. Coherency: the causal relationship possible between different elements of state and how thus how well individual applications may be composed.
 5. Accessibility: negligible barriers to innovation;easy, fast, cheap and permissionless.
-
+As a declared Web3 technology, we make an implicit assumption of the first two items. Interestingly, items 3 and 4 are antagonistic according to an information theoretic principle which we are sure must already exist in some form but are nonetheless unaware of a name for it. For argument’s sake we shall name it *size-synchrony antagonism*.
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 
