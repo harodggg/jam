@@ -34,5 +34,12 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;Later, Ethereum would provide a categorically more general-purpose rule set, one which was practically Turing complete.[^1] In the context of Web3 where we are aiming to deliver a massively multiuser application platform, generality is crucial, and thus we take this as a given.
 
+&nbsp;&nbsp;&nbsp;&nbsp;Beyond resilience and generality, things get more interesting, and we must look a little deeper to understand what our driving factors are. For the present purposes,we identify three additional goals:
+1. Resilience: highly resistant from being stopped,corrupted and censored.
+2. Generality: able to perform Turing-complete computation.
+3. Performance: able to perform computation quickly and at low cost.
+4. Coherency: the causal relationship possible between different elements of state and how thus how well individual applications may be composed.
+5. Accessibility: negligible barriers to innovation;easy, fast, cheap and permissionless.
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 
