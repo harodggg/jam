@@ -49,21 +49,27 @@ Beyond resilience and generality, things get more interesting, and we must look 
 <h6>2.通用性: 能够执行图灵完备计算。</h6>
 <h6>3.性能: 能快速且低成本地执行计算。</h6>
 <h6>4.连贯性: 指状态的不同元素之间可能存在的因果关系，以及由此单个应用程序可以被良好组合的程度。</h6>
-<h7>易访问性: 创新障碍微乎其微；易于、快速、廉价且无需许可。</h7>
+<h6>易访问性: 创新障碍微乎其微；易于、快速、廉价且无需许可。</h6>
 As a declared Web3 technology, we make an implicit assumption of the first two items. Interestingly, items 3 and 4 are antagonistic according to an information theoretic principle which we are sure must already exist in some form but are nonetheless unaware of a name for it. For argument’s sake we shall name it *size-synchrony antagonism*.
-<h6>Web3 作为一种已声明的 Web3 技术，我们隐含地假定了韧性和通用性这两个特性。有趣的是，根据某个我们确信应该以某种形式存在但尚未得知名称的信息论原理，性能和可访问性这两个特性之间存在着对抗性。为了方便讨论，我们将这种对抗性称为「规模同步对抗</h6>
+<h6>Web3 作为一种已声明的 Web3 技术，我们隐含地假定了韧性和通用性这两个特性。有趣的是，根据某个我们确信应该以某种形式存在但尚未得知名称的信息论原理，性能和可访问性这两个特性之间存在着对抗性。为了方便讨论，我们将这种对抗性称为规模同步对抗</h6>
 
 **1.3. Scaling under Size-Synchrony Antagonism.** Size-synchrony antagonism is a simple principle implying that as the state-space of information systems grow, then the system necessarily becomes less synchronous. The argument goes:
 1. The more state a system utilizes for its dataprocessing, the greater the amount of space this state must occupy.
 2. The more space used, then the greater the mean and variance of distances between statecomponents.
 3. As the mean and variance increase, then interactions become slower and subsystems must manage the possibility that distances between interdependent components of state could be materially different, requiring asynchrony.
 
+<h6>**规模同步对抗下的扩展。** 规模同步对抗是一个简单的原理，它意味着随着信息系统的状态空间增长，系统必然变得不那么同步。 论证如下：</h6>
+<h6>1. 信息系统处理数据所利用的状态越多，该状态所占用的空间就越大</h6>
+<h6>2. 占用空间越大，状态组件之间的距离的平均值和方差就越大</h6>
+<h6>3. 随着平均值和方差的增加，交互会变得更加缓慢，子系统必须设法管理状态的相互依存组件之间距离存在实质性差异的可能性，这需要异步性</h6>
+
 This assumes perfect coherency of the system’s state.Setting the question of overall security aside for a moment,we can avoid this rule by applying the divide and conquer maxim and fragmenting the state of a system, sacrificing its coherency. We might for example create two independent smaller-state systems rather than one large-state system. This pattern applies a step-curve to the principle;intra-system processing has low size and high synchrony,inter-system processing has high size but low synchrony.It is the principle behind meta-networks such as Polkadot,Cosmos and the predominant vision of a scaled Ethereum(all to be discussed in depth shortly).
-
+<h6>以上分析假设系统状态完美一致。暂且不论整体安全问题，我们可以通过分而治之的策略来打破这一限制，即牺牲系统状态的整体一致性，将状态拆分成更小的片段。例如，我们可以创建两个独立的小状态系统，而不是一个大的状态系统。这种方式相当于为该原则引入了一个阶跃曲线：系统内部处理具有较小的状态规模和较高的同步性，系统间处理则具有较大的状态规模和较低的同步性。这就是 Polkadot、Cosmos 等跨链网络以及扩容后的以太坊（我们稍后将详细讨论）背后的核心思想。</h6>
 The present work explores a middle-ground in the antagonism, avoiding the persistent fragmentation of statespace of the system as with existing approaches. We do this by introducing a new model of computation which pipelines a highly scalable element to a highly synchronous element. Asynchrony is not avoided, but we do open the possibility for a greater degree of granularity over how it is traded against size. In particular fragmentation can be made ephemeral rather than persistent, drawing upon a coherent state and fragmenting it only for as long as it takes to execute any given piece of processing on it.
-
+<h6>本文探索了一种在对抗性之间寻求平衡的方法，避免了现有方案中系统状态空间的持续碎片化。我们通过引入一种新的计算模型来实现这一点，该模型将一个高度可扩展的元素与一个高度同步的元素进行流水线处理。这种方法并没有完全避免异步性，但它允许我们在权衡规模和同步性方面拥有更大的粒度控制。具体而言，碎片化可以变为临时性的而非永久性的，它可以利用一个连贯的状态，并且只在执行特定处理任务所需的时间内进行碎片化。</h6>
 
 Unlike with snark-based L2-blockchain techniques for scaling, this model draws upon crypto-economic mechanisms and inherits their low-cost and high-performance profiles and averts a bias toward centralization.
+<h6>与基于 zk-SNARK 的 L2 区块链扩容技术不同，这个模型利用密码经济机制，从而继承了它们低成本和高性能的优势，并且避免了中心化倾向。</h6>
 
 **1.4. Document Structure.** We begin with a brief overview of present scaling approaches in blockchain technology in section 2. In section 3 we define and clarify the notation from which we will draw for our formalisms.
 
