@@ -33,18 +33,25 @@ An early, unrefined, version of this protocol was first proposed in Polkadot Fel
 
 While Bitcoin is, perhaps, the first example of such a system within the economic domain, it was not general purpose in terms of the nature of the service it offered. A rules-based service is only as useful as the generality of the rules which may be conceived and placed within it. Bitcoin’s rules allowed for an initial use-case, namely a fixedissuance token, ownership of which is well-approximated and autonomously enforced through knowledge of a secret, as well as some further elaborations on this theme.
 
-<h6>虽然比特币可能是经济领域内这种系统最早的例子之一，但它所提供的服务性质使其并非通用型。 </h6>
+<h6>虽然比特币可能是经济领域内这种系统最早的例子之一，但它所提供的服务性质使其并非通用型。基于规则的服务的效用取决于放置在其内部的规则的普遍性。比特币的规则允许一个初始用例，即固定发行量的代币，其所有权可以通过秘密的知识以及该主题的一些进一步阐述来很好地近似和自主地执行。 </h6>
 
 Later, Ethereum would provide a categorically more general-purpose rule set, one which was practically Turing complete.[^1] In the context of Web3 where we are aiming to deliver a massively multiuser application platform, generality is crucial, and thus we take this as a given.
+<h6>后来，以太坊提供了一套更通用、几乎是图灵完备的规则集。[^1] 在我们旨在提供一个庞大的多人用户应用程序平台的 Web3 背景下，通用性至关重要，因此我们将其视为理所当然。</h6>
 
 Beyond resilience and generality, things get more interesting, and we must look a little deeper to understand what our driving factors are. For the present purposes,we identify three additional goals:
+<h6>超越弹性和普遍性之后，事情变得更具吸引力，我们需要更深入地挖掘我们的驱动因素是什么。为了当前的目的，我们确定了三个额外的目标：</h6>
 1. Resilience: highly resistant from being stopped,corrupted and censored.
 2. Generality: able to perform Turing-complete computation.
 3. Performance: able to perform computation quickly and at low cost.
 4. Coherency: the causal relationship possible between different elements of state and how thus how well individual applications may be composed.
 5. Accessibility: negligible barriers to innovation;easy, fast, cheap and permissionless.
-   
+<h6>1.韧性: 对阻止、破坏和审查具有高度抵抗力。</h6>
+<h6>2.通用性: 能够执行图灵完备计算。</h6>
+<h6>3.性能: 能快速且低成本地执行计算。</h6>
+<h6>4.连贯性: 指状态的不同元素之间可能存在的因果关系，以及由此单个应用程序可以被良好组合的程度。</h6>
+<h7>易访问性: 创新障碍微乎其微；易于、快速、廉价且无需许可。</h7>
 As a declared Web3 technology, we make an implicit assumption of the first two items. Interestingly, items 3 and 4 are antagonistic according to an information theoretic principle which we are sure must already exist in some form but are nonetheless unaware of a name for it. For argument’s sake we shall name it *size-synchrony antagonism*.
+<h6>Web3 作为一种已声明的 Web3 技术，我们隐含地假定了韧性和通用性这两个特性。有趣的是，根据某个我们确信应该以某种形式存在但尚未得知名称的信息论原理，性能和可访问性这两个特性之间存在着对抗性。为了方便讨论，我们将这种对抗性称为「规模同步对抗</h6>
 
 **1.3. Scaling under Size-Synchrony Antagonism.** Size-synchrony antagonism is a simple principle implying that as the state-space of information systems grow, then the system necessarily becomes less synchronous. The argument goes:
 1. The more state a system utilizes for its dataprocessing, the greater the amount of space this state must occupy.
@@ -156,6 +163,10 @@ is sophisticated or multidimensional, then we may use a bold typeface, especiall
 
 For items which retain their definition throughout the present work, we use other typographic conventions. Sets are usually referred to with a blackboard typeface, e.g. $\mathbb{N}$ refers to all natural numbers including zero. Sets which may be parameterized may be subscripted or be followed by parenthesized arguments. Imported functions, used by the present work but not specifically introduced by it, are written in calligraphic typeface, e.g. $\mathcal{H}$ the Blake2 cryptographic hashing function. For other non-context dependent functions introduced in the present work, we use upper case Greek letters, e.g. $\Upsilon$ denotes the state transition function
 <h6> 对于贯穿整部著作的项目，我们使用其他的排版约定。集合通常用黑板字体表示，例如 $\mathbb{N}$ 表示所有自然数，包括零。可参数化的集合可以用下标表示，也可以用带括号的参数表示。引用函数时，如果该函数在著作中使用但未特别引入，则使用书法字体，例如 $\mathcal{H}$ 表示 Blake2 加密散列函数。对于著作中引入的其他与上下文无关的函数，我们使用大写希腊字母，例如 $\Upsilon$ 表示状态转换函数。</h6> 
+
+Values which are not fixed but nonetheless hold some consistent meaning throughout the present work are denoted with lower case Greek letters such as $\sigma$, the state identifier. These may be placed in bold typeface to denotethat they refer to an abnormally complex value.
+<h6>本文中使用小写希腊字母（例如状态标识符 σ）表示未固定但贯穿始终且具有某种一致含义的值。这些字母可能加粗，以表示它们引用异常复杂的值。</h6>
+
 
 
 
