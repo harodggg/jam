@@ -72,14 +72,17 @@ Unlike with snark-based L2-blockchain techniques for scaling, this model draws u
 <h6>与基于 zk-SNARK 的 L2 区块链扩容技术不同，这个模型利用密码经济机制，从而继承了它们低成本和高性能的优势，并且避免了中心化倾向。</h6>
 
 **1.4. Document Structure.** We begin with a brief overview of present scaling approaches in blockchain technology in section 2. In section 3 we define and clarify the notation from which we will draw for our formalisms.
-
+<h6>1.4 文档结构。 第二部分我们将概述当前区块链技术中的扩展方法。 第三部分我们将定义和阐明我们将用于形式化描述的符号。</h6>
 We follow with a broad overview of the protocol in section 4 outlining the major areas including the Polka Virtual Machine (pvm), the consensus protocols Safrole and Grandpa, the common clock and build the foundations of the formalism.
-
+<h6>在第四部分，我们将对协议进行概述，重点介绍主要部分，包括 Polka 虚拟机 (pvm)、共识协议 Safrole 和 Grandpa、通用时钟，并在此基础上构建形式化描述方法。</h6>
 We then continue with the full protocol definition split into two parts: firstly the correct on-chain state-transition formula helpful for all nodes wishing to validator the chain state, and secondly, in sections 13 and 15 the honest strategy for the off-chain actions of any actors who wield a validator key.
+<h6>然后我们将继续进行完整的协议定义，分为两部分：首先是正确的链上状态转换公式，这对于所有希望验证链状态的节点都非常有用。其次，在第 13 和 15 节中，我们将定义持有验证者密钥的任何参与者的链下行为的诚实策略。</h6>
 
 The main body ends with a discussion over the performance characteristics of the protocol in section 17 and finally conclude in section 18.
+<h6>本文主体部分以第 17 节对协议性能特征的讨论结束，最后在第 18 节总结全文。</h6>
 
 The appendix contains various additional material important for the protocol definition including the pvm in appendices A & B, serialization and Merklization in appendices C & D and cryptography in appendices F, G & H. We finish with an index of terms which includes the values of all simple constant terms used in the work in appendix I, and close with the bibliography.
+<h6>附录包含了几个对协议定义很重要的附加材料，包括：A & B 附录：Polka 虚拟机 (pvm)，C & D 附录：序列化和 Merkle 化，F、G & H 附录：密码学。最后，我们提供了术语索引，其中包含了本文所有使用的简单常量术语的值，并以参考文献列表结束全文</h6>
 
 <h3 align="center">2. Previous Work and Present Trends</h3>
 
