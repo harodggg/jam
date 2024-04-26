@@ -196,13 +196,16 @@ Much as in the Ethereum Yellow Paper, a number of notational conventions are use
 
 **3.1. Typography.** We use a number of different typefaces to denote different kinds of terms. Where a term is used to refer to a value only relevant within some localized section of the document, we use a lower-case roman letter e.g. $\rm{x}$ , $\rm{y}$ (typically used for an item of a set or sequence) or e.g. $\rm{i}$, $\rm{j}$ (typically used for numerical indices). Where we refer to a Boolean term or a function in a local context, we tend to use a capitalized roman alphabet letter such as $\rm{A}$, $\rm{F}$ . If particular emphasis is needed on the fact a term is sophisticated or multidimensional, then we may use a bold typeface, especially in the case of sequences and sets
 
-3.1. 术语的字体运用。为了表示不同种类的术语，我们使用多种不同的字体。术语如果仅在文档的局部范围内引用，表示局部值，那么我们使用小写罗马字母，例如 $\rm{x}$ 、 $\rm{y}$（通常用于集合或序列中的元素）或 $\rm{i}$、 $\rm{j}$（通常用于数值索引）。当我们在局部上下文中引用布尔值或函数时，则倾向于使用大写罗马字母，例如 $\rm{A}$ 、 $\rm{F}$ 。如果特别需要强调术语的复杂性或多维性，则可以使用粗体字，尤其是在序列和集合的情况下。
+<h6>3.1. 术语的字体运用。为了表示不同种类的术语，我们使用多种不同的字体。术语如果仅在文档的局部范围内引用，表示局部值，那么我们使用小写罗马字母，例如 $\rm{x}$ 、 $\rm{y}$（通常用于集合或序列中的元素）或 $\rm{i}$、 $\rm{j}$（通常用于数值索引）。当我们在局部上下文中引用布尔值或函数时，则倾向于使用大写罗马字母，例如 $\rm{A}$ 、 $\rm{F}$ 。如果特别需要强调术语的复杂性或多维性，则可以使用粗体字，尤其是在序列和集合的情况下。</h6>
 
 For items which retain their definition throughout the present work, we use other typographic conventions. Sets are usually referred to with a blackboard typeface, e.g. $\mathbb{N}$ refers to all natural numbers including zero. Sets which may be parameterized may be subscripted or be followed by parenthesized arguments. Imported functions, used by the present work but not specifically introduced by it, are written in calligraphic typeface, e.g. $\mathcal{H}$ the Blake2 cryptographic hashing function. For other non-context dependent functions introduced in the present work, we use upper case Greek letters, e.g. $\Upsilon$ denotes the state transition function
 <h6> 对于贯穿整部著作的项目，我们使用其他的排版约定。集合通常用黑板字体表示，例如 $\mathbb{N}$ 表示所有自然数，包括零。可参数化的集合可以用下标表示，也可以用带括号的参数表示。引用函数时，如果该函数在著作中使用但未特别引入，则使用书法字体，例如 $\mathcal{H}$ 表示 Blake2 加密散列函数。对于著作中引入的其他与上下文无关的函数，我们使用大写希腊字母，例如 $\Upsilon$ 表示状态转换函数。</h6> 
 
 Values which are not fixed but nonetheless hold some consistent meaning throughout the present work are denoted with lower case Greek letters such as $\sigma$, the state identifier. These may be placed in bold typeface to denotethat they refer to an abnormally complex value.
 <h6>本文中使用小写希腊字母（例如状态标识符 σ）表示未固定但贯穿始终且具有某种一致含义的值。这些字母可能加粗，以表示它们引用异常复杂的值。</h6>
+
+**3.2. Functions and Operators.** We define the precedes relation to indicate that one term is defined in terms of another. E.g. y ≺ x indicates that y may be defined purely in terms of x:
+<h6>我们定义“先于”关系来表示一个术语是通过另一个术语来定义的。例如，y ≺ x 表示 y 可以纯粹用 x 来定义。</h6>
 
 
 
