@@ -211,6 +211,8 @@ Values which are not fixed but nonetheless hold some consistent meaning througho
 (1)            $\rm{y} < \rm{x} \Longleftrightarrow \exists\mathcal{f}\colon \rm{y} = \mathcal{f}(\rm{x})$
 <h6> ( \Longleftrightarrow 是等价的意思，全等于的意思。这个公式的意思是"x先于y"等价于 "存在一个函数f，可以完成通过x 和这个函数f，得到y"  )</h6>
 
+The substitute-if-nothing function $\mathcal{U}$ is equivalent to the first argument which is not ∅, or ∅ if no such argument exists: $\mathcal{U}$(a0, . . . )
+
 
 
 
