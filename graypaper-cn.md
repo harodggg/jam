@@ -214,9 +214,12 @@ Values which are not fixed but nonetheless hold some consistent meaning througho
 The substitute-if-nothing function $\mathcal{U}$ is equivalent to the first argument which is not ∅, or ∅ if no such argument exists:
 <h6> 替换空值函数，用符号 $\mathcal{U}$ 表示，可以理解为一个“如果非空则替换”函数。给定若干个参数，它返回 首个非空 的参数（不是空集 ∅）。如果所有参数都为空，则函数本身返回 空集 ∅。</h6>
 
-(2) $\mathcal{U}(a_0, \dots ) \equiv a_x \colon (a_x \neq \varnothing \bigvee x = n)$
+(2) $\mathcal{U}(a_0, \dots ) \equiv a_x \colon (a_x \neq \varnothing \bigvee x = n, \bigwedge\limits^{x - 1}_{i = 0} a_i = \varnothing)$ 
 
+<h6>  ( 这个公式的意思是，函数 $\mathcal{U}$ ,取一个集合里第一个不为空的值，如果集合全是空集，那么返回空集 )</h6>
 
+Thus, e.g. $\mathcal{U}(\varnothing, 1, \varnothing, 2) = 1$ and $\mathcal{U}(\varnothing, \varnothing) = \varnothing$.
+<h6> 因此，有例子 $\mathcal{U}(\varnothing, 1, \varnothing, 2) = 1$ and $\mathcal{U}(\varnothing, \varnothing) = \varnothing$ </h6>
 
 
 
