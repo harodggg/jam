@@ -238,15 +238,15 @@ to avoid confusion with Boolean false, which may be interpreted as some successf
 <h6>3.4. 数字。我们用符号 $\mathbb{N}$  表示包含零的自然数集。 $\mathbb{N}$ 的子集记为 $\mathbb{N}_n$，它表示小于正整数 $\rm{n}$ 的自然数集合。形式上，这些集合定义如下: $\mathbb{N}$ = {0, 1, . . . } and $\mathbb{N}_n$ = ${\rm{x} ∣ \rm{x} ∈ \mathbb{N}, \rm{x} < \rm{n}}$.</h6>
 
 
-$\mathbb{Z}$ denotes the set of integers. We denote $\mathbb{Z}_{a \dots b}$ to be the set of integers within the interval [a, b). 
+$\mathbb{Z}$ denotes the set of integers. We denote $\mathbb{Z}_{\rm{a} \dots \rm{b}}$ to be the set of integers within the interval [a, b). 
 
-Formally, $\mathbb{Z}_{a \dots b} = {x ∣ x ∈ Z, a ≤ x < b}$ .  
+Formally, $\mathbb{Z}_{a \dots b} = {\rm{x} ∣ \rm{x} ∈ \mathbb{Z}, \rm{a} ≤ \rm{x} < \rm{b}}$ .  
 
 E.g. $\mathbb{Z}_{2 \dots 5}$ = {2, 3, 4}. 
 
-We denote the offset/length form of this set as $\mathbb{Z}_{a \dots +b}$ ,
+We denote the offset/length form of this set as $\mathbb{Z}_{\rm{a} \dots +\rm{b}$ ,
 
-a short form of $\mathbb{Z}_{a \dots a+b}$.
+a short form of $\mathbb{Z}_{\rm{a} \dots \rm{a}+\rm{b}}$.
 
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
