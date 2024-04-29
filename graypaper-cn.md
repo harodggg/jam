@@ -244,7 +244,7 @@ Formally, $\mathbb{Z}_{a \dots b} = {\rm{x} ∣ \rm{x} ∈ \mathbb{Z}, \rm{a} �
 
 E.g. $\mathbb{Z}_{2 \dots 5}$ = {2, 3, 4}. 
 
-We denote the offset/length form of this set as $\mathbb{Z}_{\rm{a} \dots +\rm{b}$ ,
+We denote the offset/length form of this set as $\mathbb{Z}_{\rm{a} \dots +\rm{b}}$ ,
 
 a short form of $\mathbb{Z}_{\rm{a} \dots \rm{a}+\rm{b}}$.
 
