@@ -248,10 +248,15 @@ We denote the offset/length form of this set as $\mathbb{Z}_{\rm{a} \dots +\rm{b
 
 a short form of $\mathbb{Z}_{\rm{a} \dots \rm{a}+\rm{b}}$.
 
-<h6>记号 Z 表示所有整数的集合。我们用符号 $\mathbb{Z}_{a...b}$ 表示区间 [a, b) 内的整数集合。
-形式上，$\mathbb{Z}_{a...b}$ = {x ∈ $\mathbb{Z}$ | a ≤ x < b} 。
-例如，$\mathbb{Z}_{2...5}$ = {2, 3, 4}。我们用 $\mathbb{Z}_{a⋅⋅⋅+b}$ 表示这种区间表示法的另一种形式，它是 $\mathbb{Z}_{a...a+b}$ 的简写形式。
-例如，$\mathbb{Z}_{2⋅⋅⋅+3}$ 等于 $\mathbb{Z}_{2...5}$ 。</h6>
+<h6>记号 Z 表示所有整数的集合。我们用符号 $\mathbb{Z}_{a...b}$ 表示区间 [a, b) 内的整数集合。</h6>
+
+
+<h6>形式上，$\mathbb{Z}_{a...b}$ = {x ∈ $\mathbb{Z}$ | a ≤ x < b} 。</h6>
+
+  
+<h6>例如，$\mathbb{Z}_{2...5} = {2, 3, 4}$。我们用 $\mathbb{Z}_{a⋅⋅⋅+b}$ 表示这种区间表示法的另一种形式，它是 $\mathbb{Z}_{a...a+b}$ 的简写形式。</h6>
+
+<h6>例如，$\mathbb{Z}_{2⋅⋅⋅+3}$ 等于 $\mathbb{Z}_{2...5}$ 。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
