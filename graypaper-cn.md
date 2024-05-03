@@ -328,6 +328,11 @@ Note that since the domain of $\mathcal{V}$ is a set, should different keys with
 **3.6. Tuples.** Tuples are groups of values where each item typically belongs to a different set. They are denoted with parentheses, e.g. the tuple t of the integers 3 and 5 is denoted t = (3, 5), and it exists in the set of integer pairs sometimes denoted $\mathbb{N}×\mathbb{N}$, but denoted in the present work as $(\mathbb{N}, \mathbb{N})$.
 <h6>元组。元组是有序值集合，每个元素通常来自不同的集合。它们用括号表示。例如，包含整数 3 和 5 的元组 t 表示为 t = (3, 5)。该元组属于所有可能的整数有序对的集合。这个集合有时表示为 $\mathbb{N}×\mathbb{N}$ ，但在本文档中，我们将使用符号 $(\mathbb{N}, \mathbb{N})$ 表示。</h6>
 
+<p>
+  We have frequent need to refer to a specific item within a tuple value and as such find it convenient to declare a name for each item. E.g. we may denote a tuple with two named integer components a and b as T = $(a ∈ \mathbb{N}, b ∈ \mathbb{N})$. We would denote an item t ∈ T through subscripting its name, thus for some t =(a:3,b:5) $t_a$ = 3 and $t_b$ = 5.
+</p>
+<h6>我们经常需要引用元组值中的特定元素，因此为每个元素命名会比较方便。例如，我们可以用 T = (a∈ $\mathbb{N}$ ,b∈ $\mathbb{N}$ ) 表示一个包含两个命名整型元素 a 和 b 的元组。我们可以通过对名称进行下标引用来表示元组中的元素，例如对于某个元组 t = (a:3, b:5)， 则 $t_a$ =3 且 $t_b$ =5 。</h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
