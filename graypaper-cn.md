@@ -311,7 +311,8 @@ It is typically useful to limit the sets from which the keys and values may be d
 ```math
   \mathbb{D} \left \langle K \longrightarrow V \right \rangle \equiv \Big\{\{ (k \longmapsto v) | k \in K \wedge v \in V \}\Big\}
 ```
-
+To denote the active domain (i.e. set of keys) of a dictionary d ∈ $\mathbb{D}$⟨K → V ⟩, we use K(d) ⊂ K and for the range (i.e. set of values), V(d) ⊂ V . Formally:
+<h6>了表示字典 d ∈ $\mathbb{D}$ ⟨K → V ⟩ 的活动域（即键的集合），我们使用 K(d) ⊂ K， 表示其键集 K(d) 是全集 K 的子集。同理，为了表示取值范围（即值的集合），我们使用 V(d) ⊂ V， 表示其值集 V(d) 是全集 V 的子集。 形式上： </h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
