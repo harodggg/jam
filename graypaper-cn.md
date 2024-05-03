@@ -281,7 +281,18 @@ Thus, we define the formalism $\mathbb{D}⟨K \longmapsto	 V⟩$ to denote a dic
 A dictionary’s members must associate at most one unique value for any key k:
 <h6>字典的成员（键值对）对于任何键 k 最多只能关联一个唯一的值。</h6>
 
+(4)
 $$\forall d \in \mathbb{D} : \forall(\rm{k} \longmapsto \rm{v}) \in d : \exists!\rm{v}': (\rm{k} \longmapsto \rm{v}')$$
+
+This assertion allows us to unambiguously define the subscript and subtraction operator for a dictionary d:
+<h6>这个断言使我们可以对字典 d 的下标和减法运算符进行明确的定义。</h6>
+
+（5)
+```math
+\forall d \in \mathbb{D}: d[k] \equiv \Big\{ \begin{align} \rm{v} \qquad if \quad \exists \rm{k}: (k \longmapsto v) \in d \\ \varnothing \qquad otherwise \end{align}
+```
+
+
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
