@@ -251,7 +251,7 @@ We denote the offset/length form of this set as $\mathbb{Z}_{\rm{a} \dots +\rm{b
 
 a short form of $\mathbb{Z}_{\rm{a} \dots \rm{a}+\rm{b}}$.
 
-
+$\left{\right}$
   
 <h6>例如，$\mathbb{Z}_{2...5} = {2, 3, 4}$。我们用 $\mathbb{Z}_{a⋅⋅⋅+b}$ 表示这种区间表示法的另一种形式，它是 $\mathbb{Z}_{a...a+b}$ 的简写形式。</h6>
 
