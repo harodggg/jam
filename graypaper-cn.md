@@ -208,13 +208,13 @@ Values which are not fixed but nonetheless hold some consistent meaning througho
 <h6>我们定义“先于”关系来表示一个术语是通过另一个术语来定义的。例如，y ≺ x 表示 y 可以纯粹用 x 来定义。</h6>
 <h6> ( x > y ,">"不是等号，是指，x在y 之前发生了或者存在，通过x 可以定义y )</h6>
 
-(1)            $\rm{y} < \rm{x} \Longleftrightarrow \exists\mathcal{f}\colon \rm{y} = \mathcal{f}(\rm{x})$
+(1)            $$\rm{y} < \rm{x} \Longleftrightarrow \exists\mathcal{f}\colon \rm{y} = \mathcal{f}(\rm{x})$$
 <h6> ( \Longleftrightarrow 是等价的意思，全等于的意思。这个公式的意思是"x先于y"等价于 "存在一个函数f，可以完成通过x 和这个函数f，得到y"  )</h6>
 
 The substitute-if-nothing function $\mathcal{U}$ is equivalent to the first argument which is not ∅, or ∅ if no such argument exists:
 <h6> 替换空值函数，用符号 $\mathcal{U}$ 表示，可以理解为一个“如果非空则替换”函数。给定若干个参数，它返回 首个非空 的参数（不是空集 ∅）。如果所有参数都为空，则函数本身返回 空集 ∅。</h6>
 
-(2) $\mathcal{U}(a_0, \dots ) \equiv a_x \colon (a_x \neq \varnothing \bigvee x = n, \bigwedge\limits^{x - 1}_{i = 0} a_i = \varnothing)$ 
+(2) $$\mathcal{U}(a_0, \dots ) \equiv a_x \colon (a_x \neq \varnothing \bigvee x = n, \bigwedge\limits^{x - 1}_{i = 0} a_i = \varnothing)$$
 
 <h6>  ( 这个公式的意思是，函数 $\mathcal{U}$ ,取一个集合里第一个不为空的值，如果集合全是空集，那么返回空集 )</h6>
 
@@ -224,7 +224,7 @@ Thus, e.g. $\mathcal{U}(\varnothing, 1, \varnothing, 2) = 1$ and $\mathcal{U}(\v
 **3.3. Sets.** We denote the cardinality of some set s, thenumber of its elements, as the usual ∣s∣. We denote setdisjointness with the relation  &midcir;  . Formally:
 <h6>3.3. 集合。我们用通常的符号 |s| 表示集合 s 的 基数，即其元素的个数。我们用关系 ⫰ 表示集合的 不相交性。</h6>
 
-$\rm{A}\cup\rm{B} = \varnothing  \Longleftrightarrow \rm{A} ⫰ \rm{B} $
+$$\rm{A}\cup\rm{B} = \varnothing  \Longleftrightarrow \rm{A} ⫰ \rm{B} $$
 
 We commonly use ∅ to indicate that some term is validly left without a specific value. Its cardinality is defined as zero. We define the operation ? such that A? ≡ A ∪ {∅} indicating the same set but with the addition of the ∅ element.
 <h6>我们通常使用 ∅ 表示术语可以合法地留空而不指定具体的值。它的 基数 定义为零。我们定义运算符 ? ，使得 A? ≡ A ∪ {∅}，表示相同的集合，但添加了元素 ∅ 。</h6>
@@ -245,17 +245,16 @@ Formally, $\mathbb{Z}_{a \dots b} = {\rm{x} ∣ \rm{x} ∈ \mathbb{Z}, \rm{a} �
 <h6>形式上, $\mathbb{Z}_{a \dots b} = {\rm{x} ∣ \rm{x} ∈ \mathbb{Z}, \rm{a} ≤ \rm{x} < \rm{b}}$</h6>
 
 E.g. $\mathbb{Z}_{2 \dots 5} = {2, 3, 4}$. 
-<h6>例如，$\mathbb{Z}_{2 \dots 5}$ = {2, 3, 4} 。</h6>
+<h6>例如, $\mathbb{Z}_{2 \dots 5} = {2, 3, 4}$ 。</h6>
 
-We denote the offset/length form of this set as $\mathbb{Z}_{\rm{a} \dots +\rm{b}}$ ,
+We denote the offset/length form of this set as $\mathbb{Z}_{ \rm{a} \dots +\rm{b} }$ 
+<h6>我们将此集合的偏移量/长度形式表示为 $\mathbb{Z}_{\rm{a} \dots + \rm{b}}$ </h6>
 
-a short form of $\mathbb{Z}_{\rm{a} \dots \rm{a}+\rm{b}}$.
+, a short form of $\mathbb{Z}_{\rm{a} \dots \rm{a}+\rm{b}}$ .
+<h6>它是 $\mathbb{Z}_{\rm{a} \dots \rm{a}+\rm{b}}$ 的简写形式。</h6>
 
-$\left{\right}$
-  
-<h6>例如，$\mathbb{Z}_{2...5} = {2, 3, 4}$。我们用 $\mathbb{Z}_{a⋅⋅⋅+b}$ 表示这种区间表示法的另一种形式，它是 $\mathbb{Z}_{a...a+b}$ 的简写形式。</h6>
 
-<h6>例如，$\mathbb{Z}_{2⋅⋅⋅+3}$ 等于 $\mathbb{Z}_{2...5}$ 。</h6>
+
 
 It can sometimes be useful to represent lengths of sequences and yet limit their size, especially when dealing with sequences of octets which must be stored practically. Typically, these lengths can be defined as the set  $\mathbb{N}_{2^{32}} . To improve clarity, we denote NL as the set of lengths of octet sequences and is equivalent to 
 
