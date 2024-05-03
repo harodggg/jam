@@ -268,7 +268,7 @@ We denote the % operator as the modulo operator, e.g. 5 % 3 = 2. Furthermore, we
 **3.5. Dictionaries.** A dictionary is a possibly partial mapping from some domain into some co-domain in much the same manner as a regular function. Unlike functions however, with dictionaries the total set of pairings are necessarily enumerable, and we represent them in some data structure as the set of all $(key \longmapsto value)$ pairs. (In such data-defined mappings, it is common to name the values within the range a key and the values within the domain a value, hence the naming.)
 <h6>3.5. 字典。 字典是一种类似于普通函数的部分映射，它从某个域映射到某个共同域。然而，与函数不同的是，字典的配对总数一定是可枚举的，我们通过数据结构将它们表示为所有(键 $\longmapsto$ 值) 对的集合。（在这种数据定义的映射中，通常将范围内的值称为键，域内的值称为值，因此得名。）</h6>
 
-Thus, we define the formalism $\mathbb{D}⟨K \longmapsto	 V⟩$ to denote a dictionary which maps from the domain K to the range V. We define a dictionary as a member of the set of all dictionaries $\mathbb{D}$ and a set of pairs $\rm{p} = (\rm{k} \longmapsto \rm{v})$:
+Thus, we define the formalism $\mathbb{D}⟨K \longmap	 V⟩$ to denote a dictionary which maps from the domain K to the range V. We define a dictionary as a member of the set of all dictionaries $\mathbb{D}$ and a set of pairs $\rm{p} = (\rm{k} \longmapsto \rm{v})$:
 <h6>因此，我们定义形式主义 D⟨K⟼V⟩ 来表示一个字典，它将域 K 映射到范围 V。我们将字典定义为所有字典集合 D 的成员，以及一个由键值对组成的集合 p=(k⟼v)：</h6>
 
 (3) 
@@ -282,7 +282,7 @@ A dictionary’s members must associate at most one unique value for any key k:
 <h6>字典的成员（键值对）对于任何键 k 最多只能关联一个唯一的值。</h6>
 
 (4)
-$$\forall d \in \mathbb{D} : \forall(\rm{k} \longmapsto \rm{v}) \in d : \exists!\rm{v}': (\rm{k} \longmapsto \rm{v}')$$
+$$\forall d \in \mathbb{D} : \forall(\rm{k} \longrightarrow \rm{v}) \in d : \exists!\rm{v}': (\rm{k} \longmapsto \rm{v}')$$
 
 This assertion allows us to unambiguously define the subscript and subtraction operator for a dictionary d:
 <h6>这个断言使我们可以对字典 d 的下标和减法运算符进行明确的定义。</h6>
@@ -293,7 +293,23 @@ This assertion allows us to unambiguously define the subscript and subtraction o
 ```
 (6)
 ```math
-\forall d \in \mathbb{D},s: a /\ s \equiv \{ (\rm{k} \longmapsto \rm{v}) : (\rm{k} \longmapsto \rm{v}) \in d, \rm{k} \notin \rm{s} \}
+\forall d \in \mathbb{D},s: a \setminus  s \equiv \{ (\rm{k} \longmapsto \rm{v}) : (\rm{k} \longmapsto \rm{v}) \in d, \rm{k} \notin \rm{s} \}
+```
+<h6> 我感觉是拼写错误，a 是d ,这里定义了集合的减法。也就是一个元素属于集合a\d,但是不属于集合s。就是a\s(d\s) ) </h6>
+
+Note that when using a subscript, it is an implicit assertion that the key exists in the dictionary. Should the key not exist, the result is undefined and any block which relies on it must be considered invalid.
+<h6>注意，当使用下标访问字典元素时，隐含地断言了键在字典中存在。如果键不存在，则结果是未定义的，任何依赖此结果的代码块都将被视为无效。</h6>
+
+It is typically useful to limit the sets from which the keys and values may be drawn. Formally, we define a typed dictionary $\mathbb{D}⟨K \longrightarrow V ⟩$ as a set of pairs p of the form (k $\longmapsto$ v):
+<h6>为了限制键和值的来源集合，我们通常会进行类型化。形式上，我们将类型化字典 D⟨K⟶V⟩ 定义为由形式为 (k ⟼ v) 的键值对 p 组成的集合：</h6>
+
+(7)
+```math
+  \mathbb{D} \left \langle K \longrightarrow V \right \rangle \subset \mathbb{D}
+```
+(8)
+```math
+  \mathbb{D} \left \langle K \longrightarrow V \right \rangle \equiv \Big\{\{ (k \longmapsto v) | k \in K \wedge v \in V \}\Big\}
 ```
 
 
