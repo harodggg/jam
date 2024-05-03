@@ -239,19 +239,18 @@ to avoid confusion with Boolean false, which may be interpreted as some successf
 
 
 $\mathbb{Z}$ denotes the set of integers. We denote $\mathbb{Z}_{\rm{a} \dots \rm{b}}$ to be the set of integers within the interval [a, b). 
+<h6>记号 Z 表示所有整数的集合。我们用符号 $\mathbb{Z}_{a...b}$ 表示区间 [a, b) 内的整数集合。</h6>
 
 Formally, $\mathbb{Z}_{a \dots b} = {\rm{x} ∣ \rm{x} ∈ \mathbb{Z}, \rm{a} ≤ \rm{x} < \rm{b}}$ .  
+<h6>形式上, $\mathbb{Z}_{a \dots b} = {\rm{x} ∣ \rm{x} ∈ \mathbb{Z}, \rm{a} ≤ \rm{x} < \rm{b}}$</h6>
 
-E.g. $\mathbb{Z}_{2 \dots 5}$ = {2, 3, 4}. 
+E.g. $\mathbb{Z}_{2 \dots 5} = {2, 3, 4}$. 
+<h6>例如，$\mathbb{Z}_{2 \dots 5}$ = {2, 3, 4} 。</h6>
 
 We denote the offset/length form of this set as $\mathbb{Z}_{\rm{a} \dots +\rm{b}}$ ,
 
 a short form of $\mathbb{Z}_{\rm{a} \dots \rm{a}+\rm{b}}$.
 
-<h6>记号 Z 表示所有整数的集合。我们用符号 $\mathbb{Z}_{a...b}$ 表示区间 [a, b) 内的整数集合。</h6>
-
-
-<h6>形式上，$\mathbb{Z}_{a...b}$ = {x ∈ $\mathbb{Z}$ | a ≤ x < b} 。</h6>
 
   
 <h6>例如，$\mathbb{Z}_{2...5} = {2, 3, 4}$。我们用 $\mathbb{Z}_{a⋅⋅⋅+b}$ 表示这种区间表示法的另一种形式，它是 $\mathbb{Z}_{a...a+b}$ 的简写形式。</h6>
