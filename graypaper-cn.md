@@ -293,7 +293,7 @@ This assertion allows us to unambiguously define the subscript and subtraction o
 ```
 (6)
 ```math
-\forall d \in \mathbb{D},s: a \ s \equiv \{ (\rm{k} \longmapsto \rm{v}) : (\rm{k} \longmapsto \rm{v}) \in d, \rm{k} \notin \rm{s} \}
+\forall d \in \mathbb{D},s: a /\ s \equiv \{ (\rm{k} \longmapsto \rm{v}) : (\rm{k} \longmapsto \rm{v}) \in d, \rm{k} \notin \rm{s} \}
 ```
 
 
