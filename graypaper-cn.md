@@ -326,7 +326,7 @@ Note that since the domain of $\mathcal{V}$ is a set, should different keys with
 <h6>注意，由于集合 $\mathcal{V}$ 的定义域是一个集合，即使字典中出现多个键对应同一个值，该集合也只会包含该值的一个副本。</h6>
 
 **3.6. Tuples.** Tuples are groups of values where each item typically belongs to a different set. They are denoted with parentheses, e.g. the tuple t of the integers 3 and 5 is denoted t = (3, 5), and it exists in the set of integer pairs sometimes denoted $\mathbb{N}×\mathbb{N}$, but denoted in the present work as $(\mathbb{N}, \mathbb{N})$.
-<h6>元组。元组是有序值集合，每个元素通常来自不同的集合。它们用括号表示。例如，包含整数 3 和 5 的元组 t 表示为 t = (3, 5)。该元组属于所有可能的整数有序对的集合。这个集合有时表示为$\mathbb{N}×\mathbb{N}$ ，但在本文档中，我们将使用符号 $(\mathbb{N}, \mathbb{N})$ 表示。</h6>
+<h6>元组。元组是有序值集合，每个元素通常来自不同的集合。它们用括号表示。例如，包含整数 3 和 5 的元组 t 表示为 t = (3, 5)。该元组属于所有可能的整数有序对的集合。这个集合有时表示为 $\mathbb{N}×\mathbb{N}$ ，但在本文档中，我们将使用符号 $(\mathbb{N}, \mathbb{N})$ 表示。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
