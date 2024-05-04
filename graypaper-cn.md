@@ -336,6 +336,13 @@ Note that since the domain of $\mathcal{V}$ is a set, should different keys with
 3.7. Sequences. A sequence is a series of elements with particular ordering not dependent on their values. The set of sequences of elements all of which are drawn from some set T is denoted ⟦T⟧, and it defines a partial mapping N → T. The set of sequences containing exactly n elements each a member of the set T may be denoted $⟦T⟧_n$ and accordingly defines a complete mapping $\mathbb{N}_n$ → T. Similarly, sets of sequences of at most n elements and at least n elements may be denoted $⟦T⟧∶_n$ and $⟦T⟧_n∶$ respectively.
 <h6>序列是一系列按特定顺序排列的元素，元素的取值并不影响这种顺序。由集合 T 中的元素构成的所有序列的集合记为 ⟦T⟧，它定义了一个从自然数集 $\mathbb{N}$ 到集合 T 的部分映射。对于每个正整数 n，由 n 个集合 T 的元素组成的序列的集合可以记为 $⟦T⟧_n$，它对应了一个从 n 维自然数集 $\mathbb{N}_n$ 到集合 T 的完全映射。类似地，至多包含 n 个元素的序列集合和至少包含 n 个元素的序列集合分别记为 $⟦T⟧∶_n$ and $⟦T⟧_n∶$ 。</h6>
 
+<p>Sequences are subscriptable, thus a specific item at index i within a sequence s may be denoted s[i], or where unambiguous, $s_i$. A range may be denoted using an ellipsis for example: $[0, 1, 2, 3]_{...2}$ == [0, 1] and $[0, 1, 2, 3]_{1⋅⋅⋅+2}$ == [1, 2]. The length of such a sequence may be denoted ∣s∣.</p>
+<h6>序列是可以按索引取值的，因此序列 s 中的第 i 个元素可以表示为 s[i]，或者在没有歧义的情况下简写为 si。可以使用省略号表示范围，例如： [0, 1, 2, 3]...2 == [0, 1] 表示取序列中前两个元素，即子序列 [0, 1] [0, 1, 2, 3]1⋅⋅⋅+2 == [1, 2] 表示取序列中从索引 1 开始的两个元素，即子序列 [1, 2]。序列的长度可以用 |s| 表示</h6>
+
+We denote modulo subscription as $s[i]^\circlearrowright \equiv$ s[ i % ∣s∣ ].We denote the final element x of a sequence s = [..., x] through the function last(s) ≡ x.
+
+<h6>我们用 $s[i]^\circlearrowright \equiv$ s[ i % ∣s∣ ] 表示序列的 模运算索引。给定序列 s，其中 i 是索引，∣s∣ 是序列的长度 (元素个数)。该表达式读作 "s 在 i 的模运算索引等于 s 在 i 除以 序列长度的余数 处的元素”。 例如，序列为 [1, 2, 3, 4] 时, $s[2]^\circlearrowright$ 等于 s[2 % 4]，即 s[2]，因为 2 除以 4 的余数为 2。我们用函数 last(s) $\equiv$ x 表示序列 s 的 最后一个元素 x。</h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
