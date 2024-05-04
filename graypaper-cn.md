@@ -345,7 +345,7 @@ We denote modulo subscription as $s[i]^\circlearrowright \equiv$ s[ i % ∣s∣ 
 
 <p>3.7.1. Construction. We may wish to define a sequence in terms of incremental subscripts of other values: $[x_0,x_1, . . . ]_n$ denotes a sequence of n values beginning x0 continuing up to $x_{n−1}$. Furthermore, we may also wish to define a sequence as elements each of which are a function of their index i; in this case we denote $[f(i) ∣ i  \mathbb{N}_n]$ ≡ [f(0), f(1), . . . , f(n − 1)]. Thus, when the ordering of elements matters we use <− rather than the unordered notation ∈. The latter may also be written in short form [f(i −< Nn)]. This applies to any set which has an unambiguous ordering, particularly sequences, thus [ i2 ∣ i −< [1, 2, 3] ] = [1, 4, 9]. Multiple sequences may be combined, thus [ i ⋅ j ∣ i −< [1, 2, 3], j <− [2, 3, 4] ] = [2, 6, 12].</p>
   
-<h6>3.7.1 构造。</h6>
+<h6>3.7.1 构造。我们有时希望根据其他值的增量索引来定义序列：$[x_0,x_1, . . . ]_n$  表示一个由 n 个值组成的序列，从$x_0$开始一直到 $x_{n−1}$。其中$x_0$是序列的第一个元素，n 是序列的长度。$x_i$表示序列中第 i 个元素 (i 从 0 到 n-1)。省略号 (...) 表示序列按照相同的递增 (或递减) 规则继续下去。</h6>
 
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
