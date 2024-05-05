@@ -350,6 +350,8 @@ Sequences may be constructed from sets or other sequences whose order should be 
 
 The key component may be elided in which case it is assumed to be ordered by the elements directly; i.e. [i ∈ $\mathit{X}$] ≡ $[i \wr i ∈ X]$. $[i_k \wr \wr i ∈ X]$ does the same, but excludes any duplicate values of i. E.g. assuming s = [1, 3, 2, 3], then $[i \wr i ∈ s]$ = [1, 2, 3] and $[−i \wr i ∈ s]$ = [3, 3, 2, 1].
 
+<h6>关键元素有时可以省略，此时假定序列由元素本身直接排序。也就是说，[i ∈ X] 等同于$[i /wr i ∈ \mathit{X}]$ 。[ik _ _i ∈ X] 做同样的事，但会排除 i 的重复值。例如，假设 s = [1, 3, 2, 3]，那么 [i $\wr \wr$ i ∈ s] = [1, 2, 3] 和 $[−i \wr \wr  i ∈ s]$ = [3, 3, 2, 1]。</h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
