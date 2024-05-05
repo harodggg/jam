@@ -396,10 +396,10 @@ We may sometimes wish to take only the first x octets of a hash, in which case w
 <h6>3.8.2 签名方案: $\mathbb{E}_k⟨m⟩ ⊂ \mathbb{Y}_{64}$  是由 Josefsson 和 Liusvaara 在 2017 年定义的 Ed25519 算法产生的有效签名集合。集合中的每个签名都用 64 个八位节  表示。为了便于阅读，我们用 $\mathbb{H}_\mathit{E}$ 表示有效的公钥集合。公钥 k 是一个长度为 32 个八位节的元素，它与用于生成签名的秘密密钥相对应。消息本身用符号 m 表示。</h6>
 
 We use $\mathbb{Y}_{BLS} ⊂ \mathbb{Y}\_{144}$ to denote the set of public keys forthe bls signature scheme, described by Boneh, Lynn, and Shacham 2004, on curve bls12-381 defined by Hopwoodet al. 2020.
-<h6>我们使用 $\mathbb{Y}_{BLS} ⊂ \mathbb{Y}\_{144}$ 来表示 BLS 签名方案的公钥集合，该方案由 Boneh、Lynn 和 Shacham 在 2004 年描述，基于 Hopwood 等人在 2020 年定义的 bls12-381 曲线。</h6>
+<h6>我们使用 $\mathbb{Y}_{BLS} ⊂ \mathbb{Y}_{144}$ 来表示 BLS 签名方案的公钥集合，该方案由 Boneh、Lynn 和 Shacham 在 2004 年描述，基于 Hopwood 等人在 2020 年定义的 bls12-381 曲线。</h6>
 
-We denote the set of valid Bandersnatch public keys as $\mathbb{H}_B$, defined in appendix G. $F^{m∈\mathbb{Y}}\_{k∈\mathbb{H}\_B}⟨x ∈ \mathbb{Y}⟩ ⊂ \mathbb{Y}\_{96}$ is the set of valid singly-contextualized signatures of utilizing the secret counterpart to the public key k, some context x and message m.
-<h6>我们记 $\mathbb{H}_B$ 为有效 Bandersnatch 公钥的集合，具体定义参见附录 G。$F^{m∈\mathbb{Y}}_{k∈\mathbb{H}_B}⟨x ∈ \mathbb{Y}⟩ ⊂ \mathbb{Y}_{96}$ 表示利用公钥 k 的秘密密钥、某种上下文信息 x 以及消息 m 生成的单一上下文签名（singly-contextualized signatures）的有效集合。</h6>
+We denote the set of valid Bandersnatch public keys as $\mathbb{H}_B$ , defined in appendix G. $F^{m∈\mathbb{Y}}\_{k∈\mathbb{H}\_B}⟨x ∈ \mathbb{Y}⟩ ⊂ \mathbb{Y}\_{96}$ is the set of valid singly-contextualized signatures of utilizing the secret counterpart to the public key k, some context x and message m.
+<h6>我们记 $\mathbb{H}_B$ 为有效 Bandersnatch 公钥的集合，具体定义参见附录 G. $F^{m∈\mathbb{Y}}_{k∈\mathbb{H}_B}⟨x ∈ \mathbb{Y}⟩ ⊂ \mathbb{Y}_{96}$ 表示利用公钥 k 的秘密密钥、某种上下文信息 x 以及消息 m 生成的单一上下文签名（singly-contextualized signatures）的有效集合。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
