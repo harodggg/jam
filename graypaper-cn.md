@@ -365,6 +365,11 @@ We denote sequence subtraction with a slight modification of the set subtraction
 be denoted s <img width="57" alt="image" src="https://github.com/harodggg/jam/assets/31732456/06f5b684-4577-41ee-91e3-ad9559ba6b64"> {v}.
 <h6>我们用稍微修改集合差集运算符的方式来表示序列差分。具体来说，序列 s 去掉最左边的等于 v 的元素，可以用 s <img width="57" alt="image" src="https://github.com/harodggg/jam/assets/31732456/385bd5d3-db60-4175-b065-52e625577782">{v} 表示。</h6>
 
+3.7.3. Boolean values. $\mathbb{B}_s$ denotes the set of Boolean strings of length s, thus $\mathbb{B}_s = [{\bot, \top}]_s$ . When dealing with Boolean values we may assume an implicit equivalence mapping to a bit whereby $\top = 1 and \bot = 0$, thus $\mathbb{B}_◻ = [\mathbb{N}_2]_◻$. We use the function bits($\mathbb{Y}$) ∈ $\mathbb{B}$ to denote the sequence of bits, ordered with the least significant first, which represent the octet sequence $/mathbb{Y}$, thus bits([5, 0]) = [1, 0, 1, 0, 0, . . . ].
+<h6>
+3.7.3. 布尔值。记号 $\mathbb{B}_s$ 表示长度为 s 的布尔字符串集合，因此 $\mathbb{B}_s = [{\bot, \top}]_s$ 。这表示 $\mathbb{B}_s$  中的每个字符串都由 s 个字符组成，每个字符只能是 "0" 或 "1"。
+处理布尔值时，我们可以假设存在一个隐式的等价映射到比特上，其中 "1" 表示真 (true)，"0" 表示假 (false)。因此, $\mathbb{B}_◻ = [\mathbb{N}_2]_◻$，其中 $\mathbb{N}_2$ 表示包含 0 和 1 的集合，◻ 表示某种集合运算 (operator)。我们使用函数 $bits(\mathbb{Y}) ∈ \mathbb{B}$ 来表示比特序列，它以最低有效位在前 (least significant bit first) 的顺序表示八位节 (octet) 序列 $\mathbb{Y}$。例如，bits([5, 0]) = [1, 0, 1, 0, 0, ..., 0]。这里需要注意的是，省略号 "..." 表示后面还有很多个 "0"，具体数量取决于 octet 的位数 (通常为 8 位)。</h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
