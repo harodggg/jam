@@ -360,7 +360,11 @@ Sequences of values which themselves have a defined ordering have an implied ord
 
 3.7.2. Editing. We define the sequence concatenation operator $\frown$ such that $[x_0,x_1, \dots ,y_0,y_1, \dots ] \equiv x \frown y$ . Futher, we denote element-concatenation as x<img width="52" alt="image" src="https://github.com/harodggg/jam/assets/31732456/5897dd06-684a-4edc-be25-acecf1f92612"> i ≡ x ⌢ [i]. We denote the sequence made up of the first n elements of sequence s to be ${\mathop{s}\limits^\rightarrow}^n$ ≡ $[s_0, s_1, . . . , s_{n−1}]$, and only the final elements ${\mathop{s}\limits^\leftarrow}^n$ .
 <h6>编辑序列。我们定义序列连接运算符 ⌢，使得 $[x_0,x_1,\dots,y_0,y_1,\dots]$ 等于 x ⌢ y。此外，我们将元素连接表示为 x <img width="52" alt="image" src="https://github.com/harodggg/jam/assets/31732456/5fdf28e5-b6fe-4dd4-bda2-f4d2d514b94e"> i ≡ x ⌢ [i]。我们用 ${\mathop{s}\limits^\rightarrow}^n$ 表示序列 s 的前 n 个元素组成的序列，即 $[s_0, s_1, . . . , s_{n−1}]$，用 ${\mathop{s}\limits^\leftarrow}^n$  表示序列 s 的最后 n 个元素。</h6>
-  
+
+We denote sequence subtraction with a slight modification of the set subtraction operator; specifically, some sequence s excepting the left-most element equal to v would
+be denoted s <img width="57" alt="image" src="https://github.com/harodggg/jam/assets/31732456/06f5b684-4577-41ee-91e3-ad9559ba6b64"> {v}.
+<h6>我们用稍微修改集合差集运算符的方式来表示序列差分。具体来说，序列 s 去掉最左边的等于 v 的元素，可以用 s <img width="57" alt="image" src="https://github.com/harodggg/jam/assets/31732456/385bd5d3-db60-4175-b065-52e625577782">{v} 表示。</h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
