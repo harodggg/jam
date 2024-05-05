@@ -345,6 +345,10 @@ We denote modulo subscription as $s[i]^\circlearrowright \equiv$ s[ i % ∣s∣ 
 
 <h6>3.7.1 构造。我们有时希望根据其他值的增量索引来定义序列: $[x_0,x_1, . . . ]_n$  表示一个由 n 个值组成的序列,从 $x_0$ 开始一直到 $x_{n−1}$。其中 $x_0$ 是序列的第一个元素，n 是序列的长度. $x_i$ 表示序列中第 i 个元素 (i 从 0 到 n-1)。省略号 (...) 表示序列按照相同的递增 (或递减) 规则继续下去。在这种情况下，我们用 [f(i) ∣ i <− N] 表示 [f(0), f(1), ..., f(n - 1)]。因此，当元素的顺序很重要时，我们使用 <− 而不是无序符号 ∈。后者也可以简写为 [f(i <- $mathbb{N}$)]。这适用于任何具有明确顺序的集合，特别是序列，因此 [i^2 ∣ i <0 [1, 2, 3]] = [1, 4, 9]。可以组合多个序列，因此 [i ⋅ j ∣ i <- [1, 2, 3], j <− [2, 3, 4]] = [2, 6, 12]。</h6>
 
+Sequences may be constructed from sets or other sequences whose order should be ignored through sequence ordering notation $[i_k \wr i ∈ X]$, which is defined to result in the set or sequence of its argument except that all elements i are placed in ascending order of the corresponding value $i_k$.
+<h6>序列可以由集合或其他忽略顺序的序列构造而成，通过序列排序记法 $[i_k \wr i∈X]$ 来表示。该记法的作用是重新排列原始集合或序列，使得所有元素（记为 $i_k$）都按照它们对应的值升序排列。</h6>
+
+The key component may be elided in which case it is assumed to be ordered by the elements directly; i.e. [i ∈ $\mathit{X}$] ≡ $[i \wr i ∈ X]$. $[i_k \wr \wr i ∈ X]$ does the same, but excludes any duplicate values of i. E.g. assuming s = [1, 3, 2, 3], then $[i \wr i ∈ s]$ = [1, 2, 3] and $[−i \wr i ∈ s]$ = [3, 3, 2, 1].
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
