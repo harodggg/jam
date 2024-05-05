@@ -357,6 +357,9 @@ Sets may be constructed from sequences with the regular set construction syntax,
 
 Sequences of values which themselves have a defined ordering have an implied ordering akin to a regular dictionary, thus [1, 2, 3] < [1, 2, 4] and [1, 2, 3] < [1, 2, 3, 1].
 <h6>由本身具有定义顺序的数值组成的序列，就像常规字典一样，也隐含着排序顺序。因此，我们可以这样进行比较：[1, 2, 3] < [1, 2, 4] 以及 [1, 2, 3] < [1, 2, 3, 1].</h6>
+
+3.7.2. Editing. We define the sequence concatenation operator $\frown$ such that $[x_0,x_1, \dots ,y_0,y_1, \dots ] \equiv x \frown y$. Futher, we denote element-concatenation as x i ≡ x ⌢ [i]. We denote the sequence made up of the first n elements of sequence s to be Ð→s n ≡ [s0, s1, . . . , sn−1], and only the final elements as ←Ðs n.
+<h6>编辑序列。我们定义序列连接运算符 ⌢，使得 $[x_0,x_1,\dots,y_0,y_1,\dots]$ 等于 x ⌢ y。此外，我们将元素连接表示为 x ^ i ≡ x ⌢ [i]。我们用 Ð→s n 表示序列 s 的前 n 个元素组成的序列，即 [s0, s1, . . . , sn−1]，用 ←Ðs n 表示序列 s 的最后 n 个元素。</h6>
   
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
