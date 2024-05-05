@@ -352,6 +352,12 @@ The key component may be elided in which case it is assumed to be ordered by the
 
 <h6>关键元素有时可以省略，此时假定序列由元素本身直接排序。也就是说，[i ∈ X] 等同于$[i /wr i ∈ \mathit{X}]$ 。[ik _ _i ∈ X] 做同样的事，但会排除 i 的重复值。例如，假设 s = [1, 3, 2, 3]，那么 [i $\wr \wr$ i ∈ s] = [1, 2, 3] 和 $[−i \wr \wr  i ∈ s]$ = [3, 3, 2, 1]。</h6>
 
+Sets may be constructed from sequences with the regular set construction syntax, e.g. assuming s = [1, 2, 3, 1], then {a ∣ a ∈ s} would be equivalent to {1, 2, 3}.
+<h6>可以使用常规集合构造语法从序列构造集合。例如，假设 s = [1, 2, 3, 1]，那么 {a ∣ a ∈ s} 等于 {1, 2, 3}。</h6>
+
+Sequences of values which themselves have a defined ordering have an implied ordering akin to a regular dictionary, thus [1, 2, 3] < [1, 2, 4] and [1, 2, 3] < [1, 2, 3, 1].
+<h6>由本身具有定义顺序的数值组成的序列，就像常规字典一样，也隐含着排序顺序。因此，我们可以这样进行比较：[1, 2, 3] < [1, 2, 4] 以及 [1, 2, 3] < [1, 2, 3, 1].</h6>
+  
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
