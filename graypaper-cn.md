@@ -374,6 +374,19 @@ be denoted s <img width="57" alt="image" src="https://github.com/harodggg/jam/as
 
 <h6>3.7.4 八位节和数据块 (Blobs). $\mathbb{Y}$ 表示任意长度的八位节字符串集合，又称为数据块。八位节是计算机数据单位，由 8 个比特组成，可以表示从 0 到 255 之间的数值或单个字符. $\mathbb{Y}_x$ 表示长度为 x 的八位节序列集合。换句话说, $\mathbb{Y}_x$ 中的每个元素都是由 x 个八位节组成的有序序列. $\mathbb{Y}_\$$ 表示 $\mathbb{Y}$ 的子集，包含所有使用 ASCII 码编码的字符串。ASCII 码是一种字符编码标准，用于表示英文字母、数字和其他常用符号。隐式双射关系 (implicit bijective relationship)文中提到八位节和小于 256 的自然数之间存在着一种隐式的双射关系。这意味着我们可以将一个八位节的值转换为小于 256 的自然数，也可以将一个自然数转换为一个八位节。但是需要注意，这种转换是隐式的，并不总是显式地执行。强制转换,文中提到了在八位节形式和整数形式之间可能存在隐式的强制转换。这表示我们可以根据上下文，将一个八位节的值视为一个整数，也可以将一个整数视为一个八位节序列。序列化 (serialization),将数据结构或对象转换为可存储或传输的格式的过程。关键区别,八位节和整数在序列化方面存在着关键区别。一个八位节总是被序列化为仅包含它自己的序列。而一个整数则可能会根据其大小，被序列化为包含多个八位节的序列。例如，数字 1 可以表示为单个八位节，而数字 100 则需要多个八位节来表示。</h6>
 
+*3.7.5. Shuffling.* We define the sequence-shuffle function $\mathcal{F}$, originally introduced by Fisher and Yates 1938, with an efficient in-place algorithm described by Wikipedia 2024.This accepts a sequence and some entropy and returns a sequence of the same length with the same elements but in an order determined by the entropy. The entropy may be provided as either an indefinite sequence of integers or a hash. For a full definition see appendix E.
+
+<h6>3.7.5. 序列洗牌。我们定义序列洗牌函数 $\mathcal{F}$ ，它最初由 Fisher 和 Yates 在 1938 年引入，并由 Wikipedia 在 2024 年描述了一种高效的原地（in-place）算法。该函数接受一个序列和一些熵 (entropy) 作为输入，并返回一个具有相同长度、相同元素但顺序由熵决定的序列。熵可以表示为无限的整数序列或哈希值。有关完整定义，请参见附录 E。</h6>
+
+**3.8. Cryptography.**
+<h6>密码学</h6>
+
+<p>3.8.1. Hashing. $\mathcal{H}$ denotes the set of 256-bit values typically expected to be arrived at through a cryptographic function, equivalent to $\mathbb{Y}_{32}$ with 
+ $\mathcal{H}^{0}$ being equal to $[0]_{32}$ . We assume a function $\mathcal{H}(m ∈ \mathbb{Y}) ∈ \mathbb{H}$ denoting the Blake2b 256-bit hash introduced by Saarinen and Aumasson 2015 and a function $\mathcal{H}_K(m ∈ \mathbb{Y}) ∈ H$ denoting the Keccak 256-bit hash as proposed by Bertoni et al. 2013 and utilized by Wood 2014.</p>
+
+ <h6>
+3.8.1 哈希（Hashing). $\mathcal{H}$ 表示一组通常由密码函数产生的 256 位值的集合，这与 $\mathbb{Y}_{32}$ 等价，其中 H0 等于 $[0]_{32}$。$[0]_{32}$ 表示由 32 个 0 组成的字节串。
+$\mathcal{H}(m ∈ \mathbb{Y}) ∈ \mathbb{H}$ 表示一个函数 $\mathcal{H}$，它接受集合 $\mathbb{Y}$ 中的元素 m 为输入，并输出一个属于集合 $\mathbb{H}$ 的 256 位哈希值。Blake2b由 Saarinen 和 Aumasson 在 2015 年提出的密码散列函数，可以生成 256 位的哈希值。“散列”和“哈希”在该语境下可以互换使用. $\mathcal{H}_K(m ∈ \mathbb{Y}) ∈ H$ 表示另一个函数 $\mathcal{H}_K$ ，它也接受集合 $\mathbb{Y}$ 中的元素 m 为输入，并输出一个属于集合 $\mathbb{H}$ 的 256 位哈希值。 Keccak: 由 Bertoni 等人在 2013 年提出的密码散列函数，Keccak 也是 SHA-3 算法的基础，可以生成 256 位的哈希值。 Wood 2014: 推测 Wood 在 2014 年的某份研究或文档中使用了 Keccak 哈希函数。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
