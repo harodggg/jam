@@ -522,6 +522,26 @@ $$ \rho^\ddagger \prec (\mathbf{E}_A,\rho^\dagger) $$
 
 $$ \rho ' \prec (\mathbf{E}_G,\rho^\ddagger,\kappa ,\tau') $$
 
+(27)
+
+```math
+\left.\begin{matrix}
+ \delta '\\
+ \chi '\\
+\iota ' \\
+\varphi'  \\
+\mathbf{C} \\
+\end{matrix}\right\} \prec (\mathbf{E}_A,\rho ',\delta ^ \dagger,\chi,\iota,\varphi )
+```
+(28)
+
+$$\alpha' \prec (\mathbf{E}_G,\varphi ',\alpha)$$
+
+The only synchronous entangements are visible through the intermediate components superscripted with a dagger and defined in equations 16, 23 and 25. The latter two mark a merge and join in the dependency graph and, concretely, imply that the preimage lookup extrinsic must be folded into state before the availability extrinsic may be fully processed and accumulation of work happen.
+<h6>依赖图中唯一可见的同步依赖关系是通过用匕首标记的中间组件 (equations 16, 23 and 25)。后两个方程表示了依赖图中的合并和连接操作。具体而言，这表示必须在将预查找外部函数的结果应用于状态之后，才能完全处理可用性外部函数并进行累积工作。</h6>
+
+
+
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
