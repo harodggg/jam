@@ -420,13 +420,13 @@ $$\sigma' \equiv \Upsilon (\sigma,\mathbf{B})$$
 Where $\sigma$ is the prior state, $\sigma'$ is the posterior state, $\mathbf{B}$ is some valid block and $\Upsilon$ is our block-level state-transition function.
 <h6>$\sigma$表示之前的状态，即应用区块之前的区块链状态. $\sigma'$ 表示之后的狀態，即应用区块之后的区块链状态. $\mathbf{B}$代表一个有效的区块，包含要添加到区块链中的数据. $\Upsilon$  表示我们的块级状态转换函数。</h6>
 
-Broadly speaking, Jam (and indeed blockchains in general) may be defined simply by specifying $\Upsilon$ and some genesis state $\sigma^0.^7$ We also make several additional assumptions of agreed knowledge: a universally known clock, and the practical means of sharing data with other systems operating under the same consensus rules. The latter twowere both assumptions silently made in the *YP*.
-<h6></h6>
+Broadly speaking, Jam (and indeed blockchains in general) may be defined simply by specifying $\Upsilon$ and some genesis state $\sigma^0$.[7] We also make several additional assumptions of agreed knowledge: a universally known clock, and the practical means of sharing data with other systems operating under the same consensus rules. The latter twowere both assumptions silently made in the *YP*.
+<h6>总体而言，Jam 协议（以及大体上所有的区块链）都可以通过简单指定状态转换函数 $\Upsilon$  和初始状态 $\sigma^0$ 来定义。我们还做出了一些额外的共同认知假设：一个全局统一的时间源以及与运行相同共识规则的其他系统进行数据共享的实用方法。后两个假设在比特币黄皮书 (YP) 中都被默认引用了。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
 [^4]: Some initial thoughts on the matter resulted in a proposal by Sadana 2024 to utilize Polkadot technology as a means of helping create a modicum of compatibility between roll-up ecosystems!
 [^5]: In all likelihood actually substantially more as this was using low-tier “spare” hardware in consumer units, and our recompiler was unoptimized.
-[^6]: Earlier node versions utilized Arweave network, a decentralized data store, but this was found to be unreliable for the data throughput which Solana required.
-
+[^6]: Earlier node versions utilized Arweave network, a decentralized data store, but this was found to be unreliable for the data throughput which Solana required.（早期的 Solana 节点版本曾使用 Arweave 网络作为去中心化数据存储方案。然而，事实证明 Arweave 网络无法满足 Solana 所需的数据吞吐量，因此被弃用。）
+[^7]: Practically speaking, blockchains sometimes make assumptions of some fraction of participants whose behavior is simply honest, and not provably incorrect nor otherwise economically disincentivized. While the assumption may be reasonable, it must nevertheless be stated apart from the rules of state-transition.（实事求是地讲，区块链有时会假设参与者中的一部分人是诚实的，他们的行为并非可证明的错误，也并非受到经济上的惩罚。尽管这种假设在一定程度上是合理的，但它仍然需要与状态转换规则分开来单独陈述。）
