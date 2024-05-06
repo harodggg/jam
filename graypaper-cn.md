@@ -418,7 +418,7 @@ As in the Yellow Paper, we begin our formalisms by recalling that a blockchain m
 $$\sigma' \equiv \Upsilon (\sigma,\mathbf{B})$$
 
 Where $\sigma$ is the prior state, $\sigma'$ is the posterior state, $\mathbf{B}$ is some valid block and $\Upsilon$ is our block-level state-transition function.
-<h6>$\sigma$表示之前的状态，即应用区块之前的区块链状态. $\sigma'$ 表示之后的狀態，即应用区块之后的区块链状态. $\mathbf{B}$代表一个有效的区块，包含要添加到区块链中的数据.$\Upsilon$  表示我们的块级状态转换函数。</h6>
+<h6>$\sigma$表示之前的状态，即应用区块之前的区块链状态. $\sigma'$ 表示之后的狀態，即应用区块之后的区块链状态. $\mathbf{B}$代表一个有效的区块，包含要添加到区块链中的数据. $\Upsilon$  表示我们的块级状态转换函数。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
