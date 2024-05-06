@@ -444,8 +444,11 @@ The header is a collection of metadata primarily concerned with cryptographic re
 
 <h6>
 <ul>
-<li><Strong>Coffee</Strong></li>
-<li>Milk</li>
+<li>票据: 用于管理区块创作许可验证者选择的机制。该组件记为 $\mathbf{E}_T$ 。</li>
+<li>判定: 验证者针对当前发生的争论进行的投票表决。记为 $\mathbf{E}_J$ 。</li>
+<li>原像: 静态数据，当前正被请求供工作负载按需获取。记为 $\mathbf{E}_P$  。</li>
+<li>可用性声明: 验证者做出的保证，声明他们已经正确接收了工作负载的部分输入数据并进行本地存储 $\mathbf{E}_A$。</li>
+<li>报告: 由特定验证者担保其准确性的新完成工作负载报告 $\mathbf{E}_G$ 。</li>
 </ul>
 </h6>
 
