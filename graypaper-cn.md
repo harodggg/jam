@@ -414,6 +414,7 @@ We define the function $\mathcal{S}$ as the signature function, such that $\math
 <h5 align="center">4. Overview</h5>
 As in the Yellow Paper, we begin our formalisms by recalling that a blockchain may be defined as a pairing of some initial state together with a block-level statetransition function. The latter defines the posterior state given a pairing of some prior state and a block of data applied to it. Formally, we say:
 <h6> 如同eth 黄皮书所述，我们从形式化定义开始，回顾一下区块链可以定义为初始状态和块级状态转换函数的配对。后一个函数定义了给定先前状态和应用于该状态的区块数据之后的后续状态。形式上，我们说：</h6>
+(11)
 
 $$\sigma' \equiv \Upsilon (\sigma,\mathbf{B})$$
 
@@ -422,6 +423,27 @@ Where $\sigma$ is the prior state, $\sigma'$ is the posterior state, $\mathbf{B}
 
 Broadly speaking, Jam (and indeed blockchains in general) may be defined simply by specifying $\Upsilon$ and some genesis state $\sigma^0$.[7] We also make several additional assumptions of agreed knowledge: a universally known clock, and the practical means of sharing data with other systems operating under the same consensus rules. The latter twowere both assumptions silently made in the *YP*.
 <h6>总体而言，Jam 协议（以及大体上所有的区块链）都可以通过简单指定状态转换函数 $\Upsilon$  和初始状态 $\sigma^0$ 来定义。我们还做出了一些额外的共同认知假设：一个全局统一的时间源以及与运行相同共识规则的其他系统进行数据共享的实用方法。后两个假设在比特币黄皮书 (YP) 中都被默认引用了。</h6>
+
+**4.1. The Block.** To aid comprehension and definition of our protocol, we partition as many of our terms as possible into their functional components. We begin with the block $\mathit{B}$ which may be restated as the header $\mathit{H}$ and some input data external to the system and thus said to be extrinsic, E:
+<h6>4.1 区块 为了帮助理解和定义我们的协议，我们将尽可能多地将术语划分成功能组件。首先，我们将区块 (Block) B 表示为头信息 (Header) H 和外部输入数据 (Extrinsic Data) E 的组合。外部输入数据是指系统外部的数据，因此称为外部数据。</h6>
+(12)
+
+$$\mathbf{B} \equiv (\mathbf{H}, \mathbf{E} )$$
+(13)
+
+$$\mathbf{E} \equiv (\mathbf{E}_T, \mathbf{E}_J,\mathbf{E}_P,\mathbf{E}_A,\mathbf{E}_G )$$
+
+The header is a collection of metadata primarily concerned with cryptographic references to the blockchain ancestors and the operands and result of the present transition. As an immutable known a *priori*, it is assumed to be available throughout the functional components of block transition. The extrinsic data is split into its several portions:
+<h6>区块头包含关键的元数据，例如验证区块来源的密码学引用和区块转换的输入/输出数据。由于头信息不可更改且所有组件都需要访问它，因此假设其在整个区块处理过程中可用。外部数据包含待处理的交易或消息，通常会进一步细分.</h6>
+
+* **tickets:** Tickets, used for the mechanism which manages the selection of validators for the permissioning of block authoring. This component is denoted $\mathbf{E}_T$.
+* **judgements:** Votes, by validators, on dispute(s) arising between them presently taking place. This is denoted $\mathbf{E}_J$ .
+* **preimages:** Static data which is presently being requested to be available for workloads to be able to fetch on demand. This is denoted $\mathbf{E}_P$ .
+* **availability:**  Assurances by each validator concerning which of the input data of workloads they have correctly received and are storing locally. This is denoted $\mathbf{E}_A$.
+* **reports:** Reports of newly completed workloads whose accuracy is guaranteed by specific validators. This is denoted $\mathbf{E}_G$.
+
+
+
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
