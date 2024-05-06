@@ -468,6 +468,12 @@ Validators, who are the set of economic actors uniquely privileged to help build
 Our state also tracks two aspects of each core: α, the authorization requirement which work done on that core must satisfy at the time of being reported on-chain, together with the queue which fills this, φ; and ρ, each of the cores’ currently assigned report, the availability of whose work-package must yet be assured by a super-majority of validators.
 <h6>我们状态中还跟踪核心 (core) 的两个方面：α (alpha)：授权要求。这是指在链上报告时，核心执行的操作必须满足的授权要求。φ (phi) 是与此相关的队列，用于存放待满足的授权要求。ρ (rho)：每个核心当前分配的报告。验证者中的超级多数派必须保证这些报告所依赖的工作包的可用性。</h6>
 
+Finally, details of the most recent blocks and time are tracked in β and τ respectively and ongoing disputes are tracked in ψ.
+<h6>最后，最新区块的详细信息和时间分别保存在 β 和 τ 中，正在进行的争端则保存在 ψ 中。</h6>
+
+*4.2.1. State Transition Dependency Graph.* Much as in the YP, we specify Υ as the implication of formulating all items of posterior state in terms of the prior state and block. To aid the architecting of implementations whichparallelize this computation, we minimize the depth of the dependency graph where possible. The overall dependency graph is specified here:
+<h6>4.2.1 状态转换依赖图。与 YP (Yellow Paper) 类似，我们用 Υ 表示后验状态的所有元素都可以由先验状态和区块推导出来。为了帮助构建并行化计算的实现，我们尽可能地减小依赖图的深度。整体的依赖图如下所示：</h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
