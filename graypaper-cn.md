@@ -458,6 +458,15 @@ The header is a collection of metadata primarily concerned with cryptographic re
 (14）
 $$\sigma \equiv ( \alpha,\beta,\gamma,\delta,\eta,\iota,\varkappa , \lambda,\rho,\tau,\varphi,\chi,\psi  )$$
 
+In summary, δ is the portion of state dealing with services, analogous in Jam to the Yellow Paper’s (smart contract) accounts, the only state of the YP’s Ethereum. The identities of services which hold some privileged status are tracked in χ.
+<h6>总结来说，δ 代表了状态中与服务相关的一部分，在 Jam 中类似于 Yellow Paper 的 (智能合约) 账户，它是 YP 以太坊的唯一状态。持有特权的服务的标识符会在 χ 中被追踪。</h6>
+
+Validators, who are the set of economic actors uniquely privileged to help build and maintain the Jam chain, are identified within κ, archived in λ and enqueued from ι. All other state concerning the determination of these keys is held within γ. Note this is a departure from the YP proofof-work definitions which were mostly stateless, and this set was not enumerated but rather limited to those with sufficient compute power to find a partial hash-collision in the sha2-256 cryptographic hash function. An on-chain entropy pool is retained in η.
+<h6>验证者 (Validators) 拥有特殊经济权益的一组参与者，他们被授予独特的权利来帮助构建和维护 Jam 区块链。κ (kappa)验证者标识符集合，用于识别验证者身份。λ (lambda)验证者存档，用来存储验证者标识符 (κ) 的历史记录。ι (iota)验证者队列，用于管理待处理的验证者任务。
+γ (gamma)其他验证者状态，除了验证者标识符 (κ) 之外的所有与验证者相关的状态信息，都存储于此。例如，可能包含验证者的押金、投票权等信息。η (eta)链上熵池，Jam 区块链利用密码学中的熵池概念来保证系统的随机性，为各种操作提供不可预测的随机数来源。</h6>
+
+Our state also tracks two aspects of each core: α, the authorization requirement which work done on that core must satisfy at the time of being reported on-chain, together with the queue which fills this, φ; and ρ, each of the cores’ currently assigned report, the availability of whose work-package must yet be assured by a super-majority of validators.
+<h6>我们状态中还跟踪核心 (core) 的两个方面：α (alpha)：授权要求。这是指在链上报告时，核心执行的操作必须满足的授权要求。φ (phi) 是与此相关的队列，用于存放待满足的授权要求。ρ (rho)：每个核心当前分配的报告。验证者中的超级多数派必须保证这些报告所依赖的工作包的可用性。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
