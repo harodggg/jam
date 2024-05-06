@@ -474,6 +474,7 @@ Finally, details of the most recent blocks and time are tracked in β and τ res
 *4.2.1. State Transition Dependency Graph.* Much as in the YP, we specify Υ as the implication of formulating all items of posterior state in terms of the prior state and block. To aid the architecting of implementations whichparallelize this computation, we minimize the depth of the dependency graph where possible. The overall dependency graph is specified here:
 <h6>4.2.1 状态转换依赖图。与 YP (Yellow Paper) 类似，我们用 Υ 表示后验状态的所有元素都可以由先验状态和区块推导出来。为了帮助构建并行化计算的实现，我们尽可能地减小依赖图的深度。整体的依赖图如下所示：</h6>
 
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
