@@ -452,6 +452,12 @@ The header is a collection of metadata primarily concerned with cryptographic re
 </ul>
 </h6>
 
+**4.2. The State.** Our state may be logically partitioned into several largely independent segments which can both help avoid visual clutter within our protocol description and provide formality over elements of computation which may be simultaneously calculated (i.e. parallelized). We therefore pronounce an equivalence between σ (some complete state) and a tuple of partitioned segments of that state:
+<h6>4.2 状态。 为了使协议描述更加清晰易懂，并为可并行计算的元素提供形式化定义，我们将系统的状态划分为几个逻辑上相互独立的片段。因此，我们声明一个完整状态 σ 可以表示为其划分片段的元组。</h6>
+
+(14）
+$$\sigma \equiv ( \alpha,\beta,\gamma,\delta,\eta,\iota,\varkappa , \lambda,\rho,\tau,\varphi,\chi,\psi  )$$
+
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
