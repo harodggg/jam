@@ -442,7 +442,12 @@ The header is a collection of metadata primarily concerned with cryptographic re
 * **availability:**  Assurances by each validator concerning which of the input data of workloads they have correctly received and are storing locally. This is denoted $\mathbf{E}_A$.
 * **reports:** Reports of newly completed workloads whose accuracy is guaranteed by specific validators. This is denoted $\mathbf{E}_G$.
 
-
+<h6>
+<ul>
+<li><Strong>Coffee</Strong></li>
+<li>Milk</li>
+</ul>
+</h6>
 
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
