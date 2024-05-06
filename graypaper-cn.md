@@ -408,6 +408,8 @@ Both the Bandersnatch signature and Ringvrf proof strictly imply that a member u
 <h6>
 Bandersnatch 签名和 RingVRF 证明都严格地表明成员使用了他们的秘密密钥，结合上下文信息 x 和消息 m 来生成证明。区别在于前者会识别成员身份，而后者是匿名的。这两者都定义了一个 VRf 输出，即一个受 x 影响但不受 m 影响的高熵哈希值。用形式语言表示为 $\mathcal{Y}({\mathop{\mathbb{F}}\limits^¯}^m_r ⟨x⟩) ⊂ \mathbb{H}$ 和 $\mathcal{Y}(\mathbb{F}^m_k ⟨x⟩) ⊂ \mathbb{H}$ 。</h6>
 
+We define the function $\mathcal{S}$ as the signature function, such that $\mathcal{S}_k(m) ∈ \mathbb{F}^m_k ⟨[]⟩ ∪ \mathbb{E}_k⟨m⟩$. We assert that the ability to compute a result for this function relies on knowledge of a secret key.
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
