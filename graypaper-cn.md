@@ -411,6 +411,15 @@ Bandersnatch 签名和 RingVRF 证明都严格地表明成员使用了他们的�
 We define the function $\mathcal{S}$ as the signature function, such that $\mathcal{S}_k(m) ∈ \mathbb{F}^m_k ⟨[]⟩ ∪ \mathbb{E}_k⟨m⟩$. We assert that the ability to compute a result for this function relies on knowledge of a secret key.
 <h6>我们定义签名函数为 $\mathcal{S}$ ，满足以下规则: $\mathcal{S}_k(m) ∈ \mathbb{F}^m_k ⟨[]⟩ ∪ \mathbb{E}_k⟨m⟩$。 我们断言，计算此函数结果的能力依赖于对秘密密钥的掌握。</h6>
 
+<h5 align="center">4. Overview</h5>
+As in the Yellow Paper, we begin our formalisms by recalling that a blockchain may be defined as a pairing of some initial state together with a block-level statetransition function. The latter defines the posterior state given a pairing of some prior state and a block of data applied to it. Formally, we say:
+<h6> 如同eth 黄皮书所述，我们从形式化定义开始，回顾一下区块链可以定义为初始状态和块级状态转换函数的配对。后一个函数定义了给定先前状态和应用于该状态的区块数据之后的后续状态。形式上，我们说：</h6>
+
+$$\sigma' \equiv \Upsilon (\sigma,\mathbf{B})$$
+
+Where $\sigma$ is the prior state, $\sigma'$ is the posterior state, $\mathbf{B}$ is some valid block and $\Upsilon$ is our block-level state-transition function.
+<h6>$\sigma$表示之前的状态，即应用区块之前的区块链状态. $\sigma'$ 表示之后的狀態，即应用区块之后的区块链状态. $\mathbf{B}$代表一个有效的区块，包含要添加到区块链中的数据.$\Upsilon$  表示我们的块级状态转换函数。</h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
