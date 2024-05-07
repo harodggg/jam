@@ -541,6 +541,31 @@ The only synchronous entangements are visible through the intermediate component
 <h6>依赖图中唯一可见的同步依赖关系是通过用匕首标记的中间组件 (equations 16, 23 and 25)。后两个方程表示了依赖图中的合并和连接操作。具体而言，这表示必须在将预查找外部函数的结果应用于状态之后，才能完全处理可用性外部函数并进行累积工作。</h6>
 
 
+**4.3. Which History?** A blockchain is a sequence of blocks, each cryptographically referencing some prior block by including a hash of its header, all the way back to some first block which references the genesis header. We already presume consensus over this genesis header $\mathbf{H}^0$ and the state it represents already defined as $\sigma^0$ .
+<h6>为了厘清关于历史的讨论，让我们来看看区块链的定义。区块链是一个由区块组成的序列，每个区块都包含了前一区块头部的哈希值，以此链接成一条链，一直追溯到最初的创世区块。我们已经就这个创世区块头部 (记为 
+ $\mathbf{H}^0$ )以及它所代表的状态 (记为 $\sigma^0$ ) 达成了一致的共识。</h6>
+
+By defining a deterministic function for deriving a single posterior state for any (valid) combination of prior state and block, we are able to define a unique canonical state for any given block. We generally call the block with the most ancestors the head and its state the head state.
+<h6>通过定义一个确定性函数，该函数可以根据任何（有效的）先验状态和区块的组合来推导出唯一的后验状态，我们能够为给定的区块定义唯一的规范状态。我们通常将具有最多祖先的区块称为头部，并将其状态称为头状态。</h6>
+
+It is generally possible for two blocks to be valid and yet reference the same prior block in what is known as a fork. This implies the possibility of two different heads, each
+with their own state. While we know of no way to strictly preclude this possibility, for the system to be useful we must nonetheless attempt to minimize it. We therefore strive to ensure that:
+<h6>通常情况下，可能会出现两个区块都符合规则 (valid) 并且引用同一个前一区块的情况，这被称为分叉。这会导致存在两个不同的头部，每个头部都拥有自己的状态。虽然我们目前没有办法完全杜绝分叉的可能性，但是为了让系统发挥作用，我们仍然需要尽力减少分叉的发生。因此，我们的目标是确保：</h6>
+
+1. It be generally unlikely for two heads to form.
+2. When two heads do form they be quickly resolved into a single head.
+3. It be possible to identify a block not much older than the head which we can be extremely confident will form part of the blockchain’s history in perpetuity. When a block becomes identified as such we call it finalized and this property naturally extends to all of its ancestor blocks.
+
+1. 通常不太可能形成两个头(区块头)。
+2. 当有2个区块头出现的时候，能够很快的被处理成一个区块头
+3. 在区块链的历史中，我们可以非常确信地识别出一个与顶端区块相差不大的区块，该区块将永久地成为区块链的一部分。当一个区块被识别为这样的时候，我们称之为已 finalized（最终化）。这个特性自然会延伸到它所有祖先区块上。
+
+These goals are achieved through a combination of two consensus mechanisms: Safrole, which governs the (not-necessarily forkless) extension of the blockchain; and Grandpa, which governs the finalization of some extension into canonical history. Thus, the former delivers point 1, the latter delivers point 3 and both are important for delivering point 2. We describe these portions of the protocol in detail in sections 6 and 15 respectively.
+<h6>通过结合两种共识机制来实现这些目标：Safrole 用于管理区块链的扩展（不一定没有分叉），Grandpa 用于管理将一些扩展最终确定为规范历史。因此，前者实现目标 1，后者实现目标 3，两者对于实现目标 2 都很重要。我们分别在第 6 节和第 15 节详细描述了协议的这些部分。</h6>
+
+While Safrole limits forks to a large extent (through cryptography, economics and common-time, below), there may be times when we wish to intentionally fork since we have come to know that a particular chain extension must be reverted. In regular operation this should never happen, however we cannot discount the possibility of malicious or malfunctioning nodes. We therefore define such an extension as any which contains a block in which data is reported which any other block’s state has tagged as invalid (see section 10 on how this is done). We further require that Grandpa not finalize any extension which contains such a block. See section 15 for more information here.
+<h6>虽然 Safrole 通过以下方法在很大程度上限制了分叉（密码学、经济学和共识时间，见下文），但在某些情况下，当我们得知必须回滚特定的链扩展时，我们可能希望故意进行分叉。在正常运行下这种情况应该永远不会发生，但是我们也不能排除恶意节点或故障节点的可能性。因此，我们将任何包含区块的扩展定义为数据被报告为无效的扩展，而任何其他区块的状态都将其标记为无效（有关如何做到这一点，请参见第 10 节）。 为了进一步保证这一点，我们还要求 Grandpa 不对包含此类区块的任何扩展进行最终化。有关详细信息，请参见第 15 节。</h6>
+
 
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
