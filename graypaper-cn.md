@@ -570,9 +570,9 @@ While Safrole limits forks to a large extent (through cryptography, economics an
 network. We utilize this assumption on only one way: we require that blocks be considered temporarily invalid if their timeslot is in the future. This is specified in detail in section 6.
 <h6>4.4. 时间。我们假设预先存在关于时间的一致共识，具体用于区块的生产和导入。虽然这不是波卡 (Polkadot) 的既定假设，但实用且弹性的解决方案已经存在，例如 ntp 协议和网络。我们仅以一种方式利用这一假设：要求区块的时间槽位于未来时，则将其视为暂时无效。这将在第 6 节中详细说明。</h6>
 
-Formally, we define the time in terms of seconds passed since the beginning of the Jam Common Era, 1200 UTC on January 1, 2024.[^8] Midday CET is selected to ensure that all significant timezones are on the same date at any
+Formally, we define the time in terms of seconds passed since the beginning of the Jam Common Era, 1200 UTC on January 1, 2024. [^8] Midday CET is selected to ensure that all significant timezones are on the same date at any
 exact 24-hour multiple from the beginning of the common era. Formally, this value is denoted $\tau$ .
-<h6>正式地，我们以自 Jam Common Era 开始以来经过的秒数（   2024 年 1 月 1 日 1200 UTC）来定义时间。[^8] 该参考点专门选择为中午 CET（中欧时间），以保证所有主要时间自共同纪元开始以来，各时区在每个精确的 24 小时间隔内共享相同的日期。象征性地，该值由希腊字母 tau (τ) 表示。</h6>
+<h6>正式地，我们以自 Jam Common Era 开始以来经过的秒数（   2024 年 1 月 1 日 1200 UTC）来定义时间。 该参考点专门选择为中午 CET（中欧时间），以保证所有主要时间自共同纪元开始以来，各时区在每个精确的 24 小时间隔内共享相同的日期。象征性地，该值由希腊字母 tau (τ) 表示。</h6>
 
 **4.5. Best block.** Given the recognition of a number of valid blocks, it is necessary to determine which should be treated as the “best” block, by which we mean the most recent block we believe will ultimately be within of all future Jam chains. The simplest and least risky means of doing this would be to inspect the Grandpa finality mechanism which is able to provide a block for which there is a very high degree of confidence it will remain an ancestor to any future chain head.
 <h6>4.5. 最佳区块. 既然存在多个有效区块，我们就需要确定哪一个应该被视为“最佳”区块，这里的“最佳”是指我们认为最终将在所有未来的 Jam 链条中都存在的最新区块。做到这一点最简单、风险最低的方法是检查 Grandpa 最终化机制，该机制能够提供一个区块，我们对该区块成为任何未来链头祖先块具有非常高的可信度。</h6>
