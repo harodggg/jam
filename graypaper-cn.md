@@ -566,6 +566,23 @@ These goals are achieved through a combination of two consensus mechanisms: Safr
 While Safrole limits forks to a large extent (through cryptography, economics and common-time, below), there may be times when we wish to intentionally fork since we have come to know that a particular chain extension must be reverted. In regular operation this should never happen, however we cannot discount the possibility of malicious or malfunctioning nodes. We therefore define such an extension as any which contains a block in which data is reported which any other block’s state has tagged as invalid (see section 10 on how this is done). We further require that Grandpa not finalize any extension which contains such a block. See section 15 for more information here.
 <h6>虽然 Safrole 通过以下方法在很大程度上限制了分叉（密码学、经济学和共识时间，见下文），但在某些情况下，当我们得知必须回滚特定的链扩展时，我们可能希望故意进行分叉。在正常运行下这种情况应该永远不会发生，但是我们也不能排除恶意节点或故障节点的可能性。因此，我们将任何包含区块的扩展定义为数据被报告为无效的扩展，而任何其他区块的状态都将其标记为无效（有关如何做到这一点，请参见第 10 节）。 为了进一步保证这一点，我们还要求 Grandpa 不对包含此类区块的任何扩展进行最终化。有关详细信息，请参见第 15 节。</h6>
 
+**4.4. Time.** We presume a pre-existing consensus over time specifically for block production and import. While this was not an assumption of Polkadot, pragmatic and resilient solutions exist including the ntp protocol and
+network. We utilize this assumption on only one way: we require that blocks be considered temporarily invalid if their timeslot is in the future. This is specified in detail in section 6.
+<h6>4.4. 时间。我们假设预先存在关于时间的一致共识，具体用于区块的生产和导入。虽然这不是波卡 (Polkadot) 的既定假设，但实用且弹性的解决方案已经存在，例如 ntp 协议和网络。我们仅以一种方式利用这一假设：要求区块的时间槽位于未来时，则将其视为暂时无效。这将在第 6 节中详细说明。</h6>
+
+Formally, we define the time in terms of seconds passed since the beginning of the Jam Common Era, 1200 UTC on January 1, 2024.[8] Midday CET is selected to ensure that all significant timezones are on the same date at any
+exact 24-hour multiple from the beginning of the common era. Formally, this value is denoted $\tau$ .
+<h6>正式地，我们以自 Jam Common Era 开始以来经过的秒数（   2024 年 1 月 1 日 1200 UTC）来定义时间。[8] 该参考点专门选择为中午 CET（中欧时间），以保证所有主要时间自共同纪元开始以来，各时区在每个精确的 24 小时间隔内共享相同的日期。象征性地，该值由希腊字母 tau (τ) 表示。</h6>
+
+**4.5. Best block.** Given the recognition of a number of valid blocks, it is necessary to determine which should be treated as the “best” block, by which we mean the most recent block we believe will ultimately be within of all future Jam chains. The simplest and least risky means of doing this would be to inspect the Grandpa finality mechanism which is able to provide a block for which there is a very high degree of confidence it will remain an ancestor to any future chain head.
+<h6>4.5. 最佳区块. 既然存在多个有效区块，我们就需要确定哪一个应该被视为“最佳”区块，这里的“最佳”是指我们认为最终将在所有未来的 Jam 链条中都存在的最新区块。做到这一点最简单、风险最低的方法是检查 Grandpa 最终化机制，该机制能够提供一个区块，我们对该区块成为任何未来链头祖先块具有非常高的可信度。</h6>
+
+However, in reducing the risk of the resulting block ultimately not being within the canonical chain, Grandpa will typically return a block some small period older than the most recently authored block. (Existing deployments
+suggest around 1-2 blocks in the past under regular operation.) There are often circumstances when we may wish to have less latency at the risk of the returned block not ultimately forming a part of the future canonical chain. E.g. we may be in a position of being able to author a block, and we need to decide what its parent should be. Alternatively, we may care to speculate about the most recent state for the purpose of providing information to a downstream application reliant on the state of Jam.
+<h6>为了降低最终结果的区块不在规范链中的风险，Grandpa 通常会返回一个比最近创建的区块稍早一些的区块。（现有部署表明正常运行下大约会滞后 1-2 个区块。） 然而在某些情况下，我们可能愿意降低延迟，即使返回的区块最终可能不会成为未来规范链的一部分。例如，我们可能能够创作一个区块，并且需要决定它的父区块应该是什么。 或者，我们可能关心为了向依赖 Jam 状态的下游应用程序提供信息而获取最新的状态。</h6>
+
+In these cases, we define the best block as the head of the best chain, itself defined in section 15.
+<h6>在这些情况下，我们将最佳区块定义为最佳链的头部，最佳链本身将在第 15 节进行定义。</h6>
 
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
@@ -575,3 +592,4 @@ While Safrole limits forks to a large extent (through cryptography, economics an
 [^5]: In all likelihood actually substantially more as this was using low-tier “spare” hardware in consumer units, and our recompiler was unoptimized.
 [^6]: Earlier node versions utilized Arweave network, a decentralized data store, but this was found to be unreliable for the data throughput which Solana required.（早期的 Solana 节点版本曾使用 Arweave 网络作为去中心化数据存储方案。然而，事实证明 Arweave 网络无法满足 Solana 所需的数据吞吐量，因此被弃用。）
 [^7]: Practically speaking, blockchains sometimes make assumptions of some fraction of participants whose behavior is simply honest, and not provably incorrect nor otherwise economically disincentivized. While the assumption may be reasonable, it must nevertheless be stated apart from the rules of state-transition.（实事求是地讲，区块链有时会假设参与者中的一部分人是诚实的，他们的行为并非可证明的错误，也并非受到经济上的惩罚。尽管这种假设在一定程度上是合理的，但它仍然需要与状态转换规则分开来单独陈述。）
+[^8]: 1,704,110,400 seconds after the Unix Epoch.
