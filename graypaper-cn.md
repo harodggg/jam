@@ -601,6 +601,28 @@ Though unimportant for the present work, we presume that there be a standard nam
 The fact that balances are represented as a 64-bit integer implies that there may never be more than around $18×10^9$ tokens (each divisible into portions of $10^{−9}$ ) within Jam. We would expect that the total number of tokens ever issued will be a substantially smaller amount than this
 <h6>余额表示为 64 位整数这一事实意味着 Jam 中的代币数量可能永远不会超过 $18×10^9$  左右（每个代币可分为 $10^{−9}$ 的部分）。我们预计有史以来发行的代币总数将远小于此数量。</h6>
 
+We further presume that a number of constant prices stated in terms of tokens are known. However we leave the specific values to be determined in following work:
+<h6>我们进一步假设知道一些以代币表示的固定价格。但是，我们将在后续工作中确定具体值：</h6>
+
+* $\mathbb{B}_I$ : the additional minimum balance implied for a single item within a mapping
+* $\mathbb{B}_L$ : the additional minimum balance implied for a single octet of data within a mapping
+* $\mathbb{B}_S$ : the minimum balance implied for a service.
+
+
+* $\mathbb{B}_I$ : 与数据结构中每个键值对相关的隐式最小余额。
+* $\mathbb{B}_L$ : 映射中单个字节数据的附加隐含最低余额
+* $\mathbb{B}_S$ : 服务隐含的最低余额
+
+**4.7. The Virtual Machine and Gas.** In the present work, we presume the definition of a Polka Virtual Machine (pvm). This virtual machine is based around the risc-v instruction set architecture, specifically the rv32ecm variant, and is the basis for introducing permissionless logic into our state-transition function.
+<h6>4.7 虚拟机与 Gas费用。本节工作假设定义了 Polka 虚拟机 (pvm)。此虚拟机基于 RISC-V 指令集架构 (具体为 rv32ecm 变体)，并以此为基础将无许可逻辑引入我们的状态转换函数。</h6>
+
+The pvm is comparable to the evm defined in the Yellow Paper, but somewhat simpler: the complex instructions for cryptographic operations are missing as are those which deal with environmental interactions. Overall it is
+far less opinionated since it alters a pre-existing general purpose design, risc-v, and optimizes it for our needs. This gives us excellent pre-existing tooling, since pvm remains essentially compatible with risc-v, including support from the compiler toolkit llvm and languages such as Rust and C++. Furthermore, the instruction set simplicity which risc-v and pvm share, together with the register size (32-bit), active number (13) and endianness (little) make it especially well-suited for creating efficient recompilers on to common hardware architectures.
+<h6>pvm 可类比于黄皮书中定义的 evm，但更加简单：缺少复杂的密码操作指令以及处理环境交互的指令。总体而言，pvm 的设计干预更少，因为它修改了预先存在通用架构 RISC-V 并根据我们的需求进行优化。这为我们提供了非常棒的现有工具，因为 pvm 在本质上仍然兼容 RISC-V，包括来自编译器工具包 llvm 和语言（例如 Rust 和 C++）的支持。此外，RISC-V 和 pvm 共享的指令集简洁性、寄存器大小（32 位）、活动寄存器数量（13 个）和小端序特性使其非常适合在常见硬件架构上创建高效的重编译器。</h6>
+
+The pvm is fully defined in appendix A, but for contextualization we will briefly summarize the basic invocation function Ψ which computes the resultant state of a pvm instance initialized with some registers (${⟦\mathbb{N}\_R⟧}_{13}$) and ram ($\mathbb{M}$) and has executed for up to some amount of gas ($\mathbb{N}_G$), a number of approximately time-proportional computational steps:
+<h6>pvm 的完整定义见附录 A，但为了理解上下文，我们将简要概述基本调用函数 Ψ。该函数计算执行最多指定 gas 单位（表示与时间大致成比例的计算步骤数）的 pvm 实例的最终状态，该实例由一些寄存器 (${⟦\mathbb{N}_R⟧}_{13}$) 和内存 ($\mathbb{M}$) 初始化。</h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
