@@ -628,6 +628,16 @@ The pvm is fully defined in appendix A, but for contextualization we will briefl
 We refer to the time-proportional computational steps as gas (much like in the YP) and limit it to a 64-bit quantity. We may use either $\mathbb{N}_G$ or $\mathbb{Z}_G$ to bound it, the first as a prior argument since it is known to be positive, the latter as a result where a negative value indicates an attempt to execute beyond the gas limit. Within the context of the pvm, $\xi ∈ \mathbb{N}_G$ is typically used to denote gas.
 <h6>这里沿用了 YP（黄皮书）中的概念，将与时间大致成比例的计算步骤称为 gas（燃料），并将其限制为 64 位数值。我们可以使用 $\mathbb{N}_G$ 或者 $\mathbb{Z}_G$ 来限制 gas，前者用于先验参数，因为已知它是正值；后者用于结果，负值表示尝试执行的 gas 超过限制。在 pvm 上下文中，通常用 $\xi ∈ \mathbb{N}_G$ 表示 gas。</h6>
 
+(31)
+
+$$\mathbb{Z}\_G \equiv  \mathbb{Z}\_{-263:363},\mathbb{N}\_G \equiv \mathbb{N}_{264}, \mathbb{N}\_R \equiv \mathbb{N}\_{232}$$
+
+It is left as a rather important implementation detail to ensure that the amount of time taken while computing the function Ψ(. . . , ξ, . . . ) has a maximum computation time approximately proportional to the value of ξ regardless of other operands.
+<h6>在确保计算函数 Ψ(. . . , ξ, . . . ) 所花费的时间大致与 ξ 的值成正比（与其他操作数无关）的情况下，实现该函数的最大执行时间被留作了一个相当重要的实现细节。</h6>
+
+The pvm is a very simple risc register machine and as such has 13 registers, each of which is a 32-bit integer,denoted $\mathbb{N}_R$ .[9] Within the context of the pvm, ω ∈ $⟦\mathbb{N}_R⟧\_{13}$ is typically used to denote the registers.
+<h6></h6>
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
@@ -636,3 +646,4 @@ We refer to the time-proportional computational steps as gas (much like in the Y
 [^6]: Earlier node versions utilized Arweave network, a decentralized data store, but this was found to be unreliable for the data throughput which Solana required.（早期的 Solana 节点版本曾使用 Arweave 网络作为去中心化数据存储方案。然而，事实证明 Arweave 网络无法满足 Solana 所需的数据吞吐量，因此被弃用。）
 [^7]: Practically speaking, blockchains sometimes make assumptions of some fraction of participants whose behavior is simply honest, and not provably incorrect nor otherwise economically disincentivized. While the assumption may be reasonable, it must nevertheless be stated apart from the rules of state-transition.（实事求是地讲，区块链有时会假设参与者中的一部分人是诚实的，他们的行为并非可证明的错误，也并非受到经济上的惩罚。尽管这种假设在一定程度上是合理的，但它仍然需要与状态转换规则分开来单独陈述。）
 [^8]: 1,704,110,400 seconds after the Unix Epoch.
+[^9]: This is three fewer than risc-v’s 16, however the amount that program code output by compilers uses is 13 since two are reserved for operating system use and the third is fixed as zero
