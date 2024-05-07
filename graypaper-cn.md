@@ -5,7 +5,7 @@
 <h6 align="center">( JOIN: 表示多个实体，可能是不同种类的，不同用途的实体一起来使用。)</h6>
 <h6 align="center">( ACCUMULATE： 表示这些实体的使用该机器的结果，是依赖于前置的，历史的，类似于状态机，当前结果是依赖于前一个结果。)</h6>
 <h6 align="center">( semi-coherent: semi一半，coherent一致，相关，相干。也许是不一定需要强一致性，类似于一个区块，只有唯一的历史结果，只有一个世界树，这个也许可以包含多个历史结果，类似平行宇宙。 )</h6>
-
+<h6 align="center"> ( 为什么是半一致性呢，或者半相干了。我们可以用以太坊，或者现在的polkadot中继链作为例子，在他们中，我们全网的节点，会对一个数据，形成一个相同的共识，这样会导致全网，比如1000个节点的计算量等于一台计算机，因为全网在做同一件事情，这样是无法扩展的，并且并行的。jam 是不会保持这样子的，Jam的目标是实现现有eth/dot链计算的300倍，jam 选择放弃了全网节点同时做一件事，而是让全网节点分为不同角色运行不同的事情，分工合作，通过经济博弈保护安全，从而实现高扩展性 ) </h6>
 **Abstract.** We present a comprehensive and formal definition of Jam, a protocol combining elements of both Polkadot and Ethereum. In a single coherent model, Jam provides a global singleton permissionless object environment—much like the smart-contract environment pioneered by Ethereum—paired with secure sideband computation parallelized over a scalable node network, a proposition pioneered by Polkadot.
 <h6>摘要。我们提出了全面，并且正式的JAM定义，即一种同时结合了ethereum和polkadot两种的元素的协议。JAM既提供了类似于以太坊首创的全局单例无许可对象智能合约环境，又结合了 Polkadot 开创的、可安全地在可扩展节点网络上并行处理的侧带计算功能。</h6>
 <h6>( sideband:边带。 一般而言，术语“边带”用于指代用于传输附加信息的次要或辅助信道。这可以是在无线电通信、计算或其他领域的背景下。在这里指的可能是polkadot中继-平行链模型，中继通过hrmp或者xcmp 处理平行链的信息 )</h6>
@@ -696,14 +696,19 @@ This implies that the lifespan of the proposed protocoltakes us to mid-August of
 <h6>4.9 核心模型与服务. 以太坊黄皮书在定义所有网络参与者达成共识的 状态机时，假设所有维护完整网络状态并扩展网络状态的机器 - 或者至少希望这样做的机器 - 都将评估所有的计算。这种 “每个人做所有事” 的方法可以称为链上共识模型。遗憾的是，这种方法不可扩展，因为网络在达成共识方面所能处理的逻辑量，最多只相当于其期望任何单个节点在给定时间内能够处理的逻辑量。</h6>
 
 *4.9.1. In-core Consensus.* In the present work, we achieve scalability of the work done through introducing a second model for such computation which we call the in-core consensus model. In this model, and under normal circumstances, only a subset of the network is responsible for actually executing any given computation and assuring the availability of any input data it relies upon to others. By doing this and assuming a certain amount of computational parallelism within the validator nodes of the network, we are able to scale the amount of computation done in consensus commensurate with the size of the network, and not with the computational power of any single machine. In the present work we expect the network to be able to do upwards of 300 times the amount of computation in-core as that which could be performed by a single machine running the virtual machine at full speed.
+<h6>4.9.1 内核共识。本节工作中，我们通过引入一种用于此类计算的第二种模型（称为内核共识模型）来实现工作可扩展性。在这个模型中，在正常情况下，网络中只有少部分节点负责实际执行任何给定的计算，并确保为其他节点提供任何它所依赖的输入数据可用性。通过这样做，并且假设网络中的验证器节点具有一定的计算并行性，我们能够使共识中完成的计算量与网络规模成比例地扩展，而不是受任何单个机器的计算能力限制。在本工作中，我们期望网络能够执行的内核计算量是单台机器全速运行虚拟机所能执行的计算量的 300 倍以上。</h6>
 
 Since in-core consensus is not evaluated or verified by all nodes on the network, we must find other ways to become adequately confident that the results of the computation are correct, and any data used in determining this is available for a practical period of time. We do this through a crypto-economic game of three stages called guaranteeing, assuring, auditing and, potentially, judging. Respectively, these attach a substantial economic cost to the invalidity of some proposed computation; then a sufficient degree of confidence that the inputs of the computation will be available for some period of time; and finally, a sufficient degree of confidence that the validity of the computation (and thus enforcement of the first guarantee) will be checked by some party who we can expect to be honest.
+<h6>由于内核共识并非由网络上的所有节点进行评估和验证，因此我们需要找到其他方法来充分确信计算结果的正确性，并且用于确定这一点的任何数据在一段实用期内都是可用的。我们通过一个名为“担保、确认、审计和 (潜在的) 仲裁”的三阶段密码经济博弈来实现这一点。具体来说，这些阶段分别为：为一些提议计算的无效性附加巨额经济成本；然后，确保计算的输入数据在一段时间内可用的足够程度的信心；最后，确保计算的有效性（以及因此对第一项担保的执行）将由我们期望诚实的某个一方进行检查的足够程度的信心。</h6>
 
 All execution done in-core must be reproducible by any node synchronized to the portion of the chain which has been finalized. Execution done in-core is therefore designed to be as stateless as possible. The requirements for doing it include only the refinement code of the service, the code of the authorizer and any preimage lookups it carried out during its execution.
+<h6>在内核中执行的所有操作都必须能够被任何同步到已完成部分链条的节点所重现。因此，内核执行被设计得尽可能无状态。执行它的先决条件只包含服务的相关精炼代码、授权器代码以及它在执行过程中进行的任何预镜像查找。</h6>
 
 When a work-report is presented on-chain, a specific block known as the lookup-anchor is identified. Correct behavior requires that this must be in the finalized chain and reasonably recent, both properties which may be proven and thus are acceptable for use within a consensus protocol.
+<h6>当工作报告在链上提交时，会引用一个特定的区块，称为查找锚点。正确行为要求该区块必须位于已经完成的链条中并且足够新近。这两个属性都可以被证明，因此适合在共识协议中使用。</h6>
 
 We describe this pipeline in detail in the relevant sections later.
+<h6>我们将在后面的相关章节详细描述此流程</h6>
 
 *4.9.2. On Services and Accounts.* In YP Ethereum, we have two kinds of accounts: contract accounts (whose actions are defined deterministically based on the account’s associated code and state) and simple accounts which act as gateways for data to arrive into the world state and are controlled by knowledge of some secret key. In Jam, all accounts are service accounts. Like Ethereum’s contract accounts, they have an associated balance, some code and state. Since they are not controlled by a secret key, they do not need a nonce.
 
