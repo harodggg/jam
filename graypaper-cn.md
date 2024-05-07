@@ -623,6 +623,8 @@ far less opinionated since it alters a pre-existing general purpose design, risc
 The pvm is fully defined in appendix A, but for contextualization we will briefly summarize the basic invocation function Ψ which computes the resultant state of a pvm instance initialized with some registers (${⟦\mathbb{N}\_R⟧}_{13}$) and ram ($\mathbb{M}$) and has executed for up to some amount of gas ($\mathbb{N}_G$), a number of approximately time-proportional computational steps:
 <h6>pvm 的完整定义见附录 A，但为了理解上下文，我们将简要概述基本调用函数 Ψ。该函数计算执行最多指定 gas 单位（表示与时间大致成比例的计算步骤数）的 pvm 实例的最终状态，该实例由一些寄存器 (${⟦\mathbb{N}_R⟧}_{13}$) 和内存 ($\mathbb{M}$) 初始化。</h6>
 
+
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
