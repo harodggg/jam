@@ -637,8 +637,60 @@ It is left as a rather important implementation detail to ensure that the amount
 
 The pvm is a very simple risc register machine and as such has 13 registers, each of which is a 32-bit integer,denoted $\mathbb{N}_R$. [^9] Within the context of the pvm, ω ∈ $⟦\mathbb{N}_R⟧\_{13}$ is typically used to denote the registers.
 
-<h6>dfdla</h6>
-lfdjl
+<h6>这比 RISC-V 的 16 个寄存器要少 3 个，但是编译器输出的程序代码实际使用的寄存器数量为 13 个，因为其中两个被操作系统占用，另一个固定为零。</h6>
+
+(32) 
+
+$$\mathbb{M} ≡ (\mathbf{V} \in \mathbb{Y}_{2^{32}},\mathbf{A} \in ⟦{\mathbf{W}, \mathbf{R}, \varnothing}⟧_{2^{32}})$$
+
+The pvm assumes a simple pageable ram of 32-bit addressable octets where each octet may be either immutable, mutable or inaccessible. The ram definition M includes two components: a value V and access A. If the component is unspecified while being subscripted then the value component may be assumed. Within the context of the virtual machine, µ ∈ M is typically used to denote ram.
+
+<h6>pvm 使用了一个简单的可分页 RAM，该 RAM 由 32 位可寻址的八位字节组成，每个字节可以是不可变的、可变的或不可访问的。RAM 定义 M 包含两个组件：值 V 和访问权限 A。如果在取下标时未指定组件，则可以假定为值组件。在虚拟机的上下文中，通常用 µ ∈ M 表示 RAM。</h6>
+
+(33)
+
+$$V_µ ≡ {i ∣ µ_A[i] ≠ ∅} \qquad V^∗_µ ≡ {i ∣ µ_A[i] = W}$$
+
+We define two sets of indices for the ram µ: $\mathbb{V}_µ$ is the set of indices which may be read from; and $\mathbb{V}^∗_µ$ is the set of indices which may be written to
+<h6>对于 RAM µ，我们定义了两组索引集合: $\mathbb{V}_µ$ 表示可以读取的索引集合; $\mathbb{V}^∗_µ$ 表示可以写入的索引集合。</h6>
+
+Invocation of the pvm has an exit-reason as the first item in the resultant tuple. It is either:
+<h6>pvm 的调用结果是一个元组，其第一个元素是退出原因。退出原因可以是以下几种情况之一:</h6>
+
+* Regular program termination caused by an explicit halt instruction, ∎.
+* Irregular program termination caused by some exceptional circumstance, ☇.
+* Exhaustion of gas, ∞.
+* A page fault (attempt to access some address in ram which is not accessible), F. This includes the address at fault.
+* An attempt at progressing a host-call, h̵. This allows for the progression and integration of a context-dependent state-machine beyond the regular pvm.
+
+* 程序正常终止，由显式 halt 指令引起，记为∎ (huàn).
+* 程序因异常情况而异样终止，记为 ☇ (bǎi diàn).
+* 燃气耗尽，记为 ∞ (wú xiàn)。
+* 对于分页内存系统，页面错误 (F) 指的是尝试访问内存中不可访问的地址。
+* 在这里，h̵ 表示尝试执行“主机调用”(host-call)。这允许在常规 pvm 之外进行与上下文相关的状态机的推进和集成。
+
+
+The full definition follows in appendix A.
+<h6>完整定义见附录 A</h6>
+
+**4.8. Epochs and Slots.** Unlike the YP Ethereum with its proof-of-work consensus system, Jam defines a proof-ofauthority consensus mechanism, with the authorized validators presumed to be identified by a set of public keys and decided by a staking mechanism residing within some system hosted by Jam. The staking system is out of scope for the present work; instead there is an api which may be utilized to update these keys, and we presume that whatever logic is needed for the staking system will be introduced and utilize this api as needed.
+<h6>4.8 时代和槽位. 与采用工作量证明共识机制的 YP 以太坊不同，Jam 定义了一种权益证明共识机制，授权验证者的身份由一组公钥标识，并由 Jam 托管的某个系统中的权益机制决定。权益机制超出本文讨论范围；取而代之的是，存在一个用于更新这些密钥的 API，我们假设权益系统所需的任何逻辑都将被引入并根据需要使用此 API。</h6>
+
+The Safrole mechanism subdivides time following genesis into fixed length epochs with each epoch divided into E = 600 timeslots each of uniform length P = 6 seconds, given an epoch period of E ⋅ P = 3600 seconds or one hour.
+<h6>Safrole 机制将时间划分成固定长度的时代，每个时代又分为 E = 600 个长度相同的时隙，给定时代周期为 E ⋅ P = 3600 秒或 1 小时，则每个时隙的长度 P 等于 6 秒。</h6>
+
+This six-second slot period represents the minimum time between Jam blocks, and through Safrole we aim to strictly minimize forks arising both due to contention within a slot (where two valid blocks may be produced within the same six-second period) and due to contention over multiple slots (where two valid blocks are produced in different time slots but with the same parent).
+<h6>这个六秒时隙周期代表 Jam 块之间的最短时间，通过 Safrole，我们的目标是严格最小化由于时隙内争用（其中可能在同一六秒周期内产生两个有效块）和由于原因而产生的分叉。争夺多个时隙（其中两个有效块在不同时隙中生成，但具有相同的父块）。</h6>
+
+Formally when identifying a timeslot index, we use a 32-bit integer indicating the number of six-second timeslots from the Jam Common Era. For use in this context we introduce the set $\mathbb{N}_T$ :
+<h6>正式地，为了标识一个时隙索引，我们使用一个 32 位整数，表示从 Jam 共同时代 (Jam Common Era) 开始的 6 秒时隙数量。为了在这个上下文中使用，我们引入集合 $\mathbb{N}_T$ :</h6>
+
+(34)
+
+$$\mathbb{N}_T \equiv \mathbb{N}\_{2^{32}}$$
+
+This implies that the lifespan of the proposed protocoltakes us to mid-August of the year 2840, which with the current course that humanity is on should be ample.
+<h6>这意味着拟议协议的有效期将我们带到 2840 年 8 月中旬，按照人类当前的进程，这个期限应该是足够的。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
