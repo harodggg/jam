@@ -584,6 +584,22 @@ suggest around 1-2 blocks in the past under regular operation.) There are often 
 In these cases, we define the best block as the head of the best chain, itself defined in section 15.
 <h6>在这些情况下，我们将最佳区块定义为最佳链的头部，最佳链本身将在第 15 节进行定义。</h6>
 
+**4.6. Economics.** The present work describes a cryptoeconomic system, i.e. one combining elements of both cryptography and economics and game theory to deliver a self-sovereign digital service. In order to codify and manipulate economic incentives we define a token which is native to the system, which we will simply call tokens in the present work.
+<h6>4.6. 经济学. 本文描述了 密码经济系统，即一种结合密码学、经济学和博弈论的元素来提供 自主权数字服务 的系统。为了将经济激励措施 编码 并加以操控，我们定义了系统内部的原生代币，本文将简单地将其称为 代币.</h6>
+
+A value of tokens is generally referred to as a balance, and such a value is said to be a member of the set of balances, $\mathbb{N}_B$ , which is exactly equivalent to the set of 64-bit unsigned integers:
+
+<h6>该论文将代币的价值定义为余额。所有可能余额的集合用 $\mathbb{N}_B$ 表示，它与64 位无符号整数的集合相同。</h6>
+
+(29) 
+
+$$ \mathbb{N}_B \equiv \mathbb{N}\_{2^{64}} $$
+
+Though unimportant for the present work, we presume that there be a standard named denomination for $10^9$ tokens. This is different to both Ethereum (which uses adenomination of $10^{18}$), Polkadot (which uses a denomination of $10^{10}$) and Polkadot’s experimental cousin Kusama (which uses $10^{12}$).
+<h6>虽然在目前的工作中无关紧要，但我们假设存在一个标准命名的面额，表示 10⁹ 个代币。这与以太坊 (使用 10¹⁸ 面额)、波卡 (使用 10¹⁰ 面额) 和波卡的实验性兄弟网络Kusama (使用 10¹² 面额) 都不同。</h6>
+
+The fact that balances are represented as a 64-bit integer implies that there may never be more than around $18×10^9}$ tokens (each divisible into portions of $10^{−9}$ ) within Jam. We would expect that the total number of tokens ever issued will be a substantially smaller amount than this
+<h6>余额表示为 64 位整数这一事实意味着 Jam 中的代币数量可能永远不会超过 $18×10^9}$  左右（每个代币可分为 $10^{−9}$ 的部分）。我们预计有史以来发行的代币总数将远小于此数量。</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
