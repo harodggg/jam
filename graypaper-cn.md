@@ -734,6 +734,22 @@ In place of Ethereum’s gas model for purchasing and measuring blockspace, Jam 
 We must first define the header in terms of its components. The header comprises a parent hash and prior state root ($\mathbb{H}_p$ and $\mathbb{H}_r$), an extrinsic hash $\mathbb{H}_x$, a timeslot index $\mathbb{H}_t$, the epoch, winning-tickets and judgements markers $\mathbb{H}_e$, $\mathbb{H}_w$ and $\mathbb{H}_j$ , a Bandersnatch block author key $\mathbb{K}_k$ and two Bandersnatch signatures; the entropyyielding vrf signature $\mathbb{H}_v$ and a block seal $\mathbb{H}_s$. Headers may be serialized to an octet sequence with and without the latter seal component using $\varepsilon$ and $\varepsilon_U$ respectively. Formally:
 <h6>为了理解区块头，我们首先需要定义其组成部分。区块头包含以下信息：父哈希( $\mathbb{H}_p$ )和前一状态根 ( $\mathbb{H}_r$ ),外部哈希 ( $\mathbb{H}_x$ ),时隙索引 ( $\mathbb{H}_t$ ),纪元 ( $\mathbb{H}_e$ ), 获奖票根 ( $\mathbb{H}_w$ ) 和判决根 ( $\mathbb{H}_j$ ) 的标记 生成该区块的班德斯纳奇块作者密钥 ( $\mathbb{K}_k$  ) 两个班德斯纳奇签名：熵生成型 VRF 签名 ( $\mathbb{H}_v$ ) 和区块密封 ( $\mathbb{H}_s$ )区块头可以序列化为包含或不包含后一个密封组件的八位字节序列，分别记为 $\varepsilon$  和 $\varepsilon_U$ 。形式上： </h6>
 
+(35)
+
+$$\mathbb{H} \equiv (\mathbb{H}_p,\mathbb{H}_r,\mathbb{H}_x,\mathbb{H}_t,\mathbb{H}_e,\mathbb{H}_w,\mathbb{H}_j ,\mathbb{H}_k,\mathbb{H}_v,\mathbb{H}_s)$$
+
+Blocks considered invalid by this rule may become valid as $\tau$ advances.
+<h6>根据这条规则，一些现在被认为无效的区块可能随着 τ 的增加而变得有效。</h6>
+
+The blockchain is a sequence of blocks, each cryptographically referencing some prior block by including a hash derived from the parent’s header, all the way back to some first block which references the genesis header. We already presume consensus over this genesis header $\mathbb{H}^0$ and the state it represents defined as $\sigma^0$ .
+<h6>区块链是一个由区块序列组成的结构。每个区块都通过包含其父区块头部的哈希值来引用之前的某个区块，一直追溯到引用创世区块头的第一个区块。我们已经假定就这个创世区块头 $\mathbb{H}^0$ 及其代表的状态 $\sigma^0$ 达成了共识。</h6>
+
+Excepting the Genesis header, all block headers $\mathbf{H}$ have an associated parent header, whose hash is $\mathbf{H}_p$ . We denote the parent header $\mathbf{H}^− = \mathit{P}(\mathbf{H})$
+<h6>除创世区块头之外，所有区块头 $\mathbf{H}$ 都具有一个关联的父区块头，其哈希值为 $\mathbf{H}_p$ 。我们记父区块头为 $\mathbf{H}^− = \mathit{P}(\mathbf{H})$ 。</h6>
+
+(36)
+
+$$\mathbf{H}_{\mathit{p}} \in \mathbb{H}, \mathbf{H}\_{\mathit{p}} \equiv \mathcal{H}(\mathit{P}(\mathbf{H}))$$
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
