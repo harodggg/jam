@@ -750,6 +750,84 @@ Excepting the Genesis header, all block headers $\mathbf{H}$ have an associated 
 (36)
 
 $$\mathbf{H}_{\mathit{p}} \in \mathbb{H}, \mathbf{H}\_{\mathit{p}} \equiv \mathcal{H}(\mathit{P}(\mathbf{H}))$$
+
+$\mathit{P}$ is thus defined as being the mapping from one block header to its parent block header. With $\mathit{P}$ , we are able to define the set of ancestor headers $mathbf{A}$ :
+<h6>那么 P 可以定义为从一个区块头映射到其父区块头的函数。有了 P 函数，我们就可以定义祖先区块头集合 A 为：</h6>
+
+(37)
+
+$$ \mathcal{h}  \in \mathbf{A} \Leftrightarrow \mathcal{h} = \mathbf{H} \vee (\exists_i \in \mathbf{A} : \mathcal{h} = \mathit{P}(i)) $$
+
+We only require implementations to store headers of ancestors which were authored in the previous $\mathbf{L}$ = 24 hours of any block $\mathbf{B}$ they wish to validate.
+<h6>对于任何要验证的区块 B，我们仅要求实现去存储那些在该区块的前 L = 24 小时内生成的祖先区块头。</h6>
+
+The extrinsic hash is the hash of the block’s extrinsic data. Given any block $\mathbf{B} = (\mathbf{H},\mathbf{E})$ , then formally:
+<h6>外部哈希是区块的外部数据（extrinsic data）的哈希值。对于任何区块 B=(H,E) ，我们可以形式化地表示为：</h6>
+
+(38)
+
+$$ \mathbf{H}_x \in \mathbb{H} , \mathbf{H}_x \equiv \mathcal{H}(\varepsilon (E)) $$ 
+
+A block may only be regarded as valid once the timeslot index $\mathbf{H}_t$ is in the past. It is always strictly greater than that of its parent. Formally
+<h6>任何区块只有在它的时隙索引 $\mathbf{H}_t$ 代表的时刻已经过去之后才能被视为有效。并且该时隙索引总是严格大于其父区块的时隙索引。形式上表示为</h6>
+
+(39)
+
+$$ \mathbf{H}_t ∈ \mathbf{N}_T , \mathit{P}(\mathbf{H})_t < \mathbf{H}_t ∧ \mathbf{H}_t ⋅ \mathbf{P} ≤ \tau $$
+
+The parent state root $\mathbf{H}_r$ is the root of a Merkle trie composed by the mapping of the prior state’s Merkle root, which by definition is also the parent block’s posterior state. This is a departure from both Polkadot and the Yellow Paper’s Ethereum, in both of which a block’s header contains the posterior state’s Merkle root. We do this to facilitate the pipelining of block computation and in particular of Merklization
+<h6>父状态根 ( $\mathbf{H}_r$ ) 是一个 Merkle 树的根节点，该 Merkle 树由先前状态的 Merkle 根 (根据定义也是父区块的后继状态) 的映射组成。这与 Polkadot 和 Yellow Paper 提到的以太坊不同，在这两者中，区块头都包含后继状态的 Merkle 根。我们这样做是为了方便区块计算的流水线处理，尤其是 Merkle 化过程。</h6>
+
+(40)
+
+$$\mathbf{H}_r ∈ \mathbb{H} , \mathbf{H}_r ≡ \mathcal{M}_S(\sigma )$$
+
+We assume the state-Merklization function $\mathcal{M}_S$ is capable of transforming our state σ into a 32-octet commitment. See appendix D for a full definition of these two functions.
+<h6>我们假设状态哈希化函数 $\mathcal{M}_S$ 能将我们的状态 σ 转换为一个 32 字节的承诺值。有关这两个函数的完整定义，请参见附录 D。</h6>
+
+All blocks have an associated public key to identify the author of the block. We identify this as an index into the current validator set $\kappa$ . We denote the Bandersnatch key of the author as $\mathbf{H}_a$ though note that this is merely an equivalence, and is not serialized as part of the header.
+<h6>所有区块都关联着一个公钥，用于识别区块的作者。我们将此公钥标识为当前验证者集合 $\kappa$ 中的索引值。我们用 $\mathbf{H}_a$ 表示作者的班德斯纳奇密钥，需要注意这仅仅是一种等价关系，该密钥不会被序列化为头部的一部分。</h6>
+
+(41)
+
+$$\mathbf{H}_\kappa ∈ \mathbb{N}_V , \mathbf{H}_a \equiv  \kappa[\mathbf{H}_k]$$
+
+5.1. The Epoch and Winning Tickets Markers. If not ∅, then the epoch marker specifies key and entropy relevant to the following epoch in case the ticket contest does not complete adequately (a very much unexpected eventuality). Similarly, the winning-tickets marker, if not ∅, provides the series of 600 slot sealing “tickets” for the next epoch (see the next section):
+<h6>5.1 时代标记和中奖门票标记。如果不为空 (∅)，则时代标记会指定与下个时代相关的密钥和熵，以防票券竞赛无法正常完成（这种情况极少见）。类似地，中奖门票标记（如果非空）则会提供一系列用于下一时代密封区块的 600 个插槽“票券”（请参阅下一节）。</h6>
+
+(42)
+
+$$\mathbf{H}_e ∈ (\mathbb{H}, ⟦\mathbb{H}_B⟧_V )? , \mathbf{H}w ∈ ⟦\mathbb{C}⟧_E $$
+
+The terms are fully defined in section 6.6.
+<h6>相关术语的完整定义请参见第 6.6 节。</h6>
+
+<h5 align="center">6. Block Production and Chain Growth</h5>
+<h6>6. 区块生产和链增长</h6>
+
+As mentioned earlier, Jam is architected around a hybrid consensus mechanism, similar in nature to that of Polkadot’s Babe/Grandpa hybrid. Jam’s block production mechanism, termed Safrole after the novel Sassafras production mechanism of which it is a simplified variant, is a stateful system rather more complex than the Nakamoto consensus described in the *YP*
+<h6>如前所述，Jam 采用了一种混合共识机制，类似于 Polkadot 的 Babe/Grandpa 混合机制。Jam 的区块生产机制被称为 Safrole，以对其所简化变体的新型 Sassafras 生产机制命名，它是一种比 YP 文档中描述的 Nakamoto 共识更复杂的状态ful 系统。</h6>
+
+The chief purpose of a block production consensus mechanism is to limit the rate at which new blocks may be authored and, ideally, preclude the possibility of “forks”: multiple blocks with equal numbers of ancestors.
+<h6>区块生产共识机制的主要目的在于限制生成新区块的速率，并且理想情况下防止出现“分叉”：即拥有相同数量祖先区块的多个区块并存的局面。</h6>
+
+
+
+To achieve this, Safrole limits the possible author of any block within any given six-second timeslot to a single key-holder from within a prespecified set of validators. Furthermore, under normal operation, the identity of the key-holder of any future timeslot will have a very high degree of anonymity. As a side effect of its operation, we can generate a high-quality pool of entropy which may be used by other parts of the protocol and is accessible to services running on it.
+<h6>为了实现这一点，Safrole 在任何给定的 6 秒时间段内，将可能的新区块创作者限制为预先指定验证者集合中的单个密钥持有者。此外，在正常运行下，任何未来时间段的密钥持有者身份都将具有非常高的匿名性。作为其运行的副作用，我们可以生成高质量的熵池，该熵池可供协议的其他部分使用，并且对运行在其上的服务可用。</h6>
+
+Because of its tightly scoped role, the core of Safrole’s state, γ, is independent of the rest of the protocol. It interacts with other portions of the protocol through ι and
+$\kappa$ , the prospective and active sets of validator keys respectively; $\tau$ , the most recent block’s timeslot; and η, the entropy accumulator.
+<h6>由于 Safrole 的核心状态 γ 仅负责有限的功能，因此它独立于协议的其他部分。它通过以下几个元素与协议的其他部分进行交互,ι 和 κ：分别代表候选验证者密钥集合和当前活跃的验证者密钥集合。τ：表示最新区块所属的时隙。η：表示熵累积器。</h6>
+
+The Safrole protocol generates, once per epoch, a sequence of $\mathbf{E}$ sealing keys, one for each potential block within a whole epoch. Each block header includes its timeslot index $\mathbf{H}_t$ (the number of six-second periods since the Jam Common Era began) and a valid seal signature Hs, signed by the sealing key corresponding to the timeslot within the aforementioned sequence. Each sealing key is in fact a pseudonym for some validator which was agreed the privilege of authoring a block in the corresponding timeslot.
+<h6>Safrole 协议会为每个时代生成一组密封密钥序列 $\mathbf{E}$ ，数量等于该时代内所有潜在区块的个数。每个区块头包含以下信息：时隙索引 $\mathbf{H}_t$ ：表示自 Jam 共同纪元 (Jam Common Era) 开始以来经过的 6 秒间隔数。密封签名 Hs ：由对应于上述序列中时隙的密封密钥签名，证明该区块属于正确的时间段。</h6>
+
+In order to generate this sequence of sealing keys, and in particular to do so without making public the correspondence relation between them and the validator set, we use a novel cryptographic structure known as a Ringvrf, utilizing the Bandersnatch curve. Bandersnatch Ringvrf allows for a proof to be provided which simultaneously guarantees the author controlled a key within a set (in our case validators), and secondly provides an output, an unbiasable deterministic hash giving us a secure verifiable random function (vrf) and as a means of determining which validators are able to author in which slots.
+
+<h6>为了生成这组密封密钥序列，并且尤其要避免公开密钥序列与验证者集合之间的对应关系，我们使用了一种称为“环签名验证函数 (RingVRF)” 的新型密码结构，该结构利用了班德斯纳奇曲线 (Bandersnatch curve)。环签名验证函数允许提供一种证明，该证明可以同时保证以下两点：作者控制着集合内的一个密钥（在本例中是验证者集合）。生成一个输出，即无偏的确定性哈希值，为我们提供了一个安全的可验证随机函数 (VRF)，并用作确定哪些验证者可以在哪些时隙内创作区块的工具。</h6>
+
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
