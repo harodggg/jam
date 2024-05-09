@@ -827,6 +827,22 @@ In order to generate this sequence of sealing keys, and in particular to do so w
 
 <h6>为了生成这组密封密钥序列，并且尤其要避免公开密钥序列与验证者集合之间的对应关系，我们使用了一种称为“环签名验证函数 (RingVRF)” 的新型密码结构，该结构利用了班德斯纳奇曲线 (Bandersnatch curve)。环签名验证函数允许提供一种证明，该证明可以同时保证以下两点：作者控制着集合内的一个密钥（在本例中是验证者集合）。生成一个输出，即无偏的确定性哈希值，为我们提供了一个安全的可验证随机函数 (VRF)，并用作确定哪些验证者可以在哪些时隙内创作区块的工具。</h6>
 
+**6.1. Timekeeping.** Here, $\tau$ defines the most recent block’s slot index, which we transition to the slot index as defined in the block’s header: 
+
+(43)
+
+$$\tau ∈ \mathbb{N}_T , \tau^′\equiv \mathbf{H}_t$$
+
+We track the slot index in state as $\tau$ in order that we are able to easily both identify a new epoch and determine the slot at which the prior block was authored. We denote e as the prior’s epoch index and m as the prior’s slot phase index within that epoch and $e^'$ and $m^'$ are the corresponding values for the present block:
+
+(44)
+
+$$ let \qquad  e \quad R \quad m = \frac{\tau}{E}, e^′ \quad R \quad m^′=\frac{\tau}{{E'}} $$
+
+6.2. Safrole Basic State. We restate γ into a number of components:
+
+(45)
+
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
