@@ -843,6 +843,68 @@ $$ let \qquad  e \quad R \quad m = \frac{\tau}{E}, e^′ \quad R \quad m^′=\fr
 
 (45)
 
+$$ \gamma  \equiv (\gamma_k, \gamma_z, \gamma_s, \gamma_a) $$
+
+$\gamma_z$ is the epoch’s root, a Bandersnatch ring root composed with the one Bandersnatch key of each of the next epoch’s validators, defined in $\gamma_k$ (itself defined in the next section).
+
+(46)
+
+$$\gamma_z \in \mathbb{Y}_R $$
+
+Finally, γa is the ticket accumulator, a series of highestscoring ticket identifiers to be used for the next epoch. $\gamma_a$ is the current epoch’s slot-sealer series, which is either a full complement of $\mathit{E}$ tickets or, in the case of a fallback mode, a series of $\mathif{E}$ Bandersnatch keys:
+
+(47)
+
+$$ \gamma_a \in ⟦\mathbb{C}⟧_{∶E}, \gamma_s \in ⟦\mathbb{C}⟧_E ∪ ⟦\mathbb{H}_B⟧_E $$
+
+Here, $\mathbb{C}$ is used to denote the set of tickets, a combination of a verifiably random ticket identifier y and the ticket’s entry-index r:
+
+(48)
+
+$$ \mathbb{C} \equiv (y \in \mathbb{H}, r \in  \mathbb{N}_N) $$
+
+As we state in section 6.4, Safrole requires that every block header $\mathbf{H}$ contain a valid seal Hs, which is a Bandersnatch signature for a public key at the appropriate index m of the current epoch’s seal-key series, present in state as $\gamma_s$.
+
+**6.3. Key Rotation.** In addition to the active set of validator keys κ and staging set ι, internal to the Safrole state we retain a pending set $\gamma_k$. The active set is the set of keys identifying the nodes which are currently privileged to author blocks and carry out the validation processes, whereas the pending set $\gamma_k$, which is reset to ι at the beginning of each epoch, is the set of keys which will be active in the next epoch and which determine the Bandersnatch ring root which authorizes tickets into the sealing-key contest for the next epoch.
+
+(49)
+
+$$\iota  \in ⟦\mathbb{K}⟧_V, \gamma_k \in ⟦\mathbb{K}⟧_V, \kappa  \in  ⟦\mathbb{K}⟧_V, \lambda  \in ⟦\mathbb{K}⟧_V$$
+
+We must introduce $\mathbb{K}$, the set of validator key tuples. This is a combination of cryptographic public keys for Bandersnatch and Ed25519 cryptography, and a third metadata key which is an opaque octet sequence, but utilized to specify practical identifiers for the validator, not least a hardware address
+
+The set of validator keys itself is equivalent to the set of 176-octet sequences. However, for clarity, we divide the sequence into four easily denoted components. For any
+validator key $v$, the Bandersnatch key is denoted $v_b$, and is equivalent to the first 32-octets; the Ed25519 key, $v_e$, is the second 32 octets; the BLS key denoted $v_{BLS}$ is equivalent to the following 144 octets, and finally the metadata $v_m$ is the last 128 octets. Formally:
+(50)
+
+$$ \mathbb{K} ≡ \mathbb{Y}_{336}$$
+
+(51)
+
+$$∀_v \in \mathbb{K} ∶ v_b \in \mathbb{H}_B ≡ v_0⋅⋅⋅+32$$
+
+(52)
+
+$$∀_v \in  \mathbb{K} ∶ v_e \in \mathbb{H}_E ≡ v_{32}⋅⋅⋅+32$$
+
+(53)
+
+$$∀_v \in \mathbb{K} ∶ v_{BLS} \in  \mathbb{Y}\_{BLS} ≡ v_{64}⋅⋅⋅+144$$
+
+(54)
+
+$$∀_v \in \mathbb{K} ∶ v_m ∈ \mathbb{Y}\_{208} ≡ v_{208}⋅⋅⋅+128$$
+
+With a new epoch under regular conditions, validator keys get rotated and the epoch’s Bandersnatch key root is updated into $\gamma^'_z:
+
+```math
+(\gamma'_k,k',\lambda , \gamma^′_z) ≡
+
+\left\{\begin{matrix}
+ (\iota , N(γ_k), N(κ), z) & if \quad ' > e ∧ \mathbf{H}_J ≠ [] \\
+(γk, N(κ), N(λ), γz)  & otherwise
+\end{matrix}\right.
+```
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
