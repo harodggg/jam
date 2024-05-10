@@ -828,53 +828,61 @@ In order to generate this sequence of sealing keys, and in particular to do so w
 <h6>为了生成这组密封密钥序列，并且尤其要避免公开密钥序列与验证者集合之间的对应关系，我们使用了一种称为“环签名验证函数 (RingVRF)” 的新型密码结构，该结构利用了班德斯纳奇曲线 (Bandersnatch curve)。环签名验证函数允许提供一种证明，该证明可以同时保证以下两点：作者控制着集合内的一个密钥（在本例中是验证者集合）。生成一个输出，即无偏的确定性哈希值，为我们提供了一个安全的可验证随机函数 (VRF)，并用作确定哪些验证者可以在哪些时隙内创作区块的工具。</h6>
 
 **6.1. Timekeeping.** Here, $\tau$ defines the most recent block’s slot index, which we transition to the slot index as defined in the block’s header: 
-
+<h6>6.1. 时间维护。符号 τ 在此处表示最新区块的槽位索引，我们将其转换为主块头文件中定义的槽位索引。</h6>
 (43)
 
 $$\tau ∈ \mathbb{N}_T , \tau^′\equiv \mathbf{H}_t$$
 
 We track the slot index in state as $\tau$ in order that we are able to easily both identify a new epoch and determine the slot at which the prior block was authored. We denote e as the prior’s epoch index and m as the prior’s slot phase index within that epoch and $e^'$ and $m^'$ are the corresponding values for the present block:
-
+<h6>
+我们在状态中使用 τ 跟踪槽位索引，以便于轻松识别新 epoch 并确定上一个区块被创作的槽位。我们用 e 表示前一个区块的 epoch 索引，用 m 表示前一个区块在该 epoch 中的槽位相位索引，用 e和 m ‘表示当前区块的对应值：</h6>
 (44)
 
 $$ let \qquad  e \quad R \quad m = \frac{\tau}{E}, e^′ \quad R \quad m^′=\frac{\tau}{{E'}} $$
 
-6.2. Safrole Basic State. We restate γ into a number of components:
+**6.2. Safrole Basic State.** We restate γ into a number of components:
+<h6>6.2. Safrole 基础状态。为了更清楚地理解熵累加器如何工作，我们将符号 γ 分解成几个组件：</h6>
 
 (45)
 
 $$ \gamma  \equiv (\gamma_k, \gamma_z, \gamma_s, \gamma_a) $$
 
 $\gamma_z$ is the epoch’s root, a Bandersnatch ring root composed with the one Bandersnatch key of each of the next epoch’s validators, defined in $\gamma_k$ (itself defined in the next section).
+<h6>γ z代表 epoch 的根，它是由下一 epoch 所有验证者的单个 Bandersnatch 密钥（在 γ k中定义，下一节将详细介绍 γ k）构成的 Bandersnatch 环根</h6>
 
 (46)
 
 $$\gamma_z \in \mathbb{Y}_R $$
 
 Finally, γa is the ticket accumulator, a series of highestscoring ticket identifiers to be used for the next epoch. $\gamma_a$ is the current epoch’s slot-sealer series, which is either a full complement of $\mathit{E}$ tickets or, in the case of a fallback mode, a series of $\mathif{E}$ Bandersnatch keys:
+<h6>最后，γ a表示票据累加器，它是一系列将在下一个 epoch 中使用的最高分票据标识符。γ s表示当前 epoch 的槽位密封器序列，它可以是完整的 E 个票据，或者在回退模式下，它是一系列 $\mathif{E}$ 个 Bandersnatch 密钥：</h6>
 
 (47)
 
 $$ \gamma_a \in ⟦\mathbb{C}⟧_{∶E}, \gamma_s \in ⟦\mathbb{C}⟧_E ∪ ⟦\mathbb{H}_B⟧_E $$
 
 Here, $\mathbb{C}$ is used to denote the set of tickets, a combination of a verifiably random ticket identifier y and the ticket’s entry-index r:
-
+<h6>这里，符号 C 表示票据集合，它是由可验证的随机票据标识符 y 和票据的条目索引 r 组成的一个组合：</h6>
 (48)
 
 $$ \mathbb{C} \equiv (y \in \mathbb{H}, r \in  \mathbb{N}_N) $$
 
 As we state in section 6.4, Safrole requires that every block header $\mathbf{H}$ contain a valid seal Hs, which is a Bandersnatch signature for a public key at the appropriate index m of the current epoch’s seal-key series, present in state as $\gamma_s$.
+<h6>正如我们在 6.4 节所述，Safrole 要求每个区块头 H 都包含一个有效的密封 Hs, 它是一个针对当前 epoch 密钥序列（存储在状态中的 γ s ）中相应索引位置 m 的公钥的 Bandersnatch 签名。</h6>
 
 **6.3. Key Rotation.** In addition to the active set of validator keys κ and staging set ι, internal to the Safrole state we retain a pending set $\gamma_k$. The active set is the set of keys identifying the nodes which are currently privileged to author blocks and carry out the validation processes, whereas the pending set $\gamma_k$, which is reset to ι at the beginning of each epoch, is the set of keys which will be active in the next epoch and which determine the Bandersnatch ring root which authorizes tickets into the sealing-key contest for the next epoch.
+<h6>6.3. 密钥轮换.除了激活验证器密钥集合 κ 和暂存集合 ι 之外，Safrole 内部状态还保留了一个待处理集合 γ k。激活集合是标识当前被授权创作区块和执行验证过程的节点的密钥集合，而待处理集合 γ k会在每个 epoch 开始时重置为 ι）则包含下一个 epoch 将激活的密钥集合，它决定了授权下一 epoch 密钥竞争（用于生成密封密钥）的票据的 Bandersnatch 环根。</h6>
 
 (49)
 
 $$\iota  \in ⟦\mathbb{K}⟧_V, \gamma_k \in ⟦\mathbb{K}⟧_V, \kappa  \in  ⟦\mathbb{K}⟧_V, \lambda  \in ⟦\mathbb{K}⟧_V$$
 
 We must introduce $\mathbb{K}$, the set of validator key tuples. This is a combination of cryptographic public keys for Bandersnatch and Ed25519 cryptography, and a third metadata key which is an opaque octet sequence, but utilized to specify practical identifiers for the validator, not least a hardware address
+<h6>我们需要引入验证器密钥元组集合 K。它包含用于 Bandersnatch 和 Ed25519 加密的密码学公钥，以及第三个元数据密钥，该密钥是一个不透明的八位字节序列，但用于指定验证器的实用标识符，尤其是硬件地址。</h6>
 
 The set of validator keys itself is equivalent to the set of 176-octet sequences. However, for clarity, we divide the sequence into four easily denoted components. For any
 validator key $v$, the Bandersnatch key is denoted $v_b$, and is equivalent to the first 32-octets; the Ed25519 key, $v_e$, is the second 32 octets; the BLS key denoted $v_{BLS}$ is equivalent to the following 144 octets, and finally the metadata $v_m$ is the last 128 octets. Formally:
+<h6>validator key 的集合本身等于 176 个八位字节序列的集合。但是，为了清晰起见，我们将序列划分成四个易于表示的组件。对于任何验证器密钥 v，Bandersnatch 密钥表示为 v b ，等于前 32 个八位字节。Ed25519 密钥表示为 v e ，是第二个 32 个八位字节。BLS 密钥表示为 v BLS ，等于接下来的 144 个八位字节。最后，元数据表示为 v m，是最后的 128 个八位字</h6>
 (50)
 
 $$ \mathbb{K} ≡ \mathbb{Y}_{336}$$
@@ -896,6 +904,7 @@ $$∀_v \in \mathbb{K} ∶ v_{BLS} \in  \mathbb{Y}\_{BLS} ≡ v_{64}⋅⋅⋅+14
 $$∀_v \in \mathbb{K} ∶ v_m ∈ \mathbb{Y}\_{208} ≡ v_{208}⋅⋅⋅+128$$
 
 With a new epoch under regular conditions, validator keys get rotated and the epoch’s Bandersnatch key root is updated into $\gamma^'_z:
+<h6>在常规情况下进入新 epoch 时，验证器密钥会进行轮换，并且 epoch 的 Bandersnatch 环根会更新为 $\gamma^'_z$：</h6>
 
 ```math
 (\gamma'_k,k',\lambda , \gamma^′_z) ≡
@@ -915,14 +924,63 @@ With a new epoch under regular conditions, validator keys get rotated and the ep
 \left.\begin{matrix}
  [0, 0, . . . ] & if k_e ∈ \psi ^′_p\\
  k & otherwise
-\end{matrix}\right\} \vert k < - k
+\end{matrix}\right\} \mid k < - k
 \end{bmatrix}
 \end{matrix}
 ```
 
 Note that the posterior active validator key set κ' is defined such that keys belonging to the historical judgement punish set $ψ^′_p$ are replaced with a null key containing only zeroes. The origin of this punish set is explained in section 10.
+<h6>需要注意的是，后验激活验证器密钥集合 κ' 的定义方式是，将属于历史惩罚集合 ψ p的密钥替换为仅包含零的空密钥。惩罚集合的来源将在第 10 节进行解释。</h6>
 
 **6.4. Sealing and Entropy Accumulation.** The header must contain a valid seal and valid vrf output. These are two signatures both using the current slot’s seal key; the message data of the former is the header’s serialization omitting the seal component $\mathbf{H}_s$, whereas the latter is used as a bias-resistant entropy source and thus its message must already have been fixed: we use the entropy stemming from the vrf of the seal signature. Formally:
+<h6>6.4. 密封和熵积累。区块头必须包含一个有效的密封和有效的 vrf 输出。这两个都是使用当前槽位的密封密钥生成的签名：前者的消息数据是区块头的序列化，但省略了密封组件 H s 。后者用作抗偏差熵源，因此其消息必须已经固定：我们使用来自密封签名 vrf 的熵。</h6>
+
+$$let \quad i = \gamma^′_s[\mathbf{H}_t]^\circlearrowleft :$$
+
+(56)
+```math
+\gamma^′_s ∈ ⟦\mathbb{C}⟧  \Longrightarrow  \left\{\begin{matrix}
+i_y = \mathcal{Y}(\mathbf{H}_s) , \\
+H_s \in \mathbb{F}^{\varepsilon \frown _U(H)}_{H_a}⟨X_S \frown \eta'_3 \mp i_r⟩ , \\
+T = 1
+\end{matrix}\right \}
+```
+
+(57)
+
+```math
+\gamma^′_s \in ⟦\mathbb{H}_B⟧ \Longrightarrow \left\{\begin{matrix}
+  i = \mathbf{H}_a ,  \\
+  H_s \in \mathbb{F}^{\varepsilon _U(H)}_{H_a}⟨X_F \frown \eta'_3 ⟩ ,\\
+  \mathbf{T} = 0
+
+\end{matrix}\right.
+```
+
+(58)
+
+$$ \mathbf{H}_v ∈ \mathbb{F}^{[]}_{H_a}⟨X_E  \frown \mathcal{Y}(H_s)⟩ $$
+
+(59)
+
+$$ \mathbf{X}_E = $jam_entropy $$
+
+(60)
+
+$$ X_F = $jam\_fallback\_seal $$
+
+(61)
+
+$$ X_S = $jam\_seal $$
+
+Sealing using the ticket is of greater security, and we utilize this knowledge when determining a candidate block on which to extend the chain, detailed in section 15. We
+thus note that the block was sealed under the regular security with the boolean marker $\mathbf{T}$. We define this only for the purpose of ease of later specification.
+<h6>使用票据进行密封可以提供更高的安全性，我们在第 15 节详细介绍了确定用于扩展链的候选区块时如何利用这一特性。因此，我们注意到该区块使用常规安全性和布尔标记 T 进行密封。我们仅为方便后续规范而定义这一点。</h6>
+
+In addition to the entropy accumulator $η_0$, we retain three additional historical values of the accumulator at the point of each of the three most recently ended epochs, $η_1$, $η_2$ and $η_3$. The second-oldest of these $η_2$ is utilized to help ensure future entropy is unbiased (see equation 62) and seed the fallback seal-key generation function with randomness (see equation 65). The oldest is used to regenerate this randomness when verifying the seal above.
+<h6>除当前的熵累加器 η_0，我们还保留了最近结束的三个 epoch 时刻的累加器的另外三个历史值，分别记为 η_1、η_2 和 η_3。其中 η_2 用于帮助确保未来的熵没有偏差（见公式 62），并为备用密封密钥生成函数注入随机性（见公式 65）。η_1 用于在验证上述密封时重新生成此随机性。</h6>
+
+
 
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
