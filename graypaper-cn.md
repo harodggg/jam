@@ -906,6 +906,25 @@ With a new epoch under regular conditions, validator keys get rotated and the ep
 \end{matrix}\right.
 ```
 
+(55)
+
+```math
+\begin{matrix}
+ where \quad z = R([k_b ∣ k <− \gamma ^′_k])\\
+ and \quad N(k) ≡ \begin{bmatrix}
+\left.\begin{matrix}
+ [0, 0, . . . ] & if k_e ∈ \psi ^′_p\\
+ k & otherwise
+\end{matrix}\right\} \vert k < - k
+\end{bmatrix}
+\end{matrix}
+```
+
+Note that the posterior active validator key set κ' is defined such that keys belonging to the historical judgement punish set $ψ^′_p$ are replaced with a null key containing only zeroes. The origin of this punish set is explained in section 10.
+
+**6.4. Sealing and Entropy Accumulation.** The header must contain a valid seal and valid vrf output. These are two signatures both using the current slot’s seal key; the message data of the former is the header’s serialization omitting the seal component $\mathbf{H}_s$, whereas the latter is used as a bias-resistant entropy source and thus its message must already have been fixed: we use the entropy stemming from the vrf of the seal signature. Formally:
+
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
