@@ -1269,8 +1269,10 @@ c ∈ \mathbb{H} , b ∈ \mathbb{N}_B , g ∈ \mathbb{Z}_G , m ∈ \mathbb{Z}_G
 ```
 
 Thus, the balance of the service of index s would be denoted $δ[s]_b$ and the storage item of key k ∈ H for that service is written $δ[s]_s[k]$.
+<h6>因此，索引 s 的服务的余额将表示为 $δ[s]_b$，并且该服务的密钥 k ∈ H 的存储项被写为 $δ[s]_s[k]$。</h6>
 
 **9.1. Code and Gas.** The code c of a service account is represented by a hash which, if the service is to be functional, must be present within its preimage lookup (see section 9.2). We thus define the actual code c:
+<h6>9.1。代码和 Gas。 服务帐户的代码 c 由哈希表示，如果服务要正常运行，则该哈希必须出现在其原像查找中（请参阅第 9.2 节）。因此，我们定义实际的代码 c：</h6>
 
 (87)
 
@@ -1281,28 +1283,53 @@ Thus, the balance of the service of index s would be denoted $δ[s]_b$ and the s
 \end{matrix}\right.
 ```
 There are three entry-points in the code:
+<h6>代码中有三个入口点：</h6>
+
 1. 0 refine: Refinement, executed in-core and stateless.10
 2. 1 accumulate: Accumulation, executed on-chain and stateful.
 3. 2 on_transfer: Transfer handler, executed onchain and stateful.
 
+<h6>
+  <ul>
+    <li>
+      0 细化：细化，在核心内执行且无状态。10
+    </li>
+    <li>
+      1 累加： 累积： 在链上执行，有状态。
+    </li>
+    <li>
+      2 on_transfer：传输处理程序，在链上执行且有状态。
+    </li>
+  </ul>
+</h6>
+
 
 Whereas the first, executing in-core, is described in more detail in section 13.2, the latter two are defined in the present section.
+<h6>第 13.2 节更详细地描述了第一个（在核心内执行），后两者在本节中定义。</h6>
 
 As stated in appendix A, execution time in the Jam virtual machine is measured deterministically in units of gas, represented as a 64-bit integer formally denoted $\mathbb{Z}_G$. There are two limits specified in the account, g, the minimum gas required in order to execute the Accumulate entry-point of the service’s code, and m, the minimum required for the On Transfer entry-point.
+<h6>如附录 A 中所述，Jam 虚拟机中的执行时间以 Gas 为单位进行确定性测量，以 64 位整数表示，正式表示为 $\mathbb{Z}_G$。账户中指定了两个限制，g，执行服务代码的累积入口点所需的最低气体量，m，传输入口点所需的最低气体量。</h6>
 
 **9.2. Preimage Lookups.** In addition to storing data in arbitrary key/value pairs available only on-chain, an account may also solicit data to be made available also incore, and thus available to the Refine logic of the service’s code. State concerning this facility is held under the service’s p and l components.
+<h6>9.2。原像查找。 除了将数据存储在仅在链上可用的任意键/值对中之外，帐户还可以请求在核心中也可用的数据，从而可用于服务代码的 Refine 逻辑。有关此设施的状态保存在服务的 p 和 l 部分下。</h6>
 
-There are several differences between preimage-lookups and storage. Firstly, preimage-lookups act as a mapping from a hash to its preimage, whereas general storage maps arbitrary keys to values. Secondly, preimage data is supplied extrinsically, whereas storage data originates as part of the service’s accumulation. Thirdly preimage data, once supplied, may not be removed freely; instead it goes through a process of being marked as unavailable, and only after a period of time may it be removed from state. This ensures that historical information on its existence is retained. The final point especially is important since preimage data is designed to be queried in-core, under the Refine logic of the service’s code, and thus it is important that the historical availability of the preimage is known
+There are several differences between preimage-lookups and storage. Firstly, preimage-lookups act as a mapping from a hash to its preimage, whereas general storage maps arbitrary keys to values. Secondly, preimage data is supplied extrinsically, whereas storage data originates as part of the service’s accumulation. Thirdly preimage data, once supplied, may not be removed freely; instead it goes through a process of being marked as unavailable, and only after a period of time may it be removed from state. This ensures that historical information on its existence is retained. The final point especially is important since preimage data is designed to be queried in-core, under the Refine logic of the service’s code, and thus it is important that the historical availability of the preimage is known.
+<h6>原像查找和存储之间存在一些差异。首先，原像查找充当从散列到其原像的映射，而通用存储将任意键映射到值。其次，原像数据是外部提供的，而存储数据则源自服务积累的一部分。第三，原像数据一旦提供，就不得随意删除；相反，它会经历一个被标记为不可用的过程，并且只有在一段时间之后才能将其从状态中删除。这确保了有关其存在的历史信息得以保留。最后一点尤其重要，因为原像数据被设计为在服务代码的 Refine 逻辑下进行核心查询，因此了解原像的历史可用性非常重要。</h6>
 
 We begin by reformulating the portion of state concerning our data-lookup system. The purpose of this system is to provide a means of storing static data on-chain such
 that it may later be made available within the execution of any service code as a function accepting only the hash of the data and its length in octets.
+<h6>我们首先重新制定有关数据查找系统的状态部分。该系统的目的是提供一种在链上存储静态数据的方法，例如 它稍后可以在任何服务代码的执行中作为仅接受数据散列及其八位字节长度的函数提供。</h6>
 
 During the on-chain execution of the Accumulate function, this is trivial to achieve since there is inherently a state which all validators verifying the block necessarily have complete knowledge of, i.e. σ. However, for the incore execution of Refine, there is no such state inherently available to all validators; we thus name a historical state, the lookup anchor which must be considered recently finalized before the work result may be accumulated hence providing this guarantee.
+<h6>在链上执行 Accumulate 函数时，要实现这一点并不难，因为所有验证区块的验证者都必须完全了解一个固有的状态，即 σ。然而，对于 Refine 的内核执行，所有验证者都无法获得这样一个固有的状态；因此，我们命名了一个历史状态，即查找锚，它必须被认为是最近才最终确定的，然后才能累积工作结果，从而提供这种保证。</h6>
 
 By retaining historical information on its availability, we become confident that any validator with a recently finalized view of the chain is able to determine whether any given preimage was available at any time within the period where auditing may occur. This ensures confidence that judgements will be deterministic even without consensus
 on chain state.
+<h6>通过保留有关其可用性的历史信息，我们确信，任何验证者在最近最终确定了对链的看法后，都能确定任何给定的预图像在审计可能发生的期间内的任何时候是否可用。这就确保了即使在没有就链状态达成共识的情况下，判断也是确定的。
+链状态的判断也是确定的。</h6>
 
 Restated, we must be able to define some historical lookup function Λ which determines whether the preimage of some hash h was available for lookup by some service account a at some timeslot t, and if so, provide its preimage:
+<h6>重述一下，我们必须能够定义某个历史查询函数Λ，它能确定某个哈希的前像在某个时间段 t 是否可供某个服务账户 a 查询，如果是，则提供其前像：</h6>
 
 (88)
 
@@ -1314,19 +1341,32 @@ A_t: \left\{\begin{matrix}
 ```
 
 This function is defined shortly below in equation 90.
+<h6>该函数在下面的公式 90 中定义。</h6>
 The preimage lookup for some service of index s is denoted δ[s]p is a dictionary mapping a hash to its corresponding preimage. Additionally, there is metadata associated with the lookup denoted $δ[s]_l$ which is a dictionary mapping some hash and presupposed length into historical information.
+<h6>索引 s 的某项服务的前像查询表示为 δ[s]p，它是一个将哈希值映射到其相应前像的字典。此外，还有与查询相关的元数据，用 $δ[s]_l$ 表示，它是一个将某些哈希值和预设长度映射为历史信息的字典。</h6>
 
 *9.2.1. Invariants.* The state of the lookup system naturally satisfies a number of invariants. Firstly, any preimage value must correspond to its hash, equation 89. Secondly, a preimage value being in state implies that its hash and length pair has some associated status, also in equation 89. Formally:
+<h6>9.2.1。不变量。 查找系统的状态自然满足许多不变量。首先，任何原像值必须对应于其散列，方程 89。其次，处于状态的原像值意味着其散列和长度对具有某种关联的状态，也在方程 89 中。形式上：</h6>
 (89)
 
 $$ ∀_a ∈ \mathbb{A}, (h \to p) ∈ a_p ⇒ h = \mathcal{H}(p) ∧(h, ∣p∣) ∈ \mathcal{K}(a_l) $$
 
 *9.2.2. Semantics.* The historical status component $h ∈ [N_T]_{∶3}$is a sequence of up to three time slots and the cardinality of this sequence implies one of four modes:
+<h6> 9.2.2. 语义。 历史状态组件$h∈[N_T]_{∶3}$是一个由最多三个时隙组成的序列，该序列的奇偶性意味着四种模式之一：</h6>
 
 - h = []: The preimage is requested, but has not yet been supplied
 - h ∈ $⟦N_T ⟧_1$ : The preimage is available and has been from time $h_0$
 - h ∈ $⟦N_T ⟧_2$: The previously available preimage is now unavailable since time $h_1$. It had been available from time $h_0$.
 - h ∈ $⟦N_T ⟧_3$: The preimage is available and has been from time $h_2$. It had previously been available from time $h_0$ until time $h_1$.
+
+  <h6>
+    <ul>
+      <li>h = []：已请求原像，但尚未提供</li>
+      <li>h ∈ $⟦N_T ⟧_1$：前像可用，并且从 $h_0$ 开始就一直可用。</li>
+      <li>h∈$⟦N_T ⟧_2$： 之前可用的前像现在从时间 $h_1$ 开始就不可用了。而从时间 $h_0$ 开始，它就可以使用了。</li>
+      <li>h∈$⟦N_T ⟧_3$： 前像从时间 $h_2$ 开始可用。在此之前，从时间 $h_0$ 到时间 $h_1$，它都是可用的。</li>
+    </ul>
+  </h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
