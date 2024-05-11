@@ -985,12 +985,14 @@ In addition to the entropy accumulator $η_0$, we retain three additional histor
 $$ η ∈ ⟦H⟧_4$$
 
 $η_0$ defines the state of the randomness accumulator to which the provably random output of the vrf, the signature over some unbiasable input, is combined each block. $η_1$ and $η_2$ meanwhile retain the state of this accumulator at the end of the two most recently ended epochs in order.
+<h6>$η_0$ 定义了随机数累加器的状态，每个区块都会将可证明随机的 vrf 输出和对不可预测输入的签名与该状态进行组合。$η_1$ 和 $η_2$ 则分别保存了最近结束的两个 epoch 周期末尾的随机数累加器状态。</h6>
 
 (63)
 
 $$η'_0 ≡ \mathcal{H}(η_0 \frown \mathcal{Y}(H_v)) $$
 
-On an epoch transition (identified as the condition e′ > e), we therefore rotate the accumulator value into the history $η_1$, $η_2$ and $η_3$:
+On an epoch transition (identified as the condition e′ > e), we therefore rotate the accumulator value into the history $η_1$, $η_2$ and $η_3$:  
+<h6>当 epoch 周期发生切换时（记为 e′ > e），我们将累加器值依次旋转到历史记录 $η_1$, $η_2$ and $η_3$:  中。</h6>
 
 (64)
 
@@ -1007,6 +1009,8 @@ On an epoch transition (identified as the condition e′ > e), we therefore rota
 **6.5. The Slot Key Sequence.** (( The posterior slot key sequence $\gamma^′_s$ is one of three expressions depending on the circumstance of the block. If the block is not the first in an epoch, then it remains unchanged from the prior $\gamma_s$. If the block signals the next epoch (by epoch index) and the previous block’s slot was within the closing period of the previous epoch, then it takes the value of the prior ticket accumulator $
 gamma^′_a$. Otherwise, it takes the value of the fallback key sequence. Formally:
 
+<h6>6.5 槽位密钥序列。后验槽位密钥序列 $\gamma^′_s$ 取决于区块的具体情形，有三种表达式可以表示。 如果区块不是 epoch 的首个区块，则它保持不变，和前一个区块的槽位密钥序列 $\gamma_s$ 相同。 如果区块通过 epoch 索引指示下一个 epoch 开始，并且前一个区块的槽位落在上一个 epoch 的 closing period 内，那么它将取前一个票据累加器 $gamma^′_a$ 的值。其他情况，它将取备用密钥序列的值。</h6>
+
 (65)
 
 ```math
@@ -1018,7 +1022,7 @@ gamma^′_a$. Otherwise, it takes the value of the fallback key sequence. Formal
 ```
 
 Here, we use Z as the inside-out sequencer function, defined as follows:
-
+<h6>这里，我们使用 Z 函数作为内部翻转序列器函数，其定义如下：</h6>
 (66)
 
 ```math
@@ -1029,7 +1033,7 @@ Z∶\left\{\begin{matrix}
 \end{matrix}\right.
 ```
 Finally, F is the fallback key sequence function which selects an epoch’s worth of validator Bandersnatch keys($⟦H_B⟧_E$) at random from the validator key set k using the entropy collected on-chain r:
-
+<h6>最终，F 是备用密钥序列函数，它使用链上收集到的熵 r，从验证器密钥集 k 中随机选择一个 epoch 周期的验证器 Bandersnatch 密钥（记为 $⟦H_B⟧_E$ ）。</h6>
 (67)
 
 ```math
@@ -1042,9 +1046,110 @@ F∶ \left\{\begin{matrix}
 ```
 
 **6.6. The Markers.** The epoch and winning-tickets markers are information placed in the header in order to minimize data transfer necessary to determine the validator keys associated with any given epoch. They are particularly useful to nodes which do not synchronize the entire state for any given block since they facilitate the secure tracking of changes to the validator key sets using only the chain of headers.
+<h6>6.6 标志 。区块头信息中包含 epoch 标记和中奖票据标记，这些信息旨在减少确定给定 epoch 相关验证器密钥所需的数据传输。 对于那些不针对每个区块同步整个状态的节点而言，epoch 标记和中奖票据标记尤其有用，因为它们仅使用区块头链就可以安全地跟踪验证器密钥集的更改</h6>
 
 As mentioned earlier, the header’s epoch marker $H_e$ is either empty or, if the block is the first in a new epoch, then a tuple of the epoch randomness and a sequence of Bandersnatch keys defining the Bandersnatch validator keys ($k_b$) beginning in the next epoch. Formally:
+<h6>承接之前的说法，区块头的 epoch 标记 $H_e$ 可以为空，或者如果该区块是新 epoch 的第一个区块，则它是一个包含 epoch 随机数和一系列定义后续 epoch 中的 Bandersnatch 验证器密钥 ( $k_b$ ) 的 Bandersnatch 密钥序列的元组。形式化描述如下：</h6>
 
+(68)
+
+```math
+H_e \equiv \left\{\begin{matrix}
+  (η^′_1, [k_e ∣ k <- γ^′_k])  & if \quad e^′> e \\
+  \varnothing & otherwise
+\end{matrix}\right.
+```
+
+The winning-tickets marker $H_w$ is either empty or, ifthe block is the first after the end of the submission period for tickets and if the ticket accumulator is saturated, then the final sequence of ticket identifiers. Formally:
+<h6>中奖票据标记 $H_w$ 可以为空，或者，如果该区块是票据提交周期结束后紧接的第一个区块，并且票据累加器已经饱和，那么它将包含最终的票据标识符序列。形式化描述如下：</h6>
+
+(69)
+
+```math
+H_w \equiv \left\{\begin{matrix}
+ Z(γ_a) & if \quad e^′ = e ∧ m < Y ≤ m^′ ∧ ∣γ_a∣ = E \\
+  \varnothing & otherwise 
+\end{matrix}\right.
+```
+
+Note that this will not be honored if the next epoch begins with a judgement in its extrinsic.
+<h6>这里需要注意的是，如果下一个 epoch 的 extrinsic 中包含仲裁 结果，那么这个中奖票据标记将不会被认可 。</h6>
+
+
+
+**6.7. The Extrinsic and Tickets.** The extrinsic $E_T$ is a sequence of proofs of valid tickets; a ticket implies an entry in our epochal “contest” to determine which validators are privileged to author a block for each timeslot in the following epoch. Tickets specify an ephemeral key and an entry index, both of which are elective, together with a proof of the ticket’s validity. The proof implies a ticket identity, a high-entropy unbiasable 32-octet sequence, which is used both as a score in the aforementioned contest and as input to the on-chain vrf.
+
+<h6>外部数据。 $E_T$ 是一个有效的票据证明序列。票据代表了我们 epoch 周期的“竞赛”参赛凭证，该竞赛用于确定哪些验证器有权为下一个 epoch 的每个时隙创作区块。票据指定了一个临时密钥和一个条目索引（两者都是可选的），以及票据有效性的证明。该证明隐含了票据标识符，这是一个用于上述竞赛评分和链上可验证随机函数 (vrf) 输入的高熵不可预测的 32 字节序列。</h6>
+
+Towards the end of the epoch (i.e. $\mathbf{Y}$ slots from the start) this contest is closed implying successive blocks within the same epoch must have an empty tickets extrinsic. At this point, the following epoch’s seal key sequence becomes fixed.
+<h6>接近 epoch 结束时（距离 epoch 开始有 Y 个时隙），该竞赛将被关闭，这意味着同一个 epoch 内的后续区块必须具有空的票据外部数据。此时，下一个 epoch 的密封密钥序列将被固定。</h6>
+
+We define the extrinsic as a sequence of proofs of valid tickets, each of which is a tuple of an entry index (a natural number less than N) and a proof of ticket validity. Formally:
+<h6>我们将外部数据定义为有效的票据证明序列，每个证明都是一个条目索引和票据有效性证明的元组。条目索引是一个小于 N 的自然数，N 为系统定义的上限。</h6>
+
+(70)
+```math
+E_T ∈ ⟦r ∈ N_N, p ∈ {\mathop{\mathbb{F}}\limits^¯}^{[]}_{γ^z} ⟨X_T \frown η^′_2  \mp r⟩⟧
+
+```
+
+(71)
+```math
+∣E_T ∣ \le  \left\{\begin{matrix}
+K  & if \quad m^′ < Y\\
+0  & otherwise 
+\end{matrix}\right.
+```
+
+(72)
+```math
+X_T = $jam_ticket
+```
+
+We define n as the set of new tickets, with the ticket identity, a hash, defined as the output component of the Bandersnatch Ringvrf proof:
+<h6></h6>
+
+(73)
+```math
+n ≡ [ y:\mathcal{Y}(i_p), r: i_r ∣ i <− E_T ]
+```
+The tickets submitted via the extrinsic must already have been placed in order of their implied identity. Duplicate identities are never allowed lest a validator submit the same ticket multiple times:
+<h6>我们定义集合 n 为新票据集合，其中票据标识符（记为哈希 )）被定义为 Bandersnatch 环形可验证随机函数 (Ringvrf) 证明的输出部分。</h6>
+
+(74)
+
+$$n = [x_y  \quad \wr \wr \quad  x ∈ n] $$
+
+(75)
+
+$$ {x_y ∣ x ∈ n} ⫰ {x_y ∣ x ∈ γ_a} $$
+
+The new ticket accumulator $γ^′_a$ is constructed by merging new tickets into the previous accumulator value (or the empty sequence if it is a new epoch):
+<h6>新票据累加器  $γ^′_a$的构建方法是将新票据集合 n 与之前累加器值进行合并（如果是新 epoch 则为空序列）。</h6>
+
+(76)
+
+```math
+γ^′_a \equiv \overrightarrow{\begin{bmatrix}
+x_y \wr x ∈ n \quad ∪ \left\{\begin{matrix}
+\varnothing   & if \quad  e^′> e \\
+  \gamma_a & otherwise 
+\end{matrix}\right.
+\end{bmatrix}}^E
+```
+
+The maximum size of the ticket accumulator is E. On each block, the accumulator becomes the lowest items of the sorted union of tickets from prior accumulator  ¥γ^′_a$ and the submitted tickets. It is invalid to include useless tickets in the extrinsic, so all submitted tickets must exist in their posterior ticket accumulator. Formall:
+
+<h6>票据累加器的大小上限为 E。每个区块的累加器值都会更新为之前累加器  ¥γ^′_a$  的票据集合和提交票据集合的排序并集中的最小元素集合。外部数据中包含无用的票据是非法的，因此所有提交的票据都必须存在于它们对应的后验票据累加器中。形式化描述如下：</h6>
+
+(77)
+
+$$ n ⊂ γ^′_a$$
+
+Note that it can be shown that in the case of an empty extrinsic $E_T = []$, as implied by $m^′ ≥ Y$, then $γ^′_a = γ_a$.
+
+<h6>需要注意的是，当外部数据为空 $E_T = []$
+) 且 m^′ ≥ Y$ 成立时，可以证明  $γ^′_a = γ_a$ 。 这意味着如果没有提交任何票据（即外部数据为空），并且距离 epoch 结束还有 Y 个或更少时隙，那么新的票据累加器将保持和之前的累加器值一致。</h6>
 
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
