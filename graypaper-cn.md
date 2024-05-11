@@ -1259,6 +1259,75 @@ The service account is defined as the tuple of storage dictionary s, preimage lo
 
 <h6>服务账户的形式化定义为一个元组，包含以下元素： 存储字典 s，预映射查找字典 p 和 l，代码哈希值 c，余额 b。 以及两个代码的 gas 限制 g 和 m</h6>
 
+(86)
+```math
+\mathbb{A} \equiv \begin{Bmatrix}
+s ∈ \mathbb{D}⟨\mathbb{H} \to  \mathbb{Y}⟩ , p ∈ \mathbb{D}⟨\mathbb{H} \to  \mathbb{Y}⟩ , \\
+l ∈ \mathbb{D}⟨(\mathbb{H}, \mathbb{N}_L) \to [\mathbb{N}_T ]_{∶3}⟩ ,\\
+c ∈ \mathbb{H} , b ∈ \mathbb{N}_B , g ∈ \mathbb{Z}_G , m ∈ \mathbb{Z}_G
+\end{Bmatrix}
+```
+
+Thus, the balance of the service of index s would be denoted $δ[s]_b$ and the storage item of key k ∈ H for that service is written $δ[s]_s[k]$.
+
+**9.1. Code and Gas.** The code c of a service account is represented by a hash which, if the service is to be functional, must be present within its preimage lookup (see section 9.2). We thus define the actual code c:
+
+(87)
+
+```math
+∀_a ∈ A ∶ a_c ≡ \left\{\begin{matrix}
+ a_p[a_c]  & if\quad  a_c ∈ a_p \\
+  \varnothing & otherwise
+\end{matrix}\right.
+```
+There are three entry-points in the code:
+1. 0 refine: Refinement, executed in-core and stateless.10
+2. 1 accumulate: Accumulation, executed on-chain and stateful.
+3. 2 on_transfer: Transfer handler, executed onchain and stateful.
+
+
+Whereas the first, executing in-core, is described in more detail in section 13.2, the latter two are defined in the present section.
+
+As stated in appendix A, execution time in the Jam virtual machine is measured deterministically in units of gas, represented as a 64-bit integer formally denoted $\mathbb{Z}_G$. There are two limits specified in the account, g, the minimum gas required in order to execute the Accumulate entry-point of the service’s code, and m, the minimum required for the On Transfer entry-point.
+
+**9.2. Preimage Lookups.** In addition to storing data in arbitrary key/value pairs available only on-chain, an account may also solicit data to be made available also incore, and thus available to the Refine logic of the service’s code. State concerning this facility is held under the service’s p and l components.
+
+There are several differences between preimage-lookups and storage. Firstly, preimage-lookups act as a mapping from a hash to its preimage, whereas general storage maps arbitrary keys to values. Secondly, preimage data is supplied extrinsically, whereas storage data originates as part of the service’s accumulation. Thirdly preimage data, once supplied, may not be removed freely; instead it goes through a process of being marked as unavailable, and only after a period of time may it be removed from state. This ensures that historical information on its existence is retained. The final point especially is important since preimage data is designed to be queried in-core, under the Refine logic of the service’s code, and thus it is important that the historical availability of the preimage is known
+
+We begin by reformulating the portion of state concerning our data-lookup system. The purpose of this system is to provide a means of storing static data on-chain such
+that it may later be made available within the execution of any service code as a function accepting only the hash of the data and its length in octets.
+
+During the on-chain execution of the Accumulate function, this is trivial to achieve since there is inherently a state which all validators verifying the block necessarily have complete knowledge of, i.e. σ. However, for the incore execution of Refine, there is no such state inherently available to all validators; we thus name a historical state, the lookup anchor which must be considered recently finalized before the work result may be accumulated hence providing this guarantee.
+
+By retaining historical information on its availability, we become confident that any validator with a recently finalized view of the chain is able to determine whether any given preimage was available at any time within the period where auditing may occur. This ensures confidence that judgements will be deterministic even without consensus
+on chain state.
+
+Restated, we must be able to define some historical lookup function Λ which determines whether the preimage of some hash h was available for lookup by some service account a at some timeslot t, and if so, provide its preimage:
+
+(88)
+
+```math
+A_t: \left\{\begin{matrix}
+\mathbb{A}, \mathbb{N}_{H_t−C_D}...\mathbb{H}_t, \mathbb{H}) \to \mathbb{Y}? \\
+\qquad (a, t, \mathcal{H}(p)) \to v ∶ v ∈ {p, \varnothing}
+\end{matrix}\right.
+```
+
+This function is defined shortly below in equation 90.
+The preimage lookup for some service of index s is denoted δ[s]p is a dictionary mapping a hash to its corresponding preimage. Additionally, there is metadata associated with the lookup denoted $δ[s]_l$ which is a dictionary mapping some hash and presupposed length into historical information.
+
+*9.2.1. Invariants.* The state of the lookup system naturally satisfies a number of invariants. Firstly, any preimage value must correspond to its hash, equation 89. Secondly, a preimage value being in state implies that its hash and length pair has some associated status, also in equation 89. Formally:
+(89)
+
+$$ ∀_a ∈ \mathbb{A}, (h \to p) ∈ a_p ⇒ h = \mathcal{H}(p) ∧(h, ∣p∣) ∈ \mathcal{K}(a_l) $$
+
+*9.2.2. Semantics.* The historical status component $h ∈ [N_T]_{∶3}$is a sequence of up to three time slots and the cardinality of this sequence implies one of four modes:
+
+- h = []: The preimage is requested, but has not yet been supplied
+- h ∈ $⟦N_T ⟧_1$ : The preimage is available and has been from time $h_0$
+- h ∈ $⟦N_T ⟧_2$: The previously available preimage is now unavailable since time $h_1$. It had been available from time $h_0$.
+- h ∈ $⟦N_T ⟧_3$: The preimage is available and has been from time $h_2$. It had previously been available from time $h_0$ until time $h_1$.
+- 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
@@ -1268,3 +1337,4 @@ The service account is defined as the tuple of storage dictionary s, preimage lo
 [^7]: Practically speaking, blockchains sometimes make assumptions of some fraction of participants whose behavior is simply honest, and not provably incorrect nor otherwise economically disincentivized. While the assumption may be reasonable, it must nevertheless be stated apart from the rules of state-transition.（实事求是地讲，区块链有时会假设参与者中的一部分人是诚实的，他们的行为并非可证明的错误，也并非受到经济上的惩罚。尽管这种假设在一定程度上是合理的，但它仍然需要与状态转换规则分开来单独陈述。）
 [^8]: 1,704,110,400 seconds after the Unix Epoch.
 [^9]: This is three fewer than risc-v’s 16, however the amount that program code output by compilers uses is 13 since two are reserved for operating system use and the third is fixed as zero
+[^10]: Technically there is some small assumption of state, namely that some modestly recent instance of each service’s preimages. The specifics of this are discussed in section 13.2.
