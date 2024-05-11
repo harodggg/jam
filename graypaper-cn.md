@@ -1327,7 +1327,7 @@ $$ ∀_a ∈ \mathbb{A}, (h \to p) ∈ a_p ⇒ h = \mathcal{H}(p) ∧(h, ∣p∣
 - h ∈ $⟦N_T ⟧_1$ : The preimage is available and has been from time $h_0$
 - h ∈ $⟦N_T ⟧_2$: The previously available preimage is now unavailable since time $h_1$. It had been available from time $h_0$.
 - h ∈ $⟦N_T ⟧_3$: The preimage is available and has been from time $h_2$. It had previously been available from time $h_0$ until time $h_1$.
-- 
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
