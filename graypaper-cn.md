@@ -1151,6 +1151,43 @@ Note that it can be shown that in the case of an empty extrinsic $E_T = []$, as 
 <h6>需要注意的是，当外部数据为空 $E_T = []$
 ) 且 m^′ ≥ Y$ 成立时，可以证明  $γ^′_a = γ_a$ 。 这意味着如果没有提交任何票据（即外部数据为空），并且距离 epoch 结束还有 Y 个或更少时隙，那么新的票据累加器将保持和之前的累加器值一致。</h6>
 
+<h3 align="center">7. Recent History</h3>
+
+We retain in state information on the most recent H blocks. This is used to preclude the possibility of duplicate or out of date work-reports from being submitted.
+
+(78)
+```math
+β ∈ ⟦(h ∈ H, b ∈ ⟦H?⟧, s ∈ H, p ∈ ⟦H⟧_{∶C})⟧_{∶H}
+```
+
+For each recent block, we retain its header hash, its state root, its accumulation-result mmr and the hash of each work-report made into it which is no more than the total number of cores, C = 341.
+
+During the accumulation stage, a value with the partial transition of this state is provided which contains the update for the newly-known roots of the parent block:
+
+$$β^† ≡ β \quad except \quad  β^†\quad [0]_s = H_r $$
+
+The final state transition is then:
+
+(80)
+
+```math
+\begin{matrix}
+β^′≡ \overleftarrow{β^† \pm \begin{Bmatrix}
+p: [((g_w)_s)_p ∣ g <− E_G] , \\
+h:  \mathcal{H}(H) , b , s: H^0
+\end{Bmatrix}}^H  \\
+where \quad b = \mathcal{A}(last([[]] ⌢ [x_b ∣ x <− β]), r) \\
+and \quad r = \mathcal{M}_2([x \wr  \varepsilon (x) ∣ x ∈ C], \mathcal{H}_K)
+\end{matrix}
+
+```
+
+Thus, we extend the recent history with the new block’s header hash, its accumulation-result Merkle tree root and the set of work-reports made into it. Note that the accumulation-result tree root r is derived from C (defined in section 12) using the basic binary Merklization function $\mathcal{M}_2 (defined in appendix F) and appending it using the mmr append function \mathcal{A} (defined in appendix F.2) to form a Merkle mountain range
+
+The state-trie root is as being the zero hash, $H^0$ which while inaccurate at the end state of the block $β^′$ , it is nevertheless safe since $β^′$ is not utilized except to define the next block’s $β^†$ , which contains a corrected value for this. 
+
+
+
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
