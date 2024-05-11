@@ -980,6 +980,70 @@ thus note that the block was sealed under the regular security with the boolean 
 In addition to the entropy accumulator $η_0$, we retain three additional historical values of the accumulator at the point of each of the three most recently ended epochs, $η_1$, $η_2$ and $η_3$. The second-oldest of these $η_2$ is utilized to help ensure future entropy is unbiased (see equation 62) and seed the fallback seal-key generation function with randomness (see equation 65). The oldest is used to regenerate this randomness when verifying the seal above.
 <h6>除当前的熵累加器 η_0，我们还保留了最近结束的三个 epoch 时刻的累加器的另外三个历史值，分别记为 η_1、η_2 和 η_3。其中 η_2 用于帮助确保未来的熵没有偏差（见公式 62），并为备用密封密钥生成函数注入随机性（见公式 65）。η_1 用于在验证上述密封时重新生成此随机性。</h6>
 
+(62)
+
+$$ η ∈ ⟦H⟧_4$$
+
+$η_0$ defines the state of the randomness accumulator to which the provably random output of the vrf, the signature over some unbiasable input, is combined each block. $η_1$ and $η_2$ meanwhile retain the state of this accumulator at the end of the two most recently ended epochs in order.
+
+(63)
+
+$$η'_0 ≡ \mathcal{H}(η_0 \frown \mathcal{Y}(H_v)) $$
+
+On an epoch transition (identified as the condition e′ > e), we therefore rotate the accumulator value into the history $η_1$, $η_2$ and $η_3$:
+
+(64)
+
+```math
+
+(η^′_1, η^′_2, η^′_3) \equiv 
+\left\{\begin{matrix}
+ (η_0, η_1, η_2) & if \quad e^′> e\\
+ (η_1, η_2, η_3) & otherwise
+\end{matrix}\right.
+
+```
+
+**6.5. The Slot Key Sequence.** (( The posterior slot key sequence $\gamma^′_s$ is one of three expressions depending on the circumstance of the block. If the block is not the first in an epoch, then it remains unchanged from the prior $\gamma_s$. If the block signals the next epoch (by epoch index) and the previous block’s slot was within the closing period of the previous epoch, then it takes the value of the prior ticket accumulator $
+gamma^′_a$. Otherwise, it takes the value of the fallback key sequence. Formally:
+
+(65)
+
+```math
+\left\{\begin{matrix}
+ Z(\gamma_a) & if \quad e′= e + 1 ∧ m′ ≥ Y ∧ ∣\gamma_a∣ = E\\
+\gamma^s  & if \quad e^′ = e\\
+\mathbf{F}(\gamma^′_2, \aleph^′)  & otherwise 
+\end{matrix}\right.
+```
+
+Here, we use Z as the inside-out sequencer function, defined as follows:
+
+(66)
+
+```math
+Z∶\left\{\begin{matrix}
+⟦\mathbb{C}⟧_E \mapsto  ⟦\mathbb{C}⟧_E   \\
+ s  \mapsto [s_0, s_{∣s∣−1}, s_1, s_{∣s∣−2}, . . . ]
+
+\end{matrix}\right.
+```
+Finally, F is the fallback key sequence function which selects an epoch’s worth of validator Bandersnatch keys($⟦H_B⟧_E$) at random from the validator key set k using the entropy collected on-chain r:
+
+(67)
+
+```math
+F∶ \left\{\begin{matrix}
+(\mathbb{H}, ⟦\mathbb{K}⟧)→ ⟦\mathbb{H}_B⟧_E \\
+
+(r, k) \longmapsto  [k[\varepsilon ^{−1} (H_4(r \frown \varepsilon_4(i)))]^↺_b ∣ i ∈ N_E]
+\end{matrix}\right.
+
+```
+
+**6.6. The Markers.** The epoch and winning-tickets markers are information placed in the header in order to minimize data transfer necessary to determine the validator keys associated with any given epoch. They are particularly useful to nodes which do not synchronize the entire state for any given block since they facilitate the secure tracking of changes to the validator key sets using only the chain of headers.
+
+As mentioned earlier, the header’s epoch marker $H_e$ is either empty or, if the block is the first in a new epoch, then a tuple of the epoch randomness and a sequence of Bandersnatch keys defining the Bandersnatch validator keys ($k_b$) beginning in the next epoch. Formally:
 
 
 
