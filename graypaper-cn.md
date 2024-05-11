@@ -1370,6 +1370,8 @@ $$ ∀_a ∈ \mathbb{A}, (h \to p) ∈ a_p ⇒ h = \mathcal{H}(p) ∧(h, ∣p∣
 
 The historical lookup function Λ may now be defined as:
 
+<h6>历史查找函数 Λ 可以定义为：</h6>
+
 $$ Λ∶ (\mathbb{A}, \mathbb{N}_T , \mathbb{H}) \to \mathbb{Y}? $$
 
 ```math
@@ -1388,10 +1390,13 @@ x ≤ t < y ∨ z ≤ t & if [x, y, z] = l
 ```
 
 **9.3. Account Footprint and Threshold Balance.** We define the dependent values i and l as the storage footprint of the service, specifically the number of items in storage and the total number of octets used in storage. They are defined purely in terms of the storage map of a service, and it must be assumed that whenever a service’s storage is changed, these change also.
+<h6>9.3 账户占用空间和阈值余额。本节定义了依赖值 i 和 l，分别表示服务的存储占用空间，具体为存储的条目数量和总字节数。这两个值完全由服务的存储映射来定义，并且必须假设服务存储发生任何变化时，它们也会随之改变。</h6>
 
 Furthermore, as we will see in the account serialization function in section C, these are expected to be found explicitly within the Merklized state data. Because of this we make explicit their set.
+<h6>此外，正如我们在 C 节的账户序列化函数中将看到的那样，预计这些值将被明确地包含在 Merkle 化状态数据中。因此，我们将它们明确地定义为一个集合。</h6>
 
 We may then define a second dependent term t, the minimum, or threshold, balance needed for any given service account in terms of its storage footprint.
+<h6>然后，我们可以定义第二个依赖项 t，即任何给定服务账户所需的最低余额或阈值余额，并根据其存储占用空间进行衡量。</h6>
 (91)
 
 ```math
@@ -1407,33 +1412,43 @@ a_t ∈ N_B ≡ B_S + B_I ⋅ a_i + B_L ⋅ a_l
 
 **9.4. Service Privileges.** Up to three services may be recognized as privileged. The portion of state in which this is held is denoted χ and has three components, each a service index. m is the index of the manager service, the service able to effect an alteration of χ from block to block. a and v are each the indices of services able to alter
 φ and ι from block to block. Formally:
+<h6>9.4 服务权限。最多可以识别三个服务为特权服务。状态中包含此信息的的部分记为 χ，它包含三个组件，每个组件都是一个服务索引。m 是管理器服务的索引，该服务能够逐块地改变 χ。a 和 v 分别是能够逐块地改变 φ 和 ι 的服务的索引。</h6>
 (92)
 
 $$ χ ≡(χ_m ∈ N_S, χ_a ∈ N_S, χ_v ∈ N_S) $$
 
 <h3 align="center">10. Judgements</h3>
+<h3 align="center">10. 判决 </h3>
 Jam provides a means of recording a vote amongst all validators over the validity of a work-report, a unit of work done within Jam (for greater detail on the nature of a
 work-report, see section 11). Such a vote is not expected to happen very often in practice (if at all), however it is an important security backstop, allowing a convenient
 manner of removing troublesome keys from the validator set at short notice where there is consensus over their malfunction. It also helps coordinate the ability of unfinalized
 chain-extensions to be reverted and replaced with an extension which does not contain some invalid work-report.
+<h6>Jam 提供了一种在所有验证者之间对工作报告 (work-report) 有效性进行投票的方法，工作报告是 Jam 内部完成的一项工作单元 (有关工作报告性质的更多详细信息，请参阅第 11 节)。实际上，这种投票并不期望经常发生 (甚至根本不会发生)，但它是一个重要的安全保障措施，允许在验证者对某个故障密钥存在共识的情况下，方便地将其从验证者集合中移除。它还有助于协调未完成的链扩展 (chain-extension) 的回滚，并用不包含无效工作报告的扩展进行替换。</h6>
 
 Generally speaking, judgement data will come about as a result of a dispute between validators, an off-chain process described in section 10. A judgement against a report will imply that the chain will have been reverted to immediately prior to the accumulation of that report. Placing the judgement on-chain has the effect of cancelling its accumulation. The specific strategy for chain selection is described fully in section 15.
+<h6>一般来说，判断数据会由于验证者之间的争论而产生，争论是一个链下流程，在第 10 节进行了描述。对报告的判决意味着链将被回滚到累积该报告之前的状态。将判决上链会起到取消其累积的效果。链选择方面的具体策略将在第 15 节中详细描述。</h6>
 
 In the case that a sufficient number of validator nodes do make some judgement in $E_J$ , then an indexed record of that judgement is placed on-chain (in ψ, the portion of
 state handling dispute judgements).
+<h6>在足够数量的验证器节点对 $E_J$ 做出判断的情况下，该判断的索引记录将被放置链上 (位于 ψ 中，状态中处理争论判决的部分)。</h6>
 
 Having a persistent on-chain record is helpful in a number of ways. Firstly it provides a very simple means of recognizing the circumstances under which action against a validator must be taken by any higher-level validatorselection logic. Should Jam be used for a public network such as Polkadot, this would imply the slashing of the offending validator’s stake on the staking parachain.
+<h6>保持一个持久的链上记录在多个方面都很有帮助。首先，它提供了一种非常简单的方法来识别任何高级验证器选择逻辑必须对验证器采取行动的情况。如果 Jam 用于像 Polkadot 这样的公共网络，这将意味着对权益质押平行链上作恶验证者的权益进行削减。</h6>
 
 As mentioned, recording reports found to have a high confidence of invalidity is important to ensure that said reports are not allowed to be resubmitted. Conversely, recording reports found to be valid ensures that additional disputes cannot be raised in the future of the chain.
+<h6>
+正如前文所述，记录被认定为极有可能无效的报告非常重要，可以确保这些报告不会被再次提交。相反，记录被认定为有效的报告可以确保将来链上不会出现额外的争论。</h6>
 
 **10.1. State.** The judgements state includes three items, an allow-set ($ψ_a$), a ban-set ($ψ_b$) and a punish-set ($ψ_p$). The allow-set contains the hashes of all work-reports
 which were disputed and judged to be accurate. The banset contains the hashes of all work-reports which were disputed and whose accuracy could not be confidently confirmed. The punish-set is a set of keys of Bandersnatch keys which were found to have guaranteed a report which was confidently found to be invalid.
+<h6>判断状态包含三个项目：允许集 (ψ_a)、禁止集 (ψ_b) 和惩罚集 (ψ_p)。允许集 (ψ_a) 包含所有经过争论并被判定为准确的的工作报告的哈希值。禁止集 (ψ_b) 包含所有经过争论但无法确认其准确性的工作报告的哈希值。惩罚集 (ψ_p) 是颁发了一份被确认为无效的报告的 Bandersnatch 密钥的集合。</h6>
 
 (93)
 
 $$ ψ ≡(ψ_a, ψ_b, ψ_p, ψ_k)$$
 
 We store the last epoch’s validator set in $ψ_k$:
+<h6>我们将最后一个纪元的验证器集存储在 $ψ_k$ 中：</h6>
 
 (94)
 
@@ -1445,13 +1460,14 @@ We store the last epoch’s validator set in $ψ_k$:
 ```
 
 10.2. Extrinsic. The judgements extrinsic, $E_J$ may contain one or more judgements as a compilation of signatures coming from exactly two-thirds plus one of either the active validator set (i.e. the Ed25519 keys of κ) or the previous epoch’s validator set (i.e. the keys of $ψ_k$):
+<h6>10.2 判决 extrinsics。判决 extrinsic ($E_J$) 可以包含一个或多个判决，这些判决由来自活动验证器集或上一个 epoch 的验证器集的至少三分之二加一的签名集合编译而成。活动验证器集 (κ) - 即当前 epoch 的验证器集合，由 Ed25519 密钥标识。上一个 epoch 的验证器集 ( $ψ_k$ ) - 是指前一个 epoch 的验证器集合，其密钥集合用 $ψ_k$ 表示。</h6>
 
 (95)
 
 $$E_J ∈ ⟦(\mathbb{H}, ⟦({\bot , \top }, N_V,\mathbb{F})⟧_{⌊2/3V⌋}+1)⟧$$
 
 All signatures must be valid in terms of one of the two allowed validator key-sets. Note that the two epoch’s keysets may not be mixed! Formally:
-
+<h6>所有签名必须根据两个允许的验证器密钥集之一有效。请注意，两个纪元的密钥集不能混合！正式：</h6>
 (96)
 
 ```math
@@ -1465,7 +1481,7 @@ k ∈ {κ, ψ_k} \\
 ```
 
 Judgements must be ordered by report hash and there may be no duplicate report hashes within the extrinsic, nor amongst any past reported hashes. Formally:
-
+<h6>判决必须按报告哈希值排序，外部报告哈希值不得重复，过去报告哈希值之间也不得重复。形式上</h6>
 (97)
 
 ```math
@@ -1477,12 +1493,14 @@ E_J = [r \wr \wr (r,v) ∈ E_J ]
 {r ∣ (r,v) } ⫰ ψ_a ∪ ψ_b
 ```
 The votes of all judgements must be ordered by validator index and there may be no duplicate such indices. Formally:
+<h6>所有判决的投票必须按照验证人索引排序，并且不能有重复的索引。正式：</h6>
 
 (99)
 
 $$∀(r,v) ∈ E_ J ∶ v = [i \wr \wr (v, i, s) ∈ v]$$
 
 We define J as the sequence of judgements introduced in the block’s extrinsic (and ordered respectively), with the sequence of signatures substituted with the sum of votes over the signatures. We require this total to be exactly zero, two-thirds-plus-one or one-third-plus-one of the validator set indicating, respectively, that we are confident of the report’s validity, confident of its invalidity, or lacking confidence in either. This requirement may seem somewhat arbitrary, but these happen to be the decision thresholds for our three possible actions and are acceptable since the security assumptions include the requirement that at least two-thirds-plus-one validators are live (Stewart 2018 discusses the security implications in depth).
+<h6>10.3 判决数据 (J)。我们将 J 定义为区块 extrinsic 中引入的判决序列（按顺序排列），并用签名总数代替签名序列。 对于验证器集合，我们要求这个总数必须正好等于零、三分之二加一或三分之一加一，分别表示我们确信报告有效、确信其无效或对两者都缺乏信心。这个要求可能看起来有些武断，但它们恰好是我们三种可能操作的决策阈值，并且是可以接受的，因为安全假设包含至少三分之二加一的验证器处于活动状态的要求（Stewart 2018 深入讨论了安全影响）。</h6>
 
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
