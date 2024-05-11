@@ -1368,6 +1368,123 @@ $$ ∀_a ∈ \mathbb{A}, (h \to p) ∈ a_p ⇒ h = \mathcal{H}(p) ∧(h, ∣p∣
     </ul>
   </h6>
 
+The historical lookup function Λ may now be defined as:
+
+$$ Λ∶ (\mathbb{A}, \mathbb{N}_T , \mathbb{H}) \to \mathbb{Y}? $$
+
+```math
+Λ(a, t, h) ≡ \left\{\begin{matrix}
+a_p[h] & if \quad h ∈ \mathcal{K}(ap) ∧ I(a_l[h, ∣a_p[h]∣], t) \\
+\varnothing  & otherwise
+\end{matrix}\right.
+```
+```math
+where \quad I(l, t) = \left\{\begin{matrix}
+1  & if [] = l\\
+x ≤ t & if [x] = l \\
+x ≤ t < y  & if [x, y] = l \\
+x ≤ t < y ∨ z ≤ t & if [x, y, z] = l
+\end{matrix}\right.
+```
+
+**9.3. Account Footprint and Threshold Balance.** We define the dependent values i and l as the storage footprint of the service, specifically the number of items in storage and the total number of octets used in storage. They are defined purely in terms of the storage map of a service, and it must be assumed that whenever a service’s storage is changed, these change also.
+
+Furthermore, as we will see in the account serialization function in section C, these are expected to be found explicitly within the Merklized state data. Because of this we make explicit their set.
+
+We may then define a second dependent term t, the minimum, or threshold, balance needed for any given service account in terms of its storage footprint.
+(91)
+
+```math
+∀_a ∈ \mathcal{V}\left\{\begin{matrix}
+a_i ∈ N_{2^32} ≡ 2 ⋅ ∣ a_l ∣ + ∣ a_s ∣ \\
+a_l ∈ N_{2^64} ≡ \begin{matrix}
+\sum\limits_{(h,z)∈K(al)}^{} 81 + z \\
++ \sum\limits_{x∈V(a_s)}^{} 32 + ∣x∣
+\end{matrix}\\
+a_t ∈ N_B ≡ B_S + B_I ⋅ a_i + B_L ⋅ a_l
+\end{matrix}\right. ∶
+```
+
+**9.4. Service Privileges.** Up to three services may be recognized as privileged. The portion of state in which this is held is denoted χ and has three components, each a service index. m is the index of the manager service, the service able to effect an alteration of χ from block to block. a and v are each the indices of services able to alter
+φ and ι from block to block. Formally:
+(92)
+
+$$ χ ≡(χ_m ∈ N_S, χ_a ∈ N_S, χ_v ∈ N_S) $$
+
+<h3 align="center">10. Judgements</h3>
+Jam provides a means of recording a vote amongst all validators over the validity of a work-report, a unit of work done within Jam (for greater detail on the nature of a
+work-report, see section 11). Such a vote is not expected to happen very often in practice (if at all), however it is an important security backstop, allowing a convenient
+manner of removing troublesome keys from the validator set at short notice where there is consensus over their malfunction. It also helps coordinate the ability of unfinalized
+chain-extensions to be reverted and replaced with an extension which does not contain some invalid work-report.
+
+Generally speaking, judgement data will come about as a result of a dispute between validators, an off-chain process described in section 10. A judgement against a report will imply that the chain will have been reverted to immediately prior to the accumulation of that report. Placing the judgement on-chain has the effect of cancelling its accumulation. The specific strategy for chain selection is described fully in section 15.
+
+In the case that a sufficient number of validator nodes do make some judgement in $E_J$ , then an indexed record of that judgement is placed on-chain (in ψ, the portion of
+state handling dispute judgements).
+
+Having a persistent on-chain record is helpful in a number of ways. Firstly it provides a very simple means of recognizing the circumstances under which action against a validator must be taken by any higher-level validatorselection logic. Should Jam be used for a public network such as Polkadot, this would imply the slashing of the offending validator’s stake on the staking parachain.
+
+As mentioned, recording reports found to have a high confidence of invalidity is important to ensure that said reports are not allowed to be resubmitted. Conversely, recording reports found to be valid ensures that additional disputes cannot be raised in the future of the chain.
+
+**10.1. State.** The judgements state includes three items, an allow-set ($ψ_a$), a ban-set ($ψ_b$) and a punish-set ($ψ_p$). The allow-set contains the hashes of all work-reports
+which were disputed and judged to be accurate. The banset contains the hashes of all work-reports which were disputed and whose accuracy could not be confidently confirmed. The punish-set is a set of keys of Bandersnatch keys which were found to have guaranteed a report which was confidently found to be invalid.
+
+(93)
+
+$$ ψ ≡(ψ_a, ψ_b, ψ_p, ψ_k)$$
+
+We store the last epoch’s validator set in $ψ_k$:
+
+(94)
+
+```math
+ψ^′_k =\left\{\begin{matrix}
+\aleph    & if \quad ⌊\frac{\tau'}{E}⌋ ≠ ⌊\frac{\tau}{E}⌋\\
+ ψ_k & otherwise
+\end{matrix}\right.
+```
+
+10.2. Extrinsic. The judgements extrinsic, $E_J$ may contain one or more judgements as a compilation of signatures coming from exactly two-thirds plus one of either the active validator set (i.e. the Ed25519 keys of κ) or the previous epoch’s validator set (i.e. the keys of $ψ_k$):
+
+(95)
+
+$$E_J ∈ ⟦(\mathbb{H}, ⟦({\bot , \top }, N_V,\mathbb{F})⟧_{⌊2/3V⌋}+1)⟧$$
+
+All signatures must be valid in terms of one of the two allowed validator key-sets. Note that the two epoch’s keysets may not be mixed! Formally:
+
+(96)
+
+```math
+\begin{matrix}
+∀(r,v) ∈ E_J ,∀(v, i, s) ∈ v ∶ s ∈ E_{k[i]e} ⟨X_v \frown r⟩\\
+where \quad X_⊺ = $jam\_valid \\
+ and \quad X = $jam\_invalid\\
+k ∈ {κ, ψ_k} \\
+
+\end{matrix}
+```
+
+Judgements must be ordered by report hash and there may be no duplicate report hashes within the extrinsic, nor amongst any past reported hashes. Formally:
+
+(97)
+
+```math
+E_J = [r \wr \wr (r,v) ∈ E_J ]
+```
+
+(98)
+```math
+{r ∣ (r,v) } ⫰ ψ_a ∪ ψ_b
+```
+The votes of all judgements must be ordered by validator index and there may be no duplicate such indices. Formally:
+
+(99)
+
+$$∀(r,v) ∈ E_ J ∶ v = [i \wr \wr (v, i, s) ∈ v]$$
+
+We define J as the sequence of judgements introduced in the block’s extrinsic (and ordered respectively), with the sequence of signatures substituted with the sum of votes over the signatures. We require this total to be exactly zero, two-thirds-plus-one or one-third-plus-one of the validator set indicating, respectively, that we are confident of the report’s validity, confident of its invalidity, or lacking confidence in either. This requirement may seem somewhat arbitrary, but these happen to be the decision thresholds for our three possible actions and are acceptable since the security assumptions include the requirement that at least two-thirds-plus-one validators are live (Stewart 2018 discusses the security implications in depth).
+
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
