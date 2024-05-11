@@ -1152,8 +1152,10 @@ Note that it can be shown that in the case of an empty extrinsic $E_T = []$, as 
 ) 且 m^′ ≥ Y$ 成立时，可以证明  $γ^′_a = γ_a$ 。 这意味着如果没有提交任何票据（即外部数据为空），并且距离 epoch 结束还有 Y 个或更少时隙，那么新的票据累加器将保持和之前的累加器值一致。</h6>
 
 <h3 align="center">7. Recent History</h3>
+<h3 align="center">7. 最近历史 </h3>
 
 We retain in state information on the most recent H blocks. This is used to preclude the possibility of duplicate or out of date work-reports from being submitted.
+<h6>我们在状态中保留了最近 H 个区块 的信息。这用于防止重复或过期的工作报告被提交。</h6>
 
 (78)
 ```math
@@ -1161,12 +1163,15 @@ We retain in state information on the most recent H blocks. This is used to prec
 ```
 
 For each recent block, we retain its header hash, its state root, its accumulation-result mmr and the hash of each work-report made into it which is no more than the total number of cores, C = 341.
+<h6>对于每个最近的块，我们保留其头哈希、状态根、累积结果 mmr 以及其中包含的每个工作报告的哈希，该哈希不超过核心总数 C = 341。</h6>
 
 During the accumulation stage, a value with the partial transition of this state is provided which contains the update for the newly-known roots of the parent block:
+<h6>在累积阶段，提供了具有该状态的部分转换的值，其中包含父块的新已知根的更新：</h6>
 
 $$β^† ≡ β \quad except \quad  β^†\quad [0]_s = H_r $$
 
 The final state transition is then:
+<h6>最终的状态转换为：</h6>
 
 (80)
 
@@ -1182,12 +1187,77 @@ and \quad r = \mathcal{M}_2([x \wr  \varepsilon (x) ∣ x ∈ C], \mathcal{H}_K)
 
 ```
 
-Thus, we extend the recent history with the new block’s header hash, its accumulation-result Merkle tree root and the set of work-reports made into it. Note that the accumulation-result tree root r is derived from C (defined in section 12) using the basic binary Merklization function $\mathcal{M}_2 (defined in appendix F) and appending it using the mmr append function \mathcal{A} (defined in appendix F.2) to form a Merkle mountain range
+Thus, we extend the recent history with the new block’s header hash, its accumulation-result Merkle tree root and the set of work-reports made into it. Note that the accumulation-result tree root r is derived from C (defined in section 12) using the basic binary Merklization function $\mathcal{M}_2$ (defined in appendix F) and appending it using the mmr append function $\mathcal{A}$ (defined in appendix F.2) to form a Merkle mountain range
+
+<h6>因此，我们使用新区块的头部哈希值、其累积结果 Merkle 树根以及包含在其内的工作报告集合来扩展最近的历史记录。需要注意的是，累积结果树根 r 是通过以下步骤生成的：首先使用基本二元 Merklization 函数 $\mathcal{M}_2$ (见附录 F) 对 C (第 12 节定义) 进行计算，然后使用 MMR 附加函数 $\mathcal{A}$ (见附录 F.2) 将其附加，最终形成一个 Merkle 树。</h6>
 
 The state-trie root is as being the zero hash, $H^0$ which while inaccurate at the end state of the block $β^′$ , it is nevertheless safe since $β^′$ is not utilized except to define the next block’s $β^†$ , which contains a corrected value for this. 
+<h6>该状态树根被设置为零哈希，记为 $H^0$  。虽然在区块  $β^′$ 的最终状态下该值并不准确，但这仍然是安全的，因为 $β^′$ 仅用于定义下一个区块的 $β^†$ ，而后者包含了修正后的值。</h6>
+
+<h3 align="center">8. Authorization</h3>
+
+We have previously discussed the model of workpackages and services in section 4.9, however we have yet to make a substantial discussion of exactly how some coretime resource may be apportioned to some work-package and its associated service. In the YP Ethereum model, the underlying resource, gas, is procured at the point of introduction on-chain and the purchaser is always the same agent who authors the data which describes the work to be done (i.e. the transaction). Conversely, in Polkadot the underlying resource, a parachain slot, is procured with a substantial deposit for typically 24 months at a time and the procurer, generally a parachain team, will often have no direct relation to the author of the work to be done (i.e. a parachain block).
+<h6>我们在 4.9 节讨论了工作包和服务的模型，但是我们尚未深入探讨如何将核心时间资源分配给工作包及其关联服务。以太坊的 YP 模型中，底层资源 Gas 会在链上引入时被获取，购买者总是创建描述待完成工作的的数据的同一个代理 (即交易). 相反，在 Polkadot 中，底层资源 - 平行链插槽 - 需要通过大额押金购买，通常一次购买 24 个月。而购买者（通常是平行链团队）往往与待完成工作的创建者（即平行链区块）没有直接关系。</h6>
+
+On a principle of flexibility, we would wish Jam capable of supporting a range of interaction patterns both Ethereum-style and Polkadot-style. In an effort to do so, we introduce the authorization system, a means of disentangling the intention of usage for some coretime from the specification and submission of a particular workload to be executed on it. We are thus able to disassociate the purchase and assignment of coretime from the specific determination of work to be done with it, and so are able to support both Ethereum-style and Polkadot-style interaction patterns.
+<h6>为了灵活性，我们希望 Jam 能够支持一系列交互模式，既支持以太坊风格的模式，也支持波卡风格的模式。为了实现这一点，我们引入了授权系统，它可以将某些核心时间的用法意图与提交要在其上执行的特定工作负载分开。因此，我们可以将核心时间的购买和分配与具体的工作确定分开，从而同时支持以太坊风格和波卡风格的交互模式。</h6>
+
+**8.1. Authorizers and Authorizations.** The authorization system involves two key concepts: authorizers and authorizations. An authorization is simply a piece of opaque data to be included with a work-package. An authorizer meanwhile, is a piece of pre-parameterized logic which accepts as an additional parameter an authorization and, when executed within a vm of prespecified computational limits, provides a Boolean output denoting the veracity of said authorization.
+<h6>8.1 授权者和授权。授权系统涉及两个关键概念：授权者和授权。授权仅仅是一份与工作包一起包含的不透明数据。而授权者则是一段预先参数化的逻辑，它接受一个授权作为额外的参数，并在预先指定计算限制的虚拟机中执行时，提供一个布尔值输出，表示授权的真实性。</h6>
+
+Authorizations are identified as the hash of their logic (specified as the vm code) and their pre-parameterization. The process by which work-packages are determined to be authorized (or not) is not the competence of on-chain logic and happens entirely in-core and as such is discussed in section 13.2. However, on-chain logic must identify each
+set of authorizers assigned to each core in order to verify that a work-package is legitimately able to utilize that resource. It is this subsystem we will now define.
+<h6>授权通过其逻辑 (指定为 vm 代码) 的哈希值及其预参数化来标识。工作包是否被授权的过程不是链上逻辑的职责，而是完全发生在核心内部，因此将在第 13.2 节进行讨论。然而，链上逻辑必须识别分配给每个核心的授权者集合，以验证工作包是否能够合法地利用该资源。我们现在将定义这个子系统。</h6>
+
+**8.2. Pool and Queue.** We define the set of authorizers allowable for a particular core c as the authorizer pool α[c]. To maintain this value, a further portion of state is
+tracked for each core: the core’s current authorizer queue φ[c], from which we draw values to fill the pool. Formally:
+<h6>8.2。池和队列。我们将特定核心 c 允许的授权者集合定义为授权者池 α[c]。为了维持这个值，状态的另一部分是跟踪每个核心：核心的当前授权者队列 φ[c]，我们从中提取值来填充池。正式：</h6>
+
+(81)
+
+$$ α ∈ ⟦⟦\mathbb{H}⟧_{∶O}⟧_C , φ ∈ ⟦⟦\mathbb{H}⟧_Q⟧_C $$
+
+Note: The portion of state φ may be altered only through an exogenous call made from the accumulate logic of an appropriately privileged service.
+<h6>注意：状态 φ 的部分只能通过从适当特权服务的累积逻辑进行的外源调用来更改。</h6>
+
+The state transition of a block involves placing a new authorization into the pool from the queue:
+<h6>块的状态转换涉及将新的授权从队列放入池中：</h6>
+(82)
+
+$$ ∀_c ∈ \mathbb{N}_C ∶ α^′[c] ≡ \overrightarrow{F(c) \pm φ′[c][H_t]^\circlearrowleft	}^O$$
+
+(83)
+
+```math
+F(c) ≡ \left\{\begin{matrix}
+  α[c]  \multimap  {g_a}  & if \quad  ∃_g ∈ E_G ∶ g_c = c\\
+ α[c]  & otherwise
+\end{matrix}\right.
+```
+
+Since $α^′$ is dependent on $φ^′$, practically speaking, this step must be computed after accumulation, the stage in which $φ^′$ is defined.
+<h6>由于 $α^′$ 依赖于 $φ^′$ ，因此在实际操作中，这一步必须在累积阶段之后计算，累积阶段正是 $φ^′$ 被定义的阶段。</h6>
 
 
+<h3 align="center">9. Service Accounts</h3>
 
+As we already noted, a service in Jam is somewhat analogous to a smart contract in Ethereum in that it includes amongst other items, a code component, a storage component and a balance. Unlike Ethereum, the code is split over two isolated entry-points each with their own environmental conditions; one, refinement, is essentially stateless and happens in-core, and the other, accumulation, which is stateful and happens on-chain. It is the latter which we will concern ourselves with now.
+<h6>正如我们之前提到的，Jam 中的服务在某种程度上类似于以太坊中的智能合约，因为它包含代码组件、存储组件和余额等其他项。与以太坊不同，代码分为两个独立的入口点，每个入口点都有自己的环境条件。其中一个，精炼，本质上是无状态的，发生在核心内部；另一个，累积，是有状态的，发生在链上。我们将重点关注后者。</h6>
+
+Service accounts are held in state under δ, a partial mapping from a service identifier NS into a tuple of named elements which specify the attributes of the service relevant to the Jam protocol. Formally:
+<h6>服务账户的状态保存在 δ 中，δ 是一个部分映射，它将服务标识符 $N_S$ 映射到一个元组，该元组由命名元素组成，这些元素指定了与 Jam 协议相关的服务属性。</h6>
+
+(84)
+
+$$ \mathbb{N}_S \equiv  \mathbb{N}_2^{32}$$
+
+(85)
+
+$$δ ∈ \mathbb{D}⟨\mathbb{N}_S \longrightarrow  A⟩ $$
+
+The service account is defined as the tuple of storage dictionary s, preimage lookup dictionaries p and l, code hash c, and balance b as well as the two code gas limits g & m. Formally:
+
+<h6>服务账户的形式化定义为一个元组，包含以下元素： 存储字典 s，预映射查找字典 p 和 l，代码哈希值 c，余额 b。 以及两个代码的 gas 限制 g 和 m</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
