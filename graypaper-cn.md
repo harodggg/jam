@@ -1526,6 +1526,7 @@ $$ ∀(r, t)∈ J ∶ t ∈ \{{0, ⌊1/3V⌋, ⌊2 /3V⌋ + 1}\} $$
 
 Note that t is the threshold of judgements that the report is valid, calculated by summing Boolean values in their implicit equivalence to binary digits of the set $\mathbb{N}_2$.
 We clear any work-reports judged to be non-valid from their core:
+<h6>注意：t 是报告有效性的判断阈值，它是通过将布尔值相加得到，这些布尔值隐含地等价于集合 $\mathbb{N}_2$ 的二进制位。</h6>
 
 (103)
 ```math
@@ -1536,6 +1537,9 @@ We clear any work-reports judged to be non-valid from their core:
 ```
 
 The allow-set assimilates the hashes of any reports we judge to be valid. The ban-set assimilates any other judged report-hashes. Finally, the punish-set accumulates the guarantor keys of any report judged to be invalid:
+
+
+<h6>允许集合包含了所有我们判定为有效的报告的哈希值。禁止集合包含了所有其他经过判断的报告哈希值。最后，惩罚集合累积了所有判定为无效的报告的担保人密钥。</h6>
 
 (104)
 
@@ -1550,39 +1554,54 @@ $$ ψ^′_b ≡ ψ_b ∪ {r ∣(r, t)∈ J, t ≠ ⌊^2  /3V⌋ + 1}$$
 $$ψ^′_p ≡ ψ_p ∪ {ρ[c]_g ∣ (ρ[c]_r, 0) ∈ J} $$
 
 Note that the augmented punish-set is utilized when determining κ′ to nullify any validator keys which appear in the punish-list.
+<h6>注意：确定 κ′ 时会使用增强惩罚集合，其作用是使惩罚列表中出现的任何验证器密钥无效化</h6>
 
 **10.3. Header. ** The judgement marker must contain exactly the sequence of report hashes judged not as confidently valid (i.e. either controversial or invalid). Formally:
+<h6>10.3 区块头。判断标记必须 仅包含 被判定为非可信有效的报告哈希序列（即有争议或无效）。形式上，该序列应为：</h6>
 (107)
 
 $$H_j ≡ [r ∣(r, t) − J, t ≠ 0]$$
 
 <h3 align="center">11. Reporting and Assurance</h3>
+<h3 align="center">11. 报告和保证 </h3>
 
 Reporting and assurance are the two on-chain processes we do to allow the results of in-core computation to make its way into the service state singleton, δ. A work-package,which comprises several work items, is transformed by validators acting as guarantors into its corresponding workreport, which similarly comprises several work outputs and then presented on-chain within the guarantees extrinsic. At this point, the work-package is erasure coded into a multitude of segments and each segment distributed to the associated validator who then attests to its availability through an assurance placed on-chain. After either enough assurances or a time-out (whichever happens first), the work-report is considered available, and the work outputs transform the state of their associated service by virtue of accumulation, covered in section 12.
+<h6>报告和验证是链上操作，允许我们将内核计算结果集成到服务状态单例 (δ) 中。验证者作为担保人，将包含多个工作项的工作包转换为对应的包含多个工作输出的工作报告，然后在担保 extrinsic 中链上提交。此时，工作包会进行 erasure 编码，拆分成多个片段，并分配给相应的验证者。验证者随后通过链上证明来保证这些片段的可用性。达到足够多的证明或超时（以两者中较早者为准）后，工作报告将被视为可用，并且工作输出将通过累积的方式转换其关联服务的当前状态（见第 12 节）。</h6>
 
 From the perspective of the work-report, therefore, the guarantee happens first and the assurance afterwards. However, from the perspective of a block’s statetransition, the assurances are best processed first since each core may only have a single work-report pending its package becoming available at a time. Thus, we will first cover the transition arising from processing the availability assurances followed by the work-report guarantees. This synchroneity can be seen formally through the requirement of an intermediate state $ρ^‡$ , utilized later in equation 134.
+<h6>
+从工作报告的角度来看，担保发生在验证之前。然而，从区块状态转换的角度来看，最好先处理验证，因为每个内核在等待其数据包可用时，一次只能有一个待处理的工作报告。因此，我们将首先介绍处理可用性验证产生的状态转换，然后介绍工作报告的担保。这种同步性可以通过方程 134 中稍后使用的中间状态 $ρ^‡$ 来形式化地表示。</h6>
 
 **11.1. State.** The state of the reporting and availability portion of the protocol is largely contained within ρ, which tracks the work-reports which have been reported but not
 yet accumulated and the identities of the guarantors who reported them and the time at which it was reported. As mentioned earlier, at only one report may be assigned to
 a core at any given time. Formally:
+<h6>11.1. 状态。协议的报告和可用性部分的状态主要包含在 ρ 中。ρ 跟踪已经报告但尚未累积的工作报告，以及报告这些报告的担保人身份和报告时间。正如之前提到的，每个内核在任何给定时间都只能分配一个报告。形式上：</h6>
 
 $$ρ ∈ ⟦(w ∈ W, g ∈ ⟦H_E⟧_{2∶3}, t ∈ N_T)?⟧_C $$
 
 As usual, intermediate and posterior values $(ρ^†, ρ^‡, ρ^′)$ are held under the same constraints as the prior value.
+<h6>像往常一样，中间值和后验值 $(ρ^†, ρ^‡, ρ^′)$ 与先前值受到相同的约束。</h6>
 
 *11.1.1. Work Report.* A work-report, of the set W, is defined as a tuple of authorizer hash and output, the refinement context, the package specification and the results of
 the evaluation of each of the items in the package, which is always at least one item and may be no more than I items. Formally:
+
+<h6>11.1.1. 工作报告。工作报告 (W) 被定义为一个元组，包含授权者哈希、输出、细化上下文、数据包规范以及数据包中每个项目的评估结果。数据包中至少要包含一个项目，最多可以包含 I 个项目。形式上：</h6>
 
 (109)
 
 $$W ≡ (a ∈ H, o ∈ Y, x ∈ X, s ∈ S, r ∈ ⟦L⟧_{1∶I})$$
 
 The total serialized size of a work-report may be no greater than $W_R$ bytes:
+
+<h6>工作报告的总序列化大小不得超过 $W_R$ 字节：</h6>
+
 (110)
 
 $$∀_w ∈ W ∶ ∣\varepsilon (w)∣ ≤ W_R$$
 
 *11.1.2. Refinement Context.* A refinement context, denoted by the set X, describes the context of the chain at the point that the report’s corresponding work-packagewas evaluated. It identifies two historical blocks, the anchor, header hash a along with its associated posterior state-root s and posterior Beefy root b; and the lookupanchor, header hash l and of timeslot t. Finally, it identifies the hash of an optional prerequisite work-package p. Formally:
+
+<h6>11.1.2. 细化上下文。细化上下文，用集合 X 表示，描述了报告对应的 工作包 被评估时链条的上下文。它包含以下信息：锚点 (anchor)： 历史区块之一，包含头哈希 a 及其关联的后验状态根 s 和后验 Beefy 根 b。查找锚点 (lookup anchor)： 历史区块之一，包含头哈希 l 和时隙 t。可选先决工作包哈希 (optional prerequisite work-package hash)： 用 p 表示，用于标识报告依赖的先前工作包（非必须项）。形式化描述：</h6>
 
 (111)
 
@@ -1597,23 +1616,28 @@ l ∈ H, t ∈ NT , p ∈ H?
 ```
 
 *11.1.3. Work Package Specification.* We define the set of work-package specifications, S, as the tuple of the workpackage’s hash and serialized length together with an erasure root. Formally:
+<h6>11.1.3. 工作包规范。我们将工作包规范集合定义为 S，它是一个元组，包含工作包的哈希值、序列化长度以及纠错根。形式上：</h6>
 
 (112)
 
 $$ S ≡(h ∈ H, l ∈ N_L, u ∈ H  )$$
 
 *11.1.4. Work Result.* We finally come to define a work result, L, which is the data conduit by which services’ states may be altered through the computation done within a work-package.
+<h6></h6>11.1.4. 工作输出 (Work Result)。我们最后定义工作输出 (L)。它是数据通道，服务的状态可以通过工作包内完成的计算进行修改。</h6>
 
 (113)
 
 $$\mathbb{L} ≡ (s ∈ \mathbb{N}_S, c ∈ \mathbb{H}, l ∈ \mathbb{H}, g ∈ \mathbb{Z}_G, o ∈ \mathbb{Y} ∪ \mathbb{J}) $$
 
 Work results are a tuple comprising several items. Firstly s, the index of the service whose state is to be altered and thus whose refine code was already executed. We include the hash of the code of the service at the time of being reported c, which must be accurately predicted within the work-report according to equation 144;
+<h6>工作输出由几个项目组成的一个元组。第一个是 s，它表示要更改其状态的服务的索引，也就是已经执行过细化代码的服务。我们还包含报告时服务的代码哈希值 c，根据公式 144，工作报告中必须准确预测该值。</h6>
 
 Next, the hash of the payload (l) within the work item which was executed in the refine stage to give this result. This has no immediate relevance, but is something provided to the accumulation logic of the service. We follow with the gas prioritization ratio g used when determining how much gas should be allocated to execute of this item’s accumulate.
+<h6>接下来是细化阶段执行的用于生成此结果的工作项中的有效载荷哈希 (l)。这与当前状态无关，但会提供给服务的累积逻辑。然后是用于确定分配多少 gas 来执行此项目累积的 gas 优先级比率 (g)。</h6>
 
 Finally, there is the output or error of the execution of the code o, which may be either an octet sequence in case it was successful, or a member of the set J, if not. This
 latter set is defined as the set of possible errors, formally:
+<h6>最后，还有执行代码的输出或错误 o，它可以是 字节序列（如果执行成功），也可以是集合 J 的成员（如果执行失败）。集合 J 被定义为可能的错误集合，形式上为：</h6>
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
