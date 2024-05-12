@@ -1692,6 +1692,40 @@ a_v[c] > {^2/3}V
 ```
 
 This value is utilized in the definition of both $δ^′$ and $ρ^‡$ which we will define presently as equivalent to $ρ^†$ except for the removal of items which are now available 
+
+(122)
+
+```math
+∀c ∈ N_C ∶ ρ^‡[c] ≡\left\{\begin{matrix}
+  \varnothing  &if ~ ρ[c]w ∈ R \\
+ρ^†[c] &  otherwise 
+\end{matrix}\right.
+```
+
+*11.3. Guarantor Assignments.* Every block, each core has some particular number of validators uniquely assigned to it assigned to guarantee work reports for it. With V = 1, 023 validators and C = 341 cores, this results in exactly V/C = 3 validators per core. The Ed25519 keys of these validators are denoted by G:
+
+(123)
+```math
+G ∈ ⟦⟦H_E⟧_{V/C}⟧_C
+```
+
+We determine the core to which any given validator is assigned through a shuffle using epochal entropy and a periodic rotation to help guard the security and liveness of the network. We use η2 for the epochal entropy rather than η1 to avoid the possibility of fork-magnification where uncertainty about chain state at the end of an epoch could
+give rise to two established forks before it naturally resolves.
+
+We define the permute function P, the rotation function R and finally the guarantor assignments G as follows:
+
+(124)
+```math
+P(e, t) ≡ R(F([⌊\frac{V ⋅ i}{C }⌋ ∣i <- N_V], e), ⌊\frac {t mod E}{R}⌋) 
+```
+
+(125)
+```math
+R(c, n) ≡ [(x + n) mod C ∣ x <− c]
+```
+
+
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
