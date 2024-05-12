@@ -1502,6 +1502,118 @@ $$∀(r,v) ∈ E_ J ∶ v = [i \wr \wr (v, i, s) ∈ v]$$
 We define J as the sequence of judgements introduced in the block’s extrinsic (and ordered respectively), with the sequence of signatures substituted with the sum of votes over the signatures. We require this total to be exactly zero, two-thirds-plus-one or one-third-plus-one of the validator set indicating, respectively, that we are confident of the report’s validity, confident of its invalidity, or lacking confidence in either. This requirement may seem somewhat arbitrary, but these happen to be the decision thresholds for our three possible actions and are acceptable since the security assumptions include the requirement that at least two-thirds-plus-one validators are live (Stewart 2018 discusses the security implications in depth).
 <h6>10.3 判决数据 (J)。我们将 J 定义为区块 extrinsic 中引入的判决序列（按顺序排列），并用签名总数代替签名序列。 对于验证器集合，我们要求这个总数必须正好等于零、三分之二加一或三分之一加一，分别表示我们确信报告有效、确信其无效或对两者都缺乏信心。这个要求可能看起来有些武断，但它们恰好是我们三种可能操作的决策阈值，并且是可以接受的，因为安全假设包含至少三分之二加一的验证器处于活动状态的要求（Stewart 2018 深入讨论了安全影响）。</h6>
 
+Formally:
+<h6>形式上:</h6>
+
+(100)
+
+$$ \mathbf{J} ∈ ⟦(\mathbb{H}, ⟦\mathbb{H}\_B⟧_{2∶3}, \mathbb{N})⟧ $$
+
+(101)
+```math
+
+\mathbf{J} = \begin{bmatrix}
+\lgroup 
+(r, \sum\limits_{(v,i,s ) \in v} v
+\rgroup 
+\mid 
+(r,v)<− E_J
+\end{bmatrix}
+```
+(102)
+
+$$ ∀(r, t)∈ J ∶ t ∈ \{{0, ⌊1/3V⌋, ⌊2 /3V⌋ + 1}\} $$
+
+Note that t is the threshold of judgements that the report is valid, calculated by summing Boolean values in their implicit equivalence to binary digits of the set $\mathbb{N}_2$.
+We clear any work-reports judged to be non-valid from their core:
+
+(103)
+```math
+∀c ∈ N_C ∶ ρ^† [c] = \left\{\begin{matrix}
+ \varnothing & if ~ {(ρ[c]_r, t) ∈ J, t < ⌊^2/3V⌋} \\
+ ρ_c & \quad otherwise
+\end{matrix}\right.
+```
+
+The allow-set assimilates the hashes of any reports we judge to be valid. The ban-set assimilates any other judged report-hashes. Finally, the punish-set accumulates the guarantor keys of any report judged to be invalid:
+
+(104)
+
+$$ ψ^′_a ≡ ψ_a ∪ {r ∣(r, ⌊^2/3V⌋ + 1) ∈ J} $$
+
+(105)
+
+$$ ψ^′_b ≡ ψ_b ∪ {r ∣(r, t)∈ J, t ≠ ⌊^2  /3V⌋ + 1}$$
+
+(106)
+
+$$ψ^′_p ≡ ψ_p ∪ {ρ[c]_g ∣ (ρ[c]_r, 0) ∈ J} $$
+
+Note that the augmented punish-set is utilized when determining κ′ to nullify any validator keys which appear in the punish-list.
+
+**10.3. Header. ** The judgement marker must contain exactly the sequence of report hashes judged not as confidently valid (i.e. either controversial or invalid). Formally:
+(107)
+
+$$H_j ≡ [r ∣(r, t) − J, t ≠ 0]$$
+
+<h3 align="center">11. Reporting and Assurance</h3>
+
+Reporting and assurance are the two on-chain processes we do to allow the results of in-core computation to make its way into the service state singleton, δ. A work-package,which comprises several work items, is transformed by validators acting as guarantors into its corresponding workreport, which similarly comprises several work outputs and then presented on-chain within the guarantees extrinsic. At this point, the work-package is erasure coded into a multitude of segments and each segment distributed to the associated validator who then attests to its availability through an assurance placed on-chain. After either enough assurances or a time-out (whichever happens first), the work-report is considered available, and the work outputs transform the state of their associated service by virtue of accumulation, covered in section 12.
+
+From the perspective of the work-report, therefore, the guarantee happens first and the assurance afterwards. However, from the perspective of a block’s statetransition, the assurances are best processed first since each core may only have a single work-report pending its package becoming available at a time. Thus, we will first cover the transition arising from processing the availability assurances followed by the work-report guarantees. This synchroneity can be seen formally through the requirement of an intermediate state $ρ^‡$ , utilized later in equation 134.
+
+**11.1. State.** The state of the reporting and availability portion of the protocol is largely contained within ρ, which tracks the work-reports which have been reported but not
+yet accumulated and the identities of the guarantors who reported them and the time at which it was reported. As mentioned earlier, at only one report may be assigned to
+a core at any given time. Formally:
+
+$$ρ ∈ ⟦(w ∈ W, g ∈ ⟦H_E⟧_{2∶3}, t ∈ N_T)?⟧_C $$
+
+As usual, intermediate and posterior values $(ρ^†, ρ^‡, ρ^′)$ are held under the same constraints as the prior value.
+
+*11.1.1. Work Report.* A work-report, of the set W, is defined as a tuple of authorizer hash and output, the refinement context, the package specification and the results of
+the evaluation of each of the items in the package, which is always at least one item and may be no more than I items. Formally:
+
+(109)
+
+$$W ≡ (a ∈ H, o ∈ Y, x ∈ X, s ∈ S, r ∈ ⟦L⟧_{1∶I})$$
+
+The total serialized size of a work-report may be no greater than $W_R$ bytes:
+(110)
+
+$$∀_w ∈ W ∶ ∣\varepsilon (w)∣ ≤ W_R$$
+
+*11.1.2. Refinement Context.* A refinement context, denoted by the set X, describes the context of the chain at the point that the report’s corresponding work-packagewas evaluated. It identifies two historical blocks, the anchor, header hash a along with its associated posterior state-root s and posterior Beefy root b; and the lookupanchor, header hash l and of timeslot t. Finally, it identifies the hash of an optional prerequisite work-package p. Formally:
+
+(111)
+
+```math
+\mathbb{X} \equiv \Bigg\lgroup
+\begin{matrix}
+  a ∈ H, s ∈ H, b ∈ H, \\
+l ∈ H, t ∈ NT , p ∈ H?
+
+\end{matrix} 
+ \Bigg\rgroup
+```
+
+*11.1.3. Work Package Specification.* We define the set of work-package specifications, S, as the tuple of the workpackage’s hash and serialized length together with an erasure root. Formally:
+
+(112)
+
+$$ S ≡(h ∈ H, l ∈ N_L, u ∈ H  )$$
+
+*11.1.4. Work Result.* We finally come to define a work result, L, which is the data conduit by which services’ states may be altered through the computation done within a work-package.
+
+(113)
+
+$$\mathbb{L} ≡ (s ∈ \mathbb{N}_S, c ∈ \mathbb{H}, l ∈ \mathbb{H}, g ∈ \mathbb{Z}_G, o ∈ \mathbb{Y} ∪ \mathbb{J}) $$
+
+Work results are a tuple comprising several items. Firstly s, the index of the service whose state is to be altered and thus whose refine code was already executed. We include the hash of the code of the service at the time of being reported c, which must be accurately predicted within the work-report according to equation 144;
+
+Next, the hash of the payload (l) within the work item which was executed in the refine stage to give this result. This has no immediate relevance, but is something provided to the accumulation logic of the service. We follow with the gas prioritization ratio g used when determining how much gas should be allocated to execute of this item’s accumulate.
+
+Finally, there is the output or error of the execution of the code o, which may be either an octet sequence in case it was successful, or a member of the set J, if not. This
+latter set is defined as the set of possible errors, formally:
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
