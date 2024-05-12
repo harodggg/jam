@@ -1644,16 +1644,20 @@ latter set is defined as the set of possible errors, formally:
 $$ \mathbb{J} ∈ \{{∞, ☇, BAD, BIG}\} $$
 
 The first two are special values concerning execution of the virtual machine, ∞ denoting an out-of-gas error and ☇ denoting an unexpected program termination. Of the remaining two, the first indicates that the service’s code was not available for lookup in state at the posterior state of the lookup-anchor block. The second indicates that the code was available but was beyond the maximum size allowed S.
+<h6>文本描述了虚拟机执行过程中使用的四个特殊值： ∞ 表示内存不足错误（out-of-gas error）。☇ 表示程序意外终止。剩下的两个值中，第一个表示在查找锚块的后继状态中，无法在状态中找到服务代码。第二个表示代码可用，但超过了允许的最大尺寸 S。</h6>
 
 **11.2. Package Availability Assurances.** We first define $ρ^‡$ , the intermediate state to be utilized next in section 11.4 as well as R, the set of available work-reports, which will we utilize later in section 12. Both require the integration of information from the assurances extrinsic $E_A$.
+<h6>11.2. 软件包可用性保证。首先，我们定义 $ρ^‡$ ，它将在 11.4 节作为下一个要使用的中间状态，以及 R，即可用工作报告集合，它将在后面的 12 节用到。这两个都需要整合来自外部保证 $E_A$ 的信息。</h6>
 
-*11.2.1. The Assurances Extrinsic.* The assurances extrinsic is a sequence of assurance values, at most one per validator. Each assurance is a sequence of binary values (i.e. bitstring), one per core, together with a signature and the index of the validator who is assuring. A value of 1 (or ⊺, if interpreted as a Boolean) at any given index implies that the validator assures they are contributing to its availability.[^11] Formally:
+*11.2.1.* The Assurances Extrinsic.* The assurances extrinsic is a sequence of assurance values, at most one per validator. Each assurance is a sequence of binary values (i.e. bitstring), one per core, together with a signature and the index of the validator who is assuring. A value of 1 (or ⊺, if interpreted as a Boolean) at any given index implies that the validator assures they are contributing to its availability.[^11] Formally:
+<h6>11.2.1. 保证外在函数 (The Assurances Extrinsic)。保证外在函数 (assurances extrinsic) 是一个包含验证者保证值的序列，每个验证者最多提供一个值。每个保证值又是一个比特串 (bitstring)，代表每个核心的状态，同时包含签名和提供保证的验证者索引。任何给定索引处的 1 值（如果解释为布尔值，则为 ⊺）表示验证器保证他们正为该索引的可用性做出贡献 [^11]。形式上：</h6>
 
 (115)
 
 $$E_A ∈ ⟦(a ∈ H, f ∈ B_C, v ∈ N_V, s ∈ E)⟧_{∶V} $$
 
 The assurances must all be anchored on the parent and ordered by validator index:
+<h6>这些保证必须全部锚定在父级上并按验证器索引排序：</h6>
 (116) 
 
 $$ ∀_a ∈ E_A ∶ a_a = H_p$$
@@ -1663,7 +1667,7 @@ $$ ∀_a ∈ E_A ∶ a_a = H_p$$
 $$ ∀_i ∈ {1 . . . ∣E_A∣} ∶ E_A[i − 1]_v < E_A[i]_v$$
 
 The signature must be one whose public key is that of the validator assuring and whose message is the serialization of the parent hash $H_p$ and the aforementioned bitstring:
-
+<h6>签名必须满足以下条件：公钥: 签名必须使用提供保证的验证者的公钥进行签名。消息: 签名消息由两个部分序列化而成：父哈希 ( $H_p$ )。前面提到的比特串</h6>
 (118)
 
 $$ ∀_a ∈ E_A ∶ a_s ∈ E_{κ[a_v]_e}⟨X_A \frown H(H_p, a_f )⟩$$
@@ -1673,13 +1677,16 @@ $$ ∀_a ∈ E_A ∶ a_s ∈ E_{κ[a_v]_e}⟨X_A \frown H(H_p, a_f )⟩$$
 $$X_A = $jam_available $$
 
 A bit may only be set if the corresponding core has a report pending availability on it:
+<h6>只有当相应的内核有报告待提交时，该位才会被设置：</h6>
+
 (200)
 
 ```math
 ∀_a ∈ E_A ∶ ∀_c ∈ N_C ∶ a_f [c] \Rightarrow  ρ^† [c] ≠ \varnothing 
 ```
 
-11.2.2. Available Reports. A work-report is said to become available if and only if there are a clear 2/3 supermajority of validators who have marked its core as set within the block’s assurance extrinsic. Formally, we define the series of available work-reports $R$ as:
+*11.2.2. Available Reports.* A work-report is said to become available if and only if there are a clear 2/3 supermajority of validators who have marked its core as set within the block’s assurance extrinsic. Formally, we define the series of available work-reports $R$ as:
+<h6>11.2.2. 可用工作报告 (Available Reports)。工作报告的可用性取决于区块保证外在函数 (assurance extrinsic) 中验证者的标记。 报告被认为可用当且仅当至少有 2/3 的验证者在其保证信息中将对应核心标记为已设置 (set)。形式上，可用工作报告集合 R 定义为</h6>
 
 (121)
 
@@ -1692,6 +1699,7 @@ a_v[c] > {^2/3}V
 ```
 
 This value is utilized in the definition of both $δ^′$ and $ρ^‡$ which we will define presently as equivalent to $ρ^†$ except for the removal of items which are now available 
+<h6>该值用于定义我们稍后将介绍的 $δ^′$ 和 $ρ^‡$ 。这两个值与 $ρ^†$ 相同，只是去掉了现在可用的条目。</h6>
 
 (122)
 
@@ -1704,6 +1712,8 @@ This value is utilized in the definition of both $δ^′$ and $ρ^‡$ which we 
 
 *11.3. Guarantor Assignments.* Every block, each core has some particular number of validators uniquely assigned to it assigned to guarantee work reports for it. With V = 1, 023 validators and C = 341 cores, this results in exactly V/C = 3 validators per core. The Ed25519 keys of these validators are denoted by G:
 
+<h6>11.3. 保证人分配 描述了验证人和核心之间的分配关系。在每个区块中，每个核心都会被分配一定数量的验证人，这些验证人专门负责为该核心担保工作报告。文档举例说明了分配规则：假设总验证人数为 V = 1023 人，核心总数为 C = 341 个，那么每个核心将被分配 V/C = 3 个验证人。这些验证人的 Ed25519 密钥用符号 G 表示。</h6>
+
 (123)
 ```math
 G ∈ ⟦⟦H_E⟧_{V/C}⟧_C
@@ -1712,7 +1722,10 @@ G ∈ ⟦⟦H_E⟧_{V/C}⟧_C
 We determine the core to which any given validator is assigned through a shuffle using epochal entropy and a periodic rotation to help guard the security and liveness of the network. We use η2 for the epochal entropy rather than η1 to avoid the possibility of fork-magnification where uncertainty about chain state at the end of an epoch could
 give rise to two established forks before it naturally resolves.
 
+<h6>我们使用洗牌算法 (shuffle) 来确定每个验证人被分配到哪个核心。该算法结合了时代熵 (epochal entropy) 和周期性旋转 (periodic rotation) 以帮助保护网络的安全性和活跃性。我们使用 η2 代替 η1 作为时代熵，以避免叉链放大 (fork-magnification) 的可能性。叉链放大是指由于区块链状态在某个时代末期存在不确定性，可能导致在自然解决之前出现两个已建立的分叉链。</h6>
+
 We define the permute function P, the rotation function R and finally the guarantor assignments G as follows:
+<h6>我们定义置换函数 P、旋转函数 R 以及最后的保证人分配 G 如下：</h6>
 
 (124)
 ```math
@@ -1724,8 +1737,65 @@ P(e, t) ≡ R(F([⌊\frac{V ⋅ i}{C }⌋ ∣i <- N_V], e), ⌊\frac {t mod E}{R
 R(c, n) ≡ [(x + n) mod C ∣ x <− c]
 ```
 
+(126)
+```math
+∀_c ∈ N_C ∶ G ≡ [κ^′_i∣ i <− NV , P(η^′_2, τ^′)_i = c]
+```
 
+We also define $G^∗$, which is equivalent to the value G as it would have been under the previous rotation:
 
+<h6>我们还定义 $G^*$，它相当于前一次旋转下的值 G：</h6>
+(127)
+
+```math
+∀_c ∈ N_C ∶ G^∗≡ [k_i ∣ i −< N_V , P(e, τ' − R)_i = c]
+```
+
+(128)
+
+```math
+where ~ e =\left\{\begin{matrix}
+ (η^′_2, κ) & if ~ ⌊\frac{τ^′ − R}{E}⌋ = ⌊\frac{τ^′}{E}⌋\\
+ (η^′_3, λ)  & otherwise
+\end{matrix}\right.
+```
+
+**11.4. Work Report Guarantees.** We begin by defining the guarantees extrinsic, $E_G$, a series of guarantees, at most one for each core, each of which is a tuple of a core index, work-report, a credential a and its corresponding timeslot t. Formally:
+
+<h6>11.4. 工作报告保证。 我们首先定义外部保证，即 $E_G$，这是一系列保证，每个核心最多一个，每个保证都是一个核心索引、工作报告、证书 a 及其相应时隙 t 的元组：</h6>
+(129)
+
+$$ E_G ∈ ⟦(c ∈ N_C, w ∈ W, t ∈ N_T , a ∈ ⟦E?⟧_3)⟧_{∶C} $$
+
+The credential is itself a sequence of either two or three tuples of a signature and a validator index. The core index of each guarantee must be in ascending order:
+<h6>凭证本身是签名和验证器索引的两个或三个元组的序列。每个保证的核心指标必须按升序排列：</h6>
+(130)
+
+$$ E_G = [i_c \wr i ∈ E_G]$$
+
+Credentials may only have one missing signature:
+<h6>凭证可能只缺少一个签名：</h6>
+
+(131)
+$$ ∀g ∈ EG ∶ ∣{x ∈ ga ∶ x ≠ ∅}∣ ≥ 2$$
+
+The signature must be one whose public key is that of the validator identified in the credential, and whose message is the serialization of the core index and the workreport. The signing validators must be assigned to the core in question in either this block G if the timeslot for the guarantee is in the same rotation as this block’s timeslot, or in the most recent previous set of assignments, $G^∗$:
+<h6>签名要求。签名必须满足以下条件：公钥: 签名必须使用凭证中标识的验证者的公钥进行签名。消息: 签名消息由两个部分序列化而成：核心索引 (core index)工作报告 (workreport)。签名验证者:如果保证时段与当前区块的时段处于同一轮换中，则验证者必须被分配到 当前区块 对应的核心 (G)。如果保证时段不处于同一轮换中，则验证者必须被分配到 最近一轮 的核心集合 ( $G^∗$ )。</h6>
+
+(132)
+
+```math
+\begin{matrix}
+  ∀_g ∈ E_G ∶ \\
+  ∀_i ∈ N_3, g_a[i] ≠ ∅ ∶\left\{\begin{matrix}
+ a_s ∈ E_k[g_c]_i⟨X_G \frown \mathcal{H}(g_c, g_r)⟩\\
+where ~ k =\left\{\begin{matrix}
+ G & if ~ ⌊\frac{τ^′}{R}⌋ = ⌊\frac{g_t}{R}⌋ \\
+G^*  & otherwise 
+\end{matrix}\right.
+\end{matrix}\right.
+\end{matrix}
+```
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
