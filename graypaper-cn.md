@@ -1639,6 +1639,59 @@ Finally, there is the output or error of the execution of the code o, which may 
 latter set is defined as the set of possible errors, formally:
 <h6>最后，还有执行代码的输出或错误 o，它可以是 字节序列（如果执行成功），也可以是集合 J 的成员（如果执行失败）。集合 J 被定义为可能的错误集合，形式上为：</h6>
 
+(114)
+
+$$ \mathbb{J} ∈ \{{∞, ☇, BAD, BIG}\} $$
+
+The first two are special values concerning execution of the virtual machine, ∞ denoting an out-of-gas error and ☇ denoting an unexpected program termination. Of the remaining two, the first indicates that the service’s code was not available for lookup in state at the posterior state of the lookup-anchor block. The second indicates that the code was available but was beyond the maximum size allowed S.
+
+**11.2. Package Availability Assurances.** We first define $ρ^‡$ , the intermediate state to be utilized next in section 11.4 as well as R, the set of available work-reports, which will we utilize later in section 12. Both require the integration of information from the assurances extrinsic $E_A$.
+
+*11.2.1. The Assurances Extrinsic.* The assurances extrinsic is a sequence of assurance values, at most one per validator. Each assurance is a sequence of binary values (i.e. bitstring), one per core, together with a signature and the index of the validator who is assuring. A value of 1 (or ⊺, if interpreted as a Boolean) at any given index implies that the validator assures they are contributing to its availability.[^11] Formally:
+
+(115)
+
+$$E_A ∈ ⟦(a ∈ H, f ∈ B_C, v ∈ N_V, s ∈ E)⟧_{∶V} $$
+
+The assurances must all be anchored on the parent and ordered by validator index:
+(116) 
+
+$$ ∀_a ∈ E_A ∶ a_a = H_p$$
+
+(117)
+
+$$ ∀_i ∈ {1 . . . ∣E_A∣} ∶ E_A[i − 1]_v < E_A[i]_v$$
+
+The signature must be one whose public key is that of the validator assuring and whose message is the serialization of the parent hash $H_p$ and the aforementioned bitstring:
+
+(118)
+
+$$ ∀_a ∈ E_A ∶ a_s ∈ E_{κ[a_v]_e}⟨X_A \frown H(H_p, a_f )⟩$$
+
+(119)
+
+$$X_A = $jam_available $$
+
+A bit may only be set if the corresponding core has a report pending availability on it:
+(200)
+
+```math
+∀_a ∈ E_A ∶ ∀_c ∈ N_C ∶ a_f [c] \Rightarrow  ρ^† [c] ≠ \varnothing 
+```
+
+11.2.2. Available Reports. A work-report is said to become available if and only if there are a clear 2/3 supermajority of validators who have marked its core as set within the block’s assurance extrinsic. Formally, we define the series of available work-reports $R$ as:
+
+(121)
+
+```math
+R ≡ \begin{bmatrix}
+ρ^†[c]_w ~~\mid  c <- N_C,\sum\limits_{a∈E_A}
+a_v[c] > {^2/3}V
+
+\end{bmatrix}
+```
+
+This value is utilized in the definition of both $δ^′$ and $ρ^‡$ which we will define presently as equivalent to $ρ^†$ except for the removal of items which are now available 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
@@ -1649,3 +1702,4 @@ latter set is defined as the set of possible errors, formally:
 [^8]: 1,704,110,400 seconds after the Unix Epoch.
 [^9]: This is three fewer than risc-v’s 16, however the amount that program code output by compilers uses is 13 since two are reserved for operating system use and the third is fixed as zero
 [^10]: Technically there is some small assumption of state, namely that some modestly recent instance of each service’s preimages. The specifics of this are discussed in section 13.2.
+[^11]: This is a “soft” implication since there is no consequence on-chain if dishonestly reported. For more information on this implication see section 13.4.
