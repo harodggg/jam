@@ -1796,6 +1796,140 @@ G^*  & otherwise
 \end{matrix}\right.
 \end{matrix}
 ```
+
+(133)
+
+```math
+X_G = $jam_guarantee
+```
+No reports may be placed on cores with a report pending availability on it unless it has timed out. In the latter case, U = 5 slots must have elapsed after the report was made. A report is invalid if the authorizer hash is not present in the authorizer pool of the core on which the work is reported. Formally:
+
+<h6></h6>
+
+(134)
+
+```math
+∀_g ∈ E_G ∶ \left\{\begin{matrix}
+(ρ^‡ [g_c] = ∅ ∨ H_t ≥ ρ^‡[g_c]_t + U , \\
+g_a ∈ α[g_c]
+\end{matrix}\right.
+```
+We denote w to be the set of work-reports in the present extrinsic E:
+(135)
+
+$$ let w = {g_w ∣ g ∈ E_G}$$
+
+We specify the maximum total accumulation gas requirement a work-report may imply as $G_A$, and we require the sum of all services’ minimum gas requirements to be no greater than this:
+
+(136)
+
+$$∀_w ∈ w ∶ \sum\limits_{s∈(w_r)_s} δ[s]_m ≤ G_A$$
+
+*11.4.1. Contextual Validity of Reports.* For convenience,we define two equivalences x and p to be, respectively, the set of all contexts and work-package hashes within the extrinsic:
+
+(137)
+
+$$let x ≡ {wx ∣ w ∈ w} , p ≡ {(ws)h ∣ w ∈ w}$$
+
+There must be no duplicate work-package hashes (i.e. two work-reports of the same package). Therefore, we require the cardinality of p to be the length of the workreport sequence w:
+
+(138)
+
+$$ ∣p∣ = ∣w∣$$ 
+
+We require that the anchor block be within the last H blocks and that its details be correct by ensuring that it appears within our most recent blocks β:
+
+(139):
+
+$$ ∀x ∈ x ∶ ∃ y ∈ β ∶ x_a = y_h ∧ x_s = y_s ∧ x_b = \mathcal{H}_K(\varepsilon M(y_b))$$
+
+We require that each lookup-anchor block be within the last L timeslots:
+
+(140)
+
+$$∀x ∈ x ∶ x_t ≥ H_t − L $$
+
+We also require that we have a record of it; this is one of the few conditions which cannot be checked purely with on-chain state and must be checked by virtue of retaining the series of the last L headers as the ancestor set A. Since it is determined through the header chain, it is still deterministic and calculable. Formally:
+
+(141)
+
+$$∀x ∈ x ∶ ∃h ∈ A ∶ h_t = x_t ∧ \mathcal{H}(h) = x_h)$$
+
+We require that the work-package of the report not be the work-package of some other report made in the past. Since the work-package implies the anchor block, and the anchor block is limited to the most recent blocks, we need only ensure that the work-package not appear in our recent history:
+
+(142)
+
+$$∀p ∈ p,∀x ∈ β ∶ p \notin  x_p $$
+
+We require that the prerequisite work-package, if present, be either in the extrinsic or in our recent history:
+(143) 
+```math
+\begin{matrix}
+  ∀w ∈ w, (w_x)_p ≠ ∅ ∶ \\
+  {(w)_x}_p ∈ p ∪ {x ∣ x ∈ b_p, b ∈ β}
+\end{matrix}
+```
+We require that all work results within the extrinsic predicted the correct code hash for their corresponding service:
+
+(144)
+
+$$∀w ∈ w,∀r ∈ w_r ∶ rc = δ[r_s]_c $$
+
+**11.5. Transitioning for Reports. ** We define ρ′ as being equivalent to $ρ^‡$ , except where the extrinsic replaced an entry. In the case an entry is replaced, the new value includes the present time τ′ allowing for the value may be replaced without respect to its availability once sufficient time has elapsed (see equation 134).
+
+(145)
+
+```math
+ \begin{matrix}
+ ∀c ∈ N_C ∶ ρ′[c] ≡ \left\{\begin{matrix}
+  (w, g : G(a), t : τ^′)& \\
+ ρ^‡ [c]  & otherwise
+\end{matrix}\right.\\
+where ~ G(a) ≡ {κ[v]_e ∣ (s, v) ∈ a}
+\end{matrix}
+```
+
+This concludes the section on reporting and assurance. We now have a complete definition of ρ′ together with R to be utilized in section 12, describing the portion of the
+state transition happening once a work-report is guaranteed and made available 
+
+<h3 algin="center"> 12. Accumulation </h3>
+
+Accumulation may be defined as some function whose arguments are R and δ together with selected portions of (at times partially transitioned) state and which yields the posterior service state δ′ togWe define δ
+†
+as the state after the integration of the
+preimages:ether with additional state elements ι′ , φ′and χ′.
+
+The proposition of accumulation is in fact quite simple: we merely wish to execute the Accumulate logic of the service code of each of the services which has at least one work output, passing to it the work outputs and useful contextual information. However, there are three main complications. Firstly, we must define the execution environment of this logic and in particular the host functions available to it. Secondly, we must define the amount of gas to be allowed for each service’s execution. Finally, we must determine the nature of transfers within Accumulate which, as we will see, leads to the need for a second entry-point, on-transfer.
+
+12.1. Preimage Integration. Prior to accumulation, we must first integrate all preimages provided in the lookup extrinsic. The lookup extrinsic is a sequence of pairs of service indices and data. These pairs must be ordered and without duplicates (equation 147 requires this). The data must have been solicited by a service but not yet be provided. Formally:
+(146)
+
+$$E_P ∈ ⟦(N_S, Y)⟧ $$
+
+(147)
+
+$$ E_P = [i \wr \wr i ∈ E_P ]$$
+
+(148)
+```math
+ ∀(s, p)∈ E_P ∶ \left\{\begin{matrix}
+ \mathcal{K}(δ[s]_p) \notni \mathcal{H}(p) ,\\
+δ[s]_l[(\mathcal{H}(p), ∣p∣)] = []
+\end{matrix}\right.
+```
+
+We define $δ^†$ as the state after the integration of the preimages:
+
+```math
+
+δ^†= δ ex. ∀ (s, p)∈ E_P ∶\left\{\begin{matrix}
+ δ^†[s]_p[\mathcal{H}(p)] = p\\
+δ^†
+[s]_l[\mathcal{}H(p), ∣p∣] = [τ^′]
+\end{matrix}\right.
+
+```
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
