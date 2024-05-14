@@ -1930,6 +1930,306 @@ We define $δ^†$ as the state after the integration of the preimages:
 
 ```
 
+**12.2. Gas Accounting.** We define S, the set of all services which will be accumulated in this block; this is all services which have at least one work output within R, together with all privileged services, χ. Formally:
+
+(150)
+
+$$ \mathbf{S} ≡ {r_s ∣ w ∈ \mathbf{R}, r ∈ w_r} ∪ {χ_m, χ_a, χ_v} $$
+
+We calculate the gas attributable for each service as the sum of each of the service’s work outputs’ share of their report’s elective accumulation gas together with the subtotal of minimum gas requirements:
+
+(151)
+
+```math
+G: \left\{\begin{matrix}
+\mathbb{N}_S \to  \mathbb{Z}_G \\
+s \to \sum\limits_{w∈R}\sum\limits_{r∈w_r,r_s=s}δ^†[s]_g\lfloor r_g.\frac{G_A − \sum\limits_{r∈wr}δ^†[r_s]_g}{\sum{r∈w_r}
+r_g}\rfloor
+\end{matrix}\right.
+```
+
+**12.3. Wrangling.** We finally define the results which will be given as an operand into the accumulate function for each service in S. This is a sequence of operand tuples O,
+one sequence for each service in S. Each sequence contains one element per work output (or error) to be accumulated for that service, together with said work output’s payload hash, package hash and authorization output. The tuples are sequenced in the same order as they appear in R. Formally:
+
+(152)
+
+$$ O ≡(o ∈ Y ∪ J, l ∈ H, k ∈ H, a ∈ Y)$$
+
+(153)
+```math
+M \left\{\begin{matrix}
+\mathbb{N}_S → ⟦\mathbb{O}⟧ \\
+s \to \begin{bmatrix}
+\lgroup 
+\begin{matrix}
+o: r_o, l: r_p, \\
+a: w_o, k (w_s)_h
+\end{matrix}
+\rgroup \mid 
+\begin{matrix}
+ w ∈ R,\\
+ r ∈ wr,\\
+ r_s = s
+\end{matrix}
+\end{bmatrix}
+\end{matrix}\right.
+
+```
+
+12.4. Invocation. Within this section, we define A, the function which conducts the accumulation of a single service. Formally speaking, A assumes omnipresence of timeslot Ht and some prior state components $δ^†$ , ν, $R_d$, and takes as specific arguments the service index s ∈ S (from which it may derive the wrangled results M(s) andgas limit G(s)) and yields values for $δ^†$.[s] and staging assignments into φ, ι together with a series of lookup solicitations/forgets, a series of deferred transfers and C mapping from service index to Beefy commitment hashes.
+
+We first denote the set of deferred transfers as T, noting that a transfer includes a memo component m of 64 octets, together with the service index of the sender s, the service index of the receiver d, the amount of tokens to be transferred a and the gas limit g for the transfer. Formally:
+
+(154)
+
+$$T ≡(s ∈ N_S, d ∈ N_S, a ∈ N_B, m ∈ Y_M, g ∈ Z_G)$$
+
+We may then define A, the mapping from the index of accumulated services to the various components in terms of which we will be imminently defining our posterior state:
+
+(155)
+
+```math
+A: \begin{Bmatrix}
+N_s \to \Bigg\lgroup \begin{matrix}
+s ∈ A?, v ∈ K_V, t ∈ ⟦T⟧, r ∈ H,\\
+c ∈ ⟦⟦H⟧+Q⟧_C, n ∈ D⟨N_S → A⟩,\\
+p ∈(m ∈ N_S, a ∈ N_S, v ∈ N_S)\\
+
+
+\end{matrix} \Bigg\rgroup\\
+s \to Ψ_A(δ^†, s,M(s), G(s))
+\end{Bmatrix}
+```
+
+As can be seen plainly, our accumulation mapping A combines portions of the prior state into arguments for a virtual-machine invocation. Specifically the service accounts $δ^†$ together with the index of the service in question s and its wrangled refine-results M(s) and gas limit G(s) are arranged to create the arguments for ΨA, itself using a virtual-machine invocation as defined in appendix B.4.
+
+The Beefy commitment map is a function mapping all accumulated services to their accumulation result (the r component of the result of A). This is utilized in determining the accumulation-result tree root for the present block, useful for the Beefy protocol:
+
+(156)
+$$ C ≡ {(s, A(s)_r) ∣ s ∈ S, A(s)_r ≠ ∅}$$
+
+Given our mapping A, which may be calculated exhaustively from the vm invocations of each accumulated service S, we may define the posterior state δ′, χ', φ′andι′ as the result of integrating A into our state.
+
+*12.4.1. Privileged Transitions.* The staging core assignments, and validator keys and privileged service set are each altered based on the effects of the accumulation of
+each of the three privileged services:
+
+(157)
+
+```math
+χ′≡ A(χ_m)_p , φ′≡ A(χ_a)_c , ι′ ≡ A(χ_v)_v
+```
+*12.4.2. Service Account Transitions.* Finally, we integrate all changes to the service accounts into state.
+
+We note that all newly added service indices, defined as $\mathcal{K}(A(s)_n)$ for any accumulated service s, must not conflict with the indices of existing services or newly added services. This should never happen, since new indices are explicitly selected to avoid such conflicts, but in the unlikely event it happens, the block would be invalid. Formally:
+
+(158)
+
+```math
+\begin{matrix}
+∀s ∈ S ∶ \mathcal{K}(A(s)_n) ∩ \mathcal{K}(δ^†) = ∅, \\
+∀t ∈ S ∖ {s} ∶ \mathcal{K}(A(s)_n) ∩ \mathcal{K}(A(t)_n) = ∅
+\end{matrix}
+```
+
+We first define $δ^‡$, an intermediate state after main accumulation but before the transfers have been credited and handled:
+
+(159)
+
+```math
+
+
+\begin{matrix}
+ K(δ^‡) ≡ \Big(\mathcal{K}(δ^†) ∪ ⋃\limits_{s∈S} \mathcal{K}(A(s)_n)) ∖ {s \mid \begin{matrix}
+s ∈ S \\
+s_s = ∅
+\end{matrix} }\Big) \\
+
+δ^‡[s] ≡\left\{\begin{matrix}
+A(s)_s  &if ~ s ∈ S \\
+A(t)_n[s]  & if ~ ∃!t ∶ t ∈ S, s ∈ \mathcal{K}(A(t)n)\\
+ δ^†[s]  &otherwise
+\end{matrix}\right.
+
+\end{matrix}
+
+```
+
+We denote R(s) the sequence of transfers received by a given service of index s, in order of them being sent from services of ascending index. (If some service s received
+no transfers or simply does not exist then R(s) would be validly defined as the empty sequence.) Formally:
+
+(160)
+
+```math
+R: \left\{\begin{matrix}
+ \mathbb{N}_S \to ⟦\mathbb{T}⟧\\
+d \to [ t ∣ s <− S, t <− A(s)t, t_d = d ]
+\end{matrix}\right.
+```
+
+The posterior state δ′ may then be defined as the intermediate state with all the deferred effects of the transfersapplied:
+
+(161)
+
+```math
+δ′= {s \to Ψ_T (δ^‡, a, R(a)) ∣ (s \to a) ∈ δ^‡}
+```
+
+Note that $Ψ_T$ is defined in appendix B.5 such that it results in $δ^‡$[d], i.e. no difference to the account’s intermediate state, if R(d) = [], i.e. said account received no
+transfers.
+
+<h3 align="center">13. Work Packages and Work Reports</h3>
+
+** 13.1. Honest Behavior. ** We have so far specified how to recognize blocks for a correctly transitioning Jam blockchain. Through defining the state transition function and a state Merklization function, we have also defined how to recognize a valid header. While it is not especially difficult to understand how a new block may be authored for any node which controls a key which would allow the creation of the two signatures in the header, nor indeed to fill in the other header fields, readers will note that the contents of the extrinsic remain unclear
+
+We define not only correct behavior through the creation of correct blocks but also honest behavior, which involves the node taking part in several off-chain activities.
+This does have analogous aspects within YP Ethereum, though it is not mentioned so explicitly in said document: the creation of blocks along with the gossiping and inclusion of transactions within those blocks would all count as off-chain activities for which honest behavior is helpful. In Jam’s case, honest behavior is well-defined and expected of at least 2/3 of validators.
+
+Beyond the production of blocks, incentivized honest behavior includes:
+
+- the guaranteeing and reporting of work-packages, along with chunking and distribution of both the chunks and the work-package itself, discussed in section 13.3;
+- assuring the availability of work-packages after being in receipt of their data;
+- making and submitting judgements on the correctness of work-reports;
+- determining which work-reports to audit, fetching and auditing them, and creating and distributing an adverse judgement to other nodes based on the outcome of the audit;
+- submitting the correct amount of work seen being done by other validators, discussed in section 16.
+
+We begin with the first of these, the guaranteeing of work-packages.
+
+**13.2. Packages and Items.** We begin by defining a work-package, of set P, and its constituent work items, of set I. A work-package includes a simple blob acting as an authorization token j, a service identifier for where authorization code is hosted h, an authorization code hash c and a parameterization blob p, a context x and a sequence
+of work items limited in size i:
+(162)
+
+$$ P ∈(j ∈ Y, h ∈ N_S, c ∈ H,p ∈ Y,x ∈ X,i ∈ I_{1l}) $$
+
+We limit the encoded size of work-packages to a little over 6mb in order to allow for 1mb/s/core data throughput:
+
+(163)
+
+$$∣\varepsilon (P)∣ ≤ W_P$$
+
+(164)
+
+$$ W_P = 6 ⋅ 2 ^ {20} + 2 ^{16}$$
+
+A work item includes the identifier of the service to which it relates s, the code hash of the service at the time of reporting, and whose preimage must be available from
+the perspective of the lookup anchor block c, a payload blob y, and a gas limit g:
+
+(165)
+
+$$ I ∈(s ∈ N_S, c ∈ H,y ∈ Y, g ∈ N_G) $$
+
+We define the work-package’s implied authorizer as $p_a$, the hash of the concatenation of the authorization code and the parameterization. We define the authorization code as pand require that it be available at the time of the lookup anchor block from the historical lookup of service h. Formally:
+
+(166)
+```math
+∀p ∈ P ∶ \left\{\begin{matrix}
+p_a ≡ \mathcal{H}(p_c \frown p_p) \\
+p_c ≡ H(δ[p_h], (p_x)_t,p_c) \\
+p_c ∈ Y
+\end{matrix}\right.
+```
+
+(Λ is the historical lookup function defined in equation 90.)
+
+We now come to the work result computation function Ξ. This forms the basis for all utilization of cores on Jam. It operates on some work-package p for some nominated core c and results in either an error ∇ or the work result, which is deterministic and, thanks to the historical lookup functionality, can be evaluated by any node which has a recently finalized chain for up to 24 epochs after the lookup-anchor block.formally:
+
+(167)
+```math
+\Xi : \left\{\begin{matrix}
+(P, N_C ) \to W \\
+(p, c) \to \left\{\begin{matrix}
+∇  & if~ o \notin Y\\
+(a: p_a, o, x: p_x, s, r)  & otherwise
+\end{matrix}\right.
+\end{matrix}\right.
+```
+
+where:
+
+```math
+\begin{matrix}
+ o = Ψ_I (p, c)\\
+s =(h, l:∣\varepsilon (p)∣, u: \mathcal{M}_2([\mathcal{H}(x) ∣ x <− C(P_{2^{11}} (\varepsilon (p)))])) \\
+ r = [Ψ_R(c, g, s, h, y,p_x,p_a, o) ∣(s, c,y, g) <− p_i]\\
+h = \mathcal{H}(p)
+
+\end{matrix}
+```
+
+And P is the zero-padding function to take an octet array to some multiple of n in length:
+
+(168)
+
+```math
+P_n∈N_1 \left\{\begin{matrix}
+Y \to  Y_{k⋅n} \\
+x \to x \frown [0, 0, ...]_{((∣x∣+n−1) mod n)+1...n}
+\end{matrix}\right.
+```
+
+We define the binary Merklization function $M_2$ in equation 280. Note that C represents the erasure-coding function for the chunks and is defined in appendix H.
+
+Validators are incentivized to distribute each workpackage chunk to each other validator, since they are not paid for guaranteeing unless a work-report is considered to
+be available. Given our work-package p, we should therefore send chunk $ C( \varepsilon (p))v $ to each validator whose keys are$  κ_v$. In the case of a coming epoch change, they may also maximize expected reward by distributing to the new validator set (and thus also send the chunk to $ (γ_k)_v)$ .
+
+We will see this function utilized in the next sections, for guaranteeing, auditing and judging.
+
+**13.3. Guaranteeing. ** Guaranteeing work-packages involves the creation and distribution of a corresponding work-report which requires certain conditions to be met. Along with the report, a signature demonstrating the validator’s commitment to its correctness is needed. With two guarantor signatures, the work-report may be distributed to the forthcoming Jam chain block author in order to be used in the EG, which leads to a reward for the guarantors.
+
+We presume that in a public system, validators will be punished severely if they malfunction and commit to a report which does not faithfully represent the result of Ξ
+applied on a work-package. Overall, the process is:
+
+1. Evaluation of the work-package’s authorization, and cross-referencing against the authorization pool in the most recent Jam chain state.
+2. Chunking of the work-package report according to the erasure codec.
+3. Creation and publication of a work-package report.
+4. Distributing the chunks and package as needed to other nodes.
+
+
+For any work-package p we are in receipt of, we may determine the work result, if any, it corresponds to for the core c that we are assigned to. When Jam chain state is needed, we always utilize the chain state of the most recent block.
+
+For any guarantor of index v assigned to core c and a work-package p, we define the work result r simply as:
+
+(169)
+
+```math
+r = Ξ(p, c)
+```
+
+Such guarantors may safely create and distribute the payload (s, v). The component s may be created according to equation 132; specifically it is a signature using the validator’s registered Ed25519 key on a payload l:
+
+(170)
+```math
+l = \mathcal{H}(c, r)
+```
+
+To maximize profit, the guarantor should require the work result meets all expectations which are in place during the guarantee extrinsic described in section 11.4. This
+includes contextual validity, inclusion of the authorization in the authorization pool, and ensuring total gas is at most $G_A$. No doing so does not result in punishment, but will prevent the block author from including the package and so reduces rewards.
+
+Advanced nodes may maximize the likelihood that their reports will be includable on-chain by attempting to predict the state of the chain at the time that the report will get to the block author. Naive nodes may simply use the current chain head when verifying the work-report. To minimize work done, nodes should make all such evaluations prior to evaluating the ΨR function to calculate the report’s work results.
+
+Once evaluated as a reasonable work-package to guarantee, guarantors should maximize the chance that their work is not wasted by attempting to form consensus over the core. To achieve this they should send the workpackage to any other guarantors on the same core which they do not believe already know of it.
+
+In order to minimize the work for block authors and thus maximize expected profits, guarantors should attempt to construct their core’s next guarantee extrinsic from the work-report, core index and set of attestations including their own and as many others as possible.
+
+In order to minimize the chance of any block authors disregarding the guarantor for anti-spam measures, guarantors should sign an average of no more than two workreports per timeslot.
+
+**13.4. Availability Assurance.** Validators should issue signed statements, called assurances, when they are in possession of their corresponding erasure-coding chunk of the work-package for any corresponding work-reports which are currently pending availability.
+
+The correct erasure-coding chunk can be determined through a proof using the commitment to the workpackage chunks Merkle root specified in the work-report.
+
+**13.5. Auditing and Judging.** The auditing and judging system is theoretically equivalent to that in Elves, introduced by Stewart 2018. For a full security analysis of the mechanism, see this work. The main differences are in terminology, whereby the terms backing and approval there refer to our guaranteeing and auditing, respectively.
+
+*13.5.1. Overview.* The auditing process involves each node requiring themselves to fetch, evaluate and issue judgement on a random but deterministic set of workreports from each Jam chain block in which the workreport becomes available (i.e. from R). Prior to any evaluation, a node declares and proves its requirement. At specific common junctures in time thereafter the set of work-reports which a node requires itself to evaluate from each block’s R may be enlarged if any declared intentions are not matched by a positive judgement in a reasonable time or in the event of a negative judgement being seen. These enlargement events are called tranches.
+
+If all declared intentions for a work-report are matched by a positive judgement at any given juncture, then the work-report is considered audited. Once all of any given block’s newly available work-reports are audited, then we consider the block to be audited. One prerequisite of a node finalizing a block is for it to view the block as audited. Note that while there will be eventual consensus on whether a block is audited, there may not be consensus at the time that the block gets finalized. This does not affect the crypto-economic guarantees of this system.
+
+In regular operation, no negative judgements will ultimately be found for a work-report, and there will be no direct consequences of the auditing stage. In the unlikely event that a negative judgement is found, then one of several things happens; if there are still more than 2/3V positive judgements, then validators issuing negative judgements may receive a punishment for time-wasting. If there are greater than 1/3V negative judgements, then the block which includes the work-report is ban-listed. It and all its descendants are disregarded and may not be built on. In all cases, once there are enough votes, a judgement extrinsic can be constructed by a block author and placed on-chain to denote the outcome. See section 10 for details on this.
+
+All announcements and judgements are published to all validators along with metadata describing the signed material. On receipt of sure data, validators are expected to update their perspective accordingly (later defined as J and A).
+
+13.5.2. Auditing Specifics. Each validator shall perform auditing duties on each valid block received. Since we are entering off-chain logic, and we cannot assume consensus, we henceforth now consider ourselves a specific validator of index v and assume ourselves focused on some block B with other terms corresponding, so σ ′ is said block’s posterior state, H is its header &c. Practically, all considerations must be replicated for all blocks and multiple blocks’ considerations may be underway simultaneously
+
+We define the sequence of work-reports which we may be required to audit as Q, a sequence of length equal to the number of cores, which functions as a mapping of core index to a work-report pending which has just become available, or ∅ if no report became available on the core. Formally:
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
