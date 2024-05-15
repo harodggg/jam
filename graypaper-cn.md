@@ -2465,9 +2465,7 @@ Our performance models assume a rough split of cpu time as follows:
 Estimates for network bandwidth requirements are as follows:
 
 |                   |    Upload Mb/s | Downloads Mb/s |
-
 | :---------------  | :------------: |  :----------:  |
-
 | Guaranteeing      | 30             | 40             |
 | Assuring          | 12             | 8              |
 | Auditing          | 200            | 200            |
@@ -2479,18 +2477,163 @@ Thus, a connection able to sustain 500mb/s should leave a sufficient margin of e
 
 Under these conditions, we would expect an overall network-provided data availability capacity of 2PB, with each node dedicating at most 6tb to availability storage.
 
-|                        GB                                        |
-| :------------- | :-----------------: | :-----------------------: |
-| Auditing       | 20                  | 2 × 10 pvm instances      |
-| Block execution |  2 | 1 pvm instance |
-| State cache  | 40 |  |
-| Misc | 2 | | 
-| Total | 64 | | 
+|                 |      GB             |                           |
+| :-------------- | :-----------------: | :-----------------------: |
+| Auditing        | 20                  | 2 × 10 pvm instances      |
+| Block execution |  2                  | 1 pvm instance            |
+| State cache     | 40                  |                           |
+| Misc            | 2                   |                           | 
+| Total           | 64                  |                           | 
 
 
+As a rough guide, each parachain has an average footprint of around 2mb in the Polkadot Relay chain; a 40gb state would allow 20,000 parachains’ information to be retained in state.
+
+What might be called the “virtual hardware” of a Jam core is essentially a regular cpu core executing at somewhere between 25% and 50% of regular speed for the whole six-second portion and which may draw and provide 2.5mb/s average in general-purpose i/o and utilize up to 2gb in ram. The i/o includes any trustless reads from the Jam chain state, albeit in the recent past. This virtual hardware also provides unlimited reads from a semi-static preimage-lookup database.
+
+Each work-package may occupy this hardware and execute arbitrary code on it in six-second segments to create some result of at most 90kb. This work result is then entitled to 10ms on the same machine, this time with no “external” i/o beyond said result, but instead with full and immediate access to the Jam chain state and may alter the service(s) to which the results belong.
+
+**17.2. Illustrating Performance.** In terms of pure processing power, the Jam machine architecture can deliver extremely high levels of homogeneous trustless computation. However, the core model of Jam is a classic parallelized compute architecture, and for solutions to be able to utilize the architecture well they must be designed with it in mind to some extent. Accordingly, until such usecases appear on Jam with similar semantics to existing ones, it is very difficult to make direct comparisons to existing systems. That said, if we indulge ourselves with some assumptions then we can make some crude comparisons.
+
+*17.2.1. Comparison to Polkadot.* Pre-asynchronous backing, Polkadot validates around 50 parachains, each one utilizing approximately 250ms of native computation (i.e. half a second of Wasm execution time at around a 50% overhead) and 5mb of i/o for every twelve seconds of real time which passes. This corresponds to an aggregate compute performance of around parity with a native cpu core and a total 24-hour distributed availability of around 20mb/s. Accumulation is beyond Polkadot’s capabilities and so not comparable
+
+Post asynchronous-backing and estimating that Polkadot is at present capable of validating at most 80 parachains each doing one second of native computation in every six, then the aggregate performance is increased to around 13x native cpu and the distributed availability increased to around 67mb/s.
+
+For comparison, in our basic models, Jam should be capable of attaining around 85x the computation load of a single native cpu core and a distributed availability of 852mb/s.A more sophisticated model would be to use the Jam cores for balance updates as well as transaction verification. We would have to assume that state and the transactions which operate on them can be partitioned between work-packages with some degree of efficiency, and that the 15mb of the work-package would be split between transaction data and state witness data. Our basic models predict that a 4bn 32-bit account system paginated into 2 10 accounts/page and 128 bytes per transaction could, assuming only around 1% of oraclized accounts were useful, average upwards of 1.7mtps depending on partitioning and usage characteristics. Partitioning could be done with a fixed fragmentation (essentially sharding state), a rotating partition pattern or a dynamic partitioning (which would require specialized sequencing).
+
+Interestingly, we expect neither model to be bottlenecked in computation, meaning that transactions could be substantially more sophisticated, perhaps with more flexible cryptography or smart contract functionality, without a significant impact on performance.
+
+*17.2.3. Computation Throughput.* The tps metric does not lend itself well to measuring distributed systems’ computational performance, so we now turn to another slightly more compute-focussed benchmark: the evm. The basic YP Ethereum network, now approaching a decade old, is probably the best known example of general purpose decentralized computation and makes for a reasonable yardstick. It is able to sustain a computation and i/o rate of 1.25M gas/sec, with a peak throughput of twice that. The evm gas metric was designed to be a time-proportional metric for predicting and constraining program execution. Attempting to determine a concrete comparison to pvm throughput is non-trivial and necessarily opinionated owing to the disparity between the two platforms including word size, endianness and stack/register architecture and memory model. However, we will attempt to determine a reasonable range of values.
 
 
+*17.2.2. Simple Transfers.* We might also attempt to model a simple transactions-per-second amount, with each transaction requiring a signature verification and the modification of two account balances. Once again, until there are clear designs for precisely how this would work we must make some assumptions. Our most naive model would be to use the Jam cores (i.e. refinement) simply for transaction verification and account lookups. The Jam chain would then hold and alter the balances in its state. This is unlikely to give great performance since almost all the needed i/o would be synchronous, but it can serve as a basis.
 
+A 15mb work-package can hold around 125k transactions at 128 bytes per transaction. However, a 90kb workresult could only encode around 11k account updates when each update is given as a pair of a 4 byte account index and 4 byte balance, resulting in a limit of 5.5k transactions per package, or 312k tps in total. It is possible that the eight bytes could typically be compressed by a byte or two, increasing maximum throughput a little. Our expectations are that state updates, with highly parallelized Merklization, can be done at between 500k and 1 million reads/write per second, implying around 250k-350k tps, depending on which turns out to be the bottleneck.
+
+Evm gas does not directly translate into native execution as it also combines state reads and writes as well as transaction input data, implying it is able to process some combination of up to 595 storage reads, 57 storage writes and 1.25M gas as well as 78kb input data in eachsecond, trading one against the other.[^12] We cannot find any analysis of the typical breakdown between storage i/o and pure computation, so to make a very conservative estimate, we assume it does all four. In reality, we would expect it to be able to do on average 1/4 of each.
+
+Our experiments[^13] show that on modern, high-end consumer hardware with a modern evm implementation, we can expect somewhere between 100 and 500 gas/µs in throughput on pure-compute workloads (we specifically utilized Odd-Product, Triangle-Number and several implementations of the Fibonacci calculation). To make a conservative comparison to pvm, we propose transcompilation of the evm code into pvm code and then reexecution of it under the Polkavm prototype.[^14]
+
+To help estimate a reasonable lower-bound of evm gas/µs, e.g. for workloads which are more memory and i/o intensive, we look toward real-world permissionless deployments of the evm and see that the Moonbeam network, after correcting for the slowdown of executing within the recompiled WebAssembly platform on the somewhat conservative Polkadot hardware platform, implies a throughput of around 100 gas/µs. We therefore assert that in terms of computation, 1µs evm gas approximates to around 100-500 gas on modern high-end consumer hardware.[^15]
+
+Benchmarking and regression tests show that the prototype pvm engine has a fixed preprocessing overhead of around 5ns/byte of program code and, for arithmeticheavy tasks at least, a marginal factor of 1.6-2% compared to evm execution, implying an asymptotic speedup of around 50-60x. For machine code 1mb in size expected to take of the order of a second to compute, the compilation cost becomes only 0.5% of the overall time. 16 For code not inherently suited to the 256-bit evm isa, we would expect substantially improved relative execution times on pvm, though more work must be done in order to gain confidence that these speed-ups are broadly applicable.
+
+If we allow for preprocessing to take up to the same component within execution as the marginal cost (owing to, for example, an extremely large but short-running program) and for the pvm metering to imply a safety overhead of 2x to execution speeds, then we can expect a Jam core to be able to process the equivalent of around 1,500 evm gas/µs. Owing to the crudeness of our analysis we might reasonably predict it to be somewhere within a factor of three either way—i.e. 500-5,000 evm gas/µs.
+
+Jam cores are each capable of 2.5mb/s bandwidth, which must include any state i/o and data which must be newly introduced (e.g. transactions). While writes come at comparatively little cost to the core, only requiring hashing to determine an eventual updated Merkle root, reads must be witnessed, with each one costing around 640 bytes of witness conservatively assuming a one-million entry binary Merkle trie. This would result in a maximum of a little under 4k reads/second/core, with the exact amount dependent upon how much of the bandwidth is used for newly introduced input data.
+
+Aggregating everything across Jam, excepting accumulation which could add further throughput, numbers can be multiplied by 341 (with the caveat that each one’s computation cannot interfere with any of the others’ except through state oraclization and accumulation). Unlike for roll-up chain designs such as Polkadot and Ethereum, there is no need to have persistently fragmented state. Smart-contract state may be held in a coherent format on the Jam chain so long as any updates are made through the 15kb/core/sec work results, which would need to contain only the hashes of the altered contracts’ state roots.
+
+Under our modelling assumptions, we can therefore summarize:
+
+|                          |  Eth. L1 | Jam Core | Jam      |
+| :----------------------: |  :-----: | :------: | :-----:  |
+| Compute (evm gas/µs)     | $1.25^†$ | 500-5,000|0.15-1.5m |
+| $State writes (s_{−1})$  | $57^†$   | n/a      | n/a      |
+| $ State reads (s_{−1}) $ | $595^†$  | 4k^‡     | 1.4m^‡   |
+| $Input data (s_{−1}) $   | $78kb^†$ |$2.5mb^‡$ | $852mb^‡$|
+
+What we can see is that Jam’s overall predicted performance profile implies it could be comparable to many thousands of that of the basic Ethereum L1 chain. The large factor here is essentially due to three things: spacial parallelism, as Jam can host several hundred cores under its security apparatus; temporal parallelism, as Jam targets continuous execution for its cores and pipelines much of the computation between blocks to ensure a constant, optimal workload; and platform optimization by using a vm and gas model which closely fits modern hardware architectures.
+
+It must however be understood that this is a provisional and crude estimation only. It is included for only the purpose of expressing Jam’s performance in tangible terms and is not intended as a means of comparing to a “full-blown” Ethereum/L2-ecosystem combination. Specifically, it does not take into account:
+
+* that these numbers are based on real performance of Ethereum and performance modelling of Jam (though our models are based on real-world performance of the components);
+* any L2 scaling which may be possible with either Jam or Ethereum;
+* ● the state partitioning which uses of Jam would imply;
+* the as-yet unfixed gas model for the pvm;
+* that pvm/evm comparisons are necessarily imprecise;
+* (†) all figures for Ethereum L1 are drawn from the same resource: on average each figure will be only 1/4 of this maximum.
+* (‡) the state reads and input data figures for Jam are drawn from the same resource: on average each figure will be only 1/2 of this maximum.
+
+We leave it as further work for an empirical analysis of performance and an analysis and comparison between Jam and the aggregate of a hypothetical Ethereum ecosystem which included some maximal amount of L2 deployments together with full Dank-sharding and any other additional consensus elements which they would require. This, however, is out of scope for the present work.
+
+<h3 align="center"> 18. Conclusion </h3>
+We have introduced a novel computation model which is able to make use of pre-existing crypto-economic mechanisms in order to deliver major improvements in scalability without causing persistent state-fragmentation and thus sacrificing overall cohesion. We call this overall pattern collect-refine-join-accumulate. Furthermore, we have formally defined the on-chain portion of this logic, essentially the join-accumulate portion. We call this protocol the Jam chain 
+
+We argue that the model of Jam provides a novel “sweet spot”, allowing for massive amounts of computation to be done in secure, resilient consensus compared to fullysynchronous models, and yet still have strict guarantees about both timing and integration of the computation into some singleton state machine unlike persistently fragmented models.
+
+**18.1. Further Work. ** While we are able to estimate theoretical computation possible given some basic assumptions and even make broad comparisons to existing systems, practical numbers are invaluable. We believe the model warrants further empirical research in order to better understand how these theoretical limits translate into real-world performance. We feel a proper cost analysis and comparison to pre-existing protocols would also be an excellent topic for further work.
+
+We can be reasonably confident that the design of Jam allows it to host a service under which Polkadot parachains could be validated, however further prototyping work is needed to understand the possible throughput which a pvm-powered metering system could support. We leave such a report as further work. Likewise, we have also intentionally omitted details of higher-level protocol elements including cryptocurrency, coretime sales, staking and regular smart-contract functionality.
+
+A number of potential alterations to the protocol described here are being considered in order to make practical utilization of the protocol easier. These include:
+* Synchronous calls between services in accumulate
+* Restrictions on the transfer function in order to allow for substantial parallelism over accumulation.
+* The possibility of reserving substantial additional computation capacity during accumulate under certain conditions.
+* Introducing Merklization into the Work Package format in order to obviate the need to have the whole package downloaded in order to evaluate its authorization.
+
+
+The networking protocol is also left intentionally undefined at this stage and its description must be done in a follow-up proposal.
+
+Validator performance is not presently tracked onchain. We do expect this to be tracked on-chain in the final revision of the Jam protocol, but its specific format is not yet certain and it is therefore omitted at present.
+
+<h3 align="center">19. Acknowledgements</h3>
+
+Much of this present work is based in large part on the work of others. The Web3 Foundation research team and in particular Alistair Stewart and Jeff Burdges are responsible for Elves, the security apparatus of Polkadot which enables the possibility of in-core computation for Jam. The same team is responsible for Sassafras, Grandpa and Beefy.
+
+Safrole is a mild simplification of Sassafras and was made under the careful review of Davide Gallosi and Alistair Stewart.
+
+The original CoreJam rfc was refined under the review of Bastian Köcher and Robert Habermeier and most of the key elements of that proposal have made their way into the present work.
+
+The pvm is a formalization of a partially simplified PolkaVM software prototype, developed by Jan Bujak.Cyrill Leutwiler contributed to the empirical analysis of the pvm reported in the present work.
+
+The PolkaJam team and in particular Arkadiy Paronyan, Emeric Chevalier and Dave Emmet have been instrumental in the design of the lower-level aspects of the Jam protocol, especially concerning Merklization and i/o.
+
+And, of course, thanks to the awesome Lemon Jelly, a.k.a. Fred Deakin and Nick Franglen, for three of the most beautiful albums ever produced, the cover art of the first of which was inspiration for this paper’s background art.
+
+
+<img width="705" alt="image" src="https://github.com/harodggg/jam/assets/31732456/1f5c3834-0c03-4adf-a2b4-fb7e4b759f60">
+
+<img width="720" alt="image" src="https://github.com/harodggg/jam/assets/31732456/eed7afa2-caa8-4fea-aaae-1204e9d6d031">
+
+
+<img width="564" alt="image" src="https://github.com/harodggg/jam/assets/31732456/e0fdb668-0b73-41e3-8129-2fc8d668e01a">
+
+
+<img width="545" alt="image" src="https://github.com/harodggg/jam/assets/31732456/60d210b5-d85c-469f-b071-60cd231485ef">
+
+<img width="606" alt="image" src="https://github.com/harodggg/jam/assets/31732456/c7c761ec-5cf8-4f94-b279-5fed38f80b70">
+
+<img width="588" alt="image" src="https://github.com/harodggg/jam/assets/31732456/cf391980-c08e-4b1b-801a-480a4e33a828">
+
+<img width="624" alt="image" src="https://github.com/harodggg/jam/assets/31732456/f0a865a6-70a5-4a8c-ad7d-fc8c4b9d2aed">
+
+<img width="590" alt="image" src="https://github.com/harodggg/jam/assets/31732456/95a69df6-d44f-46af-910d-e44b7432ca53">
+
+<img width="585" alt="image" src="https://github.com/harodggg/jam/assets/31732456/f05db8ce-6ba7-4e4b-b410-422bf7f5230a">
+
+<img width="559" alt="image" src="https://github.com/harodggg/jam/assets/31732456/7052ca7d-f843-4630-8d8c-76b22e382ffc">
+
+<img width="575" alt="image" src="https://github.com/harodggg/jam/assets/31732456/cbd8ba1c-a0a6-4e35-a59d-c0f078607f3f">
+
+<img width="579" alt="image" src="https://github.com/harodggg/jam/assets/31732456/e83866fe-5c4a-44a8-a19a-3b28d8edd376">
+
+<img width="582" alt="image" src="https://github.com/harodggg/jam/assets/31732456/e9aa10fc-9664-4c33-b474-22e76605dcff">
+
+<img width="574" alt="image" src="https://github.com/harodggg/jam/assets/31732456/ce4aa15e-fde9-4192-8b85-e71af5d1aa5c">
+
+<img width="570" alt="image" src="https://github.com/harodggg/jam/assets/31732456/2551054c-b867-4d5b-8f3a-e9f9a2d9cea7">
+
+<img width="580" alt="image" src="https://github.com/harodggg/jam/assets/31732456/31d9c402-2253-4e66-9e70-019c06031f3a">
+
+<img width="539" alt="image" src="https://github.com/harodggg/jam/assets/31732456/ab79a9a6-713b-44f6-8022-3beec820c1ec">
+
+<img width="557" alt="image" src="https://github.com/harodggg/jam/assets/31732456/458f7519-ba5a-4c84-8b33-a63241d27f83">
+
+<img width="547" alt="image" src="https://github.com/harodggg/jam/assets/31732456/f341fb9d-392e-46ff-b175-9728c128b2c7">
+
+<img width="539" alt="image" src="https://github.com/harodggg/jam/assets/31732456/04ac0f14-5120-4ca0-88bb-793ae1b8eb10">
+
+<img width="582" alt="image" src="https://github.com/harodggg/jam/assets/31732456/3465d4d2-67a6-4f1f-a4b6-e6c8fc16b143">
+
+<img width="556" alt="image" src="https://github.com/harodggg/jam/assets/31732456/0ee87b42-3bd4-4faf-9a99-6cd9d47f0ad8">
+
+<img width="588" alt="image" src="https://github.com/harodggg/jam/assets/31732456/9de703d7-2737-46eb-9137-d233075721c2">
+
+<img width="585" alt="image" src="https://github.com/harodggg/jam/assets/31732456/e557b310-3196-4e40-9e9b-e66a49669616">
+
+<img width="602" alt="image" src="https://github.com/harodggg/jam/assets/31732456/1822d305-91b5-4c8c-abe0-90e684aa8c3d">
+
+<img width="541" alt="image" src="https://github.com/harodggg/jam/assets/31732456/f1a073db-e3dd-4f4e-8441-38e25244e1a5">
 
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
@@ -2503,3 +2646,7 @@ Under these conditions, we would expect an overall network-provided data availab
 [^9]: This is three fewer than risc-v’s 16, however the amount that program code output by compilers uses is 13 since two are reserved for operating system use and the third is fixed as zero
 [^10]: Technically there is some small assumption of state, namely that some modestly recent instance of each service’s preimages. The specifics of this are discussed in section 13.2.
 [^11]: This is a “soft” implication since there is no consequence on-chain if dishonestly reported. For more information on this implication see section 13.4.
+[^12]: The latest “proto-danksharding” changes allow it to accept 87.3kb/s in committed-to data though this is not directly available within state, so we exclude it from this illustration, though including it with the input data would change the results little
+[^13]: This is detailed at https://hackmd.io/@XXX9CM1uSSCWVNFRYaSB5g/HJarTUhJA and intended to be updated as we get more information
+[^14]: It is conservative since we don’t take into account that the source code was originally compiled into evm code and thus the pvm machine code will replicate architectural artifacts and thus is very likely to be pessimistic. As an example, all arithmetic operations in evm are 256-bit and 32-bit native pvm is being forced to honor this even if the source code only actually required 32-bit values.
+[^15]: We speculate that the substantial range could possibly be caused in part by the major architectural differences between the evm is a typical modern hardware.
