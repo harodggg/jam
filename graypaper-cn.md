@@ -2433,6 +2433,7 @@ H^A\notin A(H^♮)
 Of these acceptable blocks, that which contains the most ancestor blocks whose author used a seal-key ticket, rather than a fallback key should be selected as the best
 head, and thus the chain on which the participant should make Grandpa votes
 
+Formally, we aim to select $B^♭$ to maximize the value m where:
 (195)
 ```math
 m = \sum\limits_{H^A∈A^♭}T^A
@@ -2452,8 +2453,45 @@ We assume node hardware is a modern 16 core cpu with 64gb ram, 1tb secondary sto
 
 Our performance models assume a rough split of cpu time as follows:
 
+|                   | *Proportion* |
+|  :------------    | -----------  |
+| Audits            |  10/16       |
+| Merklization      |  1/16        |
+| Block execution   |  2/16        |
+| Grandpa and Beefy |  1/16        |
+| Erasure coding    |  1/16        |
+| Networking & misc |  1/16        |
 
-Formally, we aim to select $B^♭$ to maximize the value m where:
+Estimates for network bandwidth requirements are as follows:
+
+|                   |    Upload Mb/s | Downloads Mb/s |
+
+| :---------------  | :------------: |  :----------:  |
+
+| Guaranteeing      | 30             | 40             |
+| Assuring          | 12             | 8              |
+| Auditing          | 200            | 200            |
+| Block publication | 42             | 42             |
+| Grandpa and Beefy | 4              | 4              |
+| Total             | 288            | 294            |
+
+Thus, a connection able to sustain 500mb/s should leave a sufficient margin of error and headroom to serve other validators as well as some public connections, though the burstiness of block publication would imply validators are best to ensure that peak bandwidth is higher.
+
+Under these conditions, we would expect an overall network-provided data availability capacity of 2PB, with each node dedicating at most 6tb to availability storage.
+
+|                        GB                                        |
+| :------------- | :-----------------: | :-----------------------: |
+| Auditing       | 20                  | 2 × 10 pvm instances      |
+| Block execution |  2 | 1 pvm instance |
+| State cache  | 40 |  |
+| Misc | 2 | | 
+| Total | 64 | | 
+
+
+
+
+
+
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
