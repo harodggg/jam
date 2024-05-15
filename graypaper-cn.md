@@ -2226,10 +2226,234 @@ In regular operation, no negative judgements will ultimately be found for a work
 
 All announcements and judgements are published to all validators along with metadata describing the signed material. On receipt of sure data, validators are expected to update their perspective accordingly (later defined as J and A).
 
-13.5.2. Auditing Specifics. Each validator shall perform auditing duties on each valid block received. Since we are entering off-chain logic, and we cannot assume consensus, we henceforth now consider ourselves a specific validator of index v and assume ourselves focused on some block B with other terms corresponding, so σ ′ is said block’s posterior state, H is its header &c. Practically, all considerations must be replicated for all blocks and multiple blocks’ considerations may be underway simultaneously
+*13.5.2. Auditing Specifics.* Each validator shall perform auditing duties on each valid block received. Since we are entering off-chain logic, and we cannot assume consensus, we henceforth now consider ourselves a specific validator of index v and assume ourselves focused on some block B with other terms corresponding, so σ ′ is said block’s posterior state, H is its header &c. Practically, all considerations must be replicated for all blocks and multiple blocks’ considerations may be underway simultaneously
 
 We define the sequence of work-reports which we may be required to audit as Q, a sequence of length equal to the number of cores, which functions as a mapping of core index to a work-report pending which has just become available, or ∅ if no report became available on the core. Formally:
 
+(171)
+
+```math
+Q ∈ ⟦W?⟧_C,
+```
+
+(172)
+
+```math
+Q ≡ \begin{bmatrix}
+\begin{matrix}
+ [ρ[c]_w  & if ~ ρ[c]w ∈ R\\
+ \varnothing  & otherwise
+\end{matrix} \mid c <− N_C
+\end{bmatrix}
+```
+
+We define our initial audit tranche in terms of a verifiable random quantity s0 created specifically for it:
+
+(173)
+```math
+s_0 ∈ F^{[]}_{κ[v]b}⟨X_U \frown \mathcal{Y}(H_v)⟩
+```
+
+(174)
+$$ X_U = $jam_audit$$
+
+We may then define a0 as the non-empty items to audit through a verifiably random selection of ten cores:
+
+(175)
+
+$$ a0 = {(c, w)∣(c, w)∈ p_{⋅⋅⋅+10}, w ≠ ∅} $$
+
+(176)
+
+$$ where p = \mathcal{F}([(c, Q_c)∣ c ∈ N_C], r) $$
+
+(177)
+
+$$and r = \mathcal{Y}(s_0) $$
+
+Every A = 8 seconds following a new time slot, a new tranche begins, and we may determine that additional cores warrant an audit from us. Such items are defined as an where n is the current tranche. Formally:
+
+(178)
+
+```math
+let n = ⌊\frac{T − P ⋅ τ^′}{A}⌋
+```
+
+New tranches may contain items from Q stemming from one of two reasons: either a negative judgement has been received; or the number of judgements from the previous tranche is less than the number of announcements from said tranche. In the first case, the validator is always required to issue a judgement on the work-report. In the second case, a new special-purpose vrf must be constructed to determine if an audit and judgement is warranted from us.
+
+In all cases, we publish a signed statement of which of the cores we believe we are required to audit (an announcement) together with evidence of the vrf signature to select them and the other validators’ announcements from the previous tranche unmatched with a judgement in order that all other validators are capable of verifying the announcement. Publication of an announcement should be taken as a contract to complete the audit regardless of any future information.
+
+Formally, for each tranche n we ensure the announcement statement is published and distributed to all other validators along with our validator index v, evidence sn and all signed data. Validator’s announcement statements must be in the set:
+(179)
+
+```math
+E_{κ[v]e}⟨X_I \pm n ⌢ E([\varepsilon_2(c) ⌢ H(w) ∣(c, w)∈ a_0])⟩
+```
+
+(180)
+
+```math
+X_I = $jam_announce
+```
+
+We define An as our perception of which validator is required to audit each of the work-reports (identified by their associated core) at tranche n. This comes from each other validators’ announcements (defined above). It cannot be correctly evaluated until n is current. We have absolute knowledge about our own audit requirements.
+
+(181)
+```math
+A_n ∶ W → ℘(N_V)
+```
+
+(182)
+```math
+∀(c, w) ∈ a_0 ∶ v ∈ q_0(w)
+```
+
+We further define $J_⊺$ and $J_\perp$ to be the validator indices who we know to have made respectively, positive and negative, judgements mapped from each work-report’s core. We don’t care from which tranche a judgement is made.
+
+(183)
+```math
+J\{{\bot ,\top}\} ∶ W → ℘(N_V)
+
+```
+
+We are able to define an for tranches beyond the first on the basis of the number of validators who we know are required to conduct an audit yet from whom we have not yet seen a judgement. It is possible that the late arrival of information alters an and nodes should reevaluate and act accordingly should this happen.
+
+We can thus define an beyond the initial tranche through a new vrf which acts upon the set of no-show validators.
+
+∀n > 0 ∶
+
+(184)
+
+$$s_n(w) ∈ F^{[]}_{κ[v]b}⟨X_U \frown Y(Hv) \frown H(w) \pm  n⟩$$
+
+(185)
+
+$$a_n ≡ {w ∈ Q ∣ F_{256V} \mathcal{Y}(s_n(w))_0 < ∣A_{n−1}(w) ∖ J_⊺(w)∣}$$
+
+We define our bias factor F = 2, which is the expected number of validators which will be required to issue a judgement for a work-report given a single no-show in the tranche before. Modeling by Stewart 2018 shows that this is optimal.
+
+Later audits must be announced in a similar fashion to the first. If audit requirements lesson on the receipt of new information (i.e. a positive judgement being returned for a previous no-show), then any audits already announced are completed and judgements published. If audit requirements raise on the receipt of new information (i.e. an additional announcement being found without an accompanying judgement), then we announce the additional audit(s) we will undertake.
+
+As n increases with the passage of time an becomes known and defines our auditing responsibilities. We must attempt to reconstruct all work-packages corresponding to each work-report we must audit. This may be done through requesting erasure-coded chunks from one-third of the validators. It may also be short-cutted through asking a third-party (e.g. an original guarantor) for a reverse-hash lookup using the work-package hash in the work-report’s package specification.
+
+Thus, for any such work-report w we are assured we will be able to fetch some candidate work-package encoding F(w) which comes either from reconstructing erasurecoded chunks verified through the erasure coding’s Merkle root, or alternatively from the preimage of the workpackage hash. We decode this candidate blob into a workpackage and attempt to reproduce the report on the core to give en, a mapping from cores to evaluations:
+
+(186)
+
+```math
+\begin{matrix}
+ ∀(c, w) ∈ a_n ∶\\
+e_n(w) \Leftrightarrow \left\{\begin{matrix}
+w = Ξ(p, c)   & if ~ ∃p ∈ P ∶ \varepsilon (p) = F(w)\\
+ \bot  & otherwise
+\end{matrix}\right.
+\end{matrix}
+```
+
+Note that a failure to decode implies an invalid workreport.
+
+From this mapping the validator issues a set of judgements $j_n$:
+
+(187)
+```math
+j_n = {S_{κ[v]e} (X_{e(w)} \frown H(w)) ∣ (c, w) \frown a_n}
+```
+
+All judgements $j_∗$ should be published to other validators in order that they build their view of J and in the case of a negative judgement arising, can form an extrinsic
+for $E_J$ .
+
+We consider a work-report as audited under two circumstances. Either, when it has no negative judgements and there exists some tranche in which we see a positive judgement from all validators who we believe are required to audit it; or when we see positive judgements for it from greater than two-thirds of the validator set.
+
+(188)
+```math
+U(w) \Leftrightarrow  ⋁ \left\{\begin{matrix}
+ J(w) = ∅ ∧ ∃_n ∶ A_n(w) ⊂ J_⊺(w)\\
+J_⊺(w)∣ > ^2/3V
+\end{matrix}\right.
+```
+
+Our block B may be considered audited, a condition denoted U, when all the work-reports which were made available are considered audited. Formally:
+(189)
+
+```math
+U \Leftrightarrow  ∀_w ∈ R ∶ U(w)
+```
+
+For any block we must judge it to be audited (i.e. U = ⊺) before we vote for the block to be finalized in Grandpa. See section 15 for more information here.
+
+Furthermore, we pointedly disregard chains which include the accumulation of a report which we know at least 1/3 of validators judge as being invalid. Any chains including such a block are not eligible for authoring on. The best block, i.e. that on which we build new blocks, is defined as the chain with the most regular Safrole blocks which does not contain any such disregarded block. Implementationwise, this may require reversion to an earlier head or alternative fork.
+
+As a block author, we include a judgement extrinsic which collects judgement signatures together and reports them on-chain. In the case of a non-valid judgement (i.e. one which is not two-thirds-plus-one of judgements confirming validity) then this extrinsic will be introduced in a block in which accumulation of the non-valid work-report is about to take place. The non-valid judgement extrinsic removes it from the pending work-reports, ρ. Refer to section 10 for more details on this.
+
+<h3 align="center">14. Beefy Distribution</h3>
+
+For each finalized block B which a validator imports, said validator shall make a bls signature on the bls12-381 curve, as defined by Hopwood et al. 2020, affirming the Keccak hash of the block’s most recent Beefy mmr. This should be published and distributed freely, along with the signed material. These signatures may be aggregated in order to provide concise proofs of finality to third-party systems. The signing and aggregation mechanism is defined fully by Jeff Burdges et al. 2022.
+
+Formally, let $F_v$ be the signed commitment of validator index v which will be published:
+(190) 
+
+$$ F_{v} ≡ S_{κ_v} (X_B ⌢ H_K(\varepsilon_M(last(β)b])) $$
+
+(191)
+
+$X_B = $jam_beefy$
+
+<h3 align="center">15. Grandpa and the Best Chain</h3>
+
+Nodes take part in the Grandpa protocol as defined by Stewart and Kokoris-Kogia 2020.
+
+We define the latest finalized block as $B^♮$ . All associated terms concerning block and state are similarly superscripted. We consider the best block, $B^♭$ to be that which
+is drawn from the set of acceptable blocks of the following criteria:
+
+* Has the finalized block as an ancestor.
+* Contains no unfinalized blocks where we see an equivocation (two valid blocks at the same timeslot).
+* Is considered audited.
+
+  Formally:
+
+  (192)
+  $$A(H^♭) ∋ H^♮ $$
+
+  (193)
+
+  $$U^♭ ≡ ⊺ $$
+
+  (194)
+
+  ```math
+∃/ H_A,HB∶ ⋀ \left\{\begin{matrix}
+ H^A ≠ H^B\\
+H^A_T = H^B_T \\
+H^A ∈ A(H^♭) \\
+H^A\notin A(H^♮)
+
+\end{matrix}\right.
+  ```
+
+Of these acceptable blocks, that which contains the most ancestor blocks whose author used a seal-key ticket, rather than a fallback key should be selected as the best
+head, and thus the chain on which the participant should make Grandpa votes
+
+(195)
+```math
+m = \sum\limits_{H^A∈A^♭}T^A
+```
+
+<h3 align="center">16. Ratings and Rewards</h3>
+
+The Jam chain does not explicitly issue rewards—we leave this as a job to be done by the staking subsystem (a system parachain—hosted without fees—in the current imagining of a public Jam network). However, much as with validator punishment information, it is important for the Jam chain to facilitate the arrival of performance information in to the staking subsystem so that it may be acted upon.
+
+Such performance information cannot directly cover all aspects of validator activity; whereas block production, guarantor reports and availability assurance can easily be tracked on-chain, Grandpa, Beefy and auditing activity cannot. In the latter case, this is instead tracked with validator voting activity: validators vote on their impression of each other’s efforts and a median may be accepted as the truth for any given validator. With an assumption of 50% honest validators, this gives an adequate means of oraclizing this information.
+
+<h3 align="center">17. Discussion</h3>
+
+*17.1. Technical Characteristics.* In total, with our stated target of 1,023 validators and three validators per core, along with requiring a mean of ten audits per validator per timeslot, and thus 30 audits per work-report, Jam is capable of trustlessly processing and integrating 341 work-packages per timeslot.
+
+We assume node hardware is a modern 16 core cpu with 64gb ram, 1tb secondary storage and 0.5gbe networking.
+
+Our performance models assume a rough split of cpu time as follows:
+
+
+Formally, we aim to select $B^♭$ to maximize the value m where:
 [^1]: The gas mechanism did restrict what programs can execute on it by placing an upper bound on the number of steps which may be executed, but some restriction to avoid infinite-computation must surely be introduced in a permissionless setting.
 [^2]: Practical matters do limit the level of real decentralization. Validator software expressly provides functionality to allow a single instance to be configured with multiple key sets, systematically facilitating a much lower level of actual decentralization than the apparent number of actors, both in terms of individual operators and hardware. Using data collated by Dune and hildobby 2024 on Ethereum 2, one can see one major node operator, Lido, has steadily accounted for almost one-third of the almost one million crypto-economic participants.
 [^3]: Ethereum’s developers hope to change this to something more secure, but no timeline is fixed.
